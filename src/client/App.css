@@ -1,0 +1,106 @@
+.App {
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.output-scrollWrapper {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: auto;
+  resize: vertical;
+  margin: 0 auto;
+  padding: 0;
+  text-align: left;
+  background: #222222;
+  color: #dddddd;
+}
+.output-linesContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 4px;
+}
+.output-line {
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 15px;
+  white-space: pre;
+  font-size: 12px;
+}
+.output-line > code {
+  font-family: 'Roboto Mono', monospace;
+}
+.output-lineno span {
+  display: inline-block;
+  width: 20px;
+  margin-right: 16px;
+  color: #5a5a5a;
+  text-align: right;
+}
+
+.output-ansi:last-of-type {
+  margin-right: 0px;
+}
+.output-prefix {
+  margin-right: 4px;
+}
+
+.shell-form {
+  position: absolute;
+  width: 0;
+  height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.shell-input {
+  overflow: hidden;
+  background: none;
+  border: none;
+  -webkit-appearance: none;
+  outline: 0;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.shell-cursor {
+  display: inline-block;
+  background: none;
+  border: 1px solid #dddddd;
+  vertical-align: top;
+  width: 8px;
+  height: 15px;
+  opacity: 0.5;
+}
+.shell-cursor.focused {
+  opacity: 1;
+  background: #dddddd;
+  animation: blink 1s step-end infinite;
+}
