@@ -1,0 +1,36 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "eslint:recommended",
+    "plugin:flowtype/recommended",
+    "plugin:react/recommended",
+    "prettier"
+  ],
+  "plugins": ["react", "flowtype", "prettier"],
+  "globals": {
+    "Promise": true
+  },
+  "env": {
+    "es6": true,
+    "node": true,
+    "browser": true,
+    "jest": true
+  },
+  "settings": {
+    "react": {
+      "version": "16.4.2"
+    }
+  },
+  "rules": {
+    "no-octal": "off",
+    "prettier/prettier": "error",
+    "flowtype/generic-spacing": "off",
+    "react/react-in-jsx-scope": "off",
+    "no-unused-vars": [
+      "error",
+      { "argsIgnorePattern": "^_", "ignoreRestSiblings": true }
+    ],
+    "quotes": ["error", "single", { "avoidEscape": true }],
+    "no-console": 1
+  }
+}

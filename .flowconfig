@@ -1,0 +1,12 @@
+[ignore]
+.*/node_modules/findup/.*
+
+[libs]
+flow-typed/
+
+[version]
+0.74.0
+
+[options]
+module.name_mapper='.*\(.s?css\)' -> 'empty/object'
+module.name_mapper='^\~' ->'<PROJECT_ROOT>/src/client'
