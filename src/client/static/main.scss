@@ -1,0 +1,51 @@
+@import url('https://rsms.me/inter/inter.css');
+@import "~normalize.css/normalize.css";
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+@supports (font-variation-settings: normal) {
+  html { font-family: 'Inter var', sans-serif; }
+}
+
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  outline: 0;
+  cursor: pointer;
+}
+
+input {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  outline: 0;
+}
+
+svg {
+  fill: currentColor;
+}
+
+*:focus {
+	outline: none;
+}
+
+.a11y-mode {
+	select:focus, button:focus, a:focus {
+		outline: 1px solid #0097b7;
+	}
+	input[type=search] {
+		outline: none;
+	}
+}

@@ -1,0 +1,121 @@
+// @flow
+import * as React from 'react';
+import styled from 'styled-components';
+import { Link, Match } from '@reach/router';
+
+import { type ThemeProps } from '~/theme';
+
+import SearchContext from '~/context/SearchContext';
+
+import { SearchBar, TabBar, Tab } from '~/components';
+
+import { Dependency, Scripts, Settings } from './assets';
+
+type Props = {};
+
+type State = {};
+
+const AppBar = styled.header`
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  z-index: 1;
+  height: ${(p: ThemeProps) => p.theme.sizing(2.2)};
+  background: ${(p: ThemeProps) => p.theme.colour('primary')};
+  ${(p: ThemeProps) => p.theme.elevation('e2')};
+`;
+
+const LeftContent = styled.div`
+  flex: 1;
+`;
+
+const StyledTabBar = styled(TabBar)`
+  padding: 0 ${(p: ThemeProps) => p.theme.sizing(-0.5)};
+`;
+
+const MiddleContent = styled.div`
+  width: 100%;
+  max-width: ${(p: ThemeProps) => p.theme.sizing('max')};
+  padding: ${(p: ThemeProps) => p.theme.sizing(-0.5)} 0;
+`;
+
+const RightContent = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+`;
+
+const StyledLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+`;
+
+const TabIcon = styled.img`
+  width: ${(p: ThemeProps) => p.theme.sizing(1.25)};
+  height: ${(p: ThemeProps) => p.theme.sizing(1.25)};
+`;
+
+class AppBarLayout extends React.Component<Props, State> {
+  static defaultProps = {};
+
+  state = {};
+
+  render() {
+    return (
+      <AppBar>
+        <LeftContent>
+          <StyledTabBar>
+            <Match path="/">
+              {({ match }) => (
+                <Tab active={match}>
+                  <StyledLink to="/">
+                    <TabIcon src={Scripts} alt="scripts" />
+                  </StyledLink>
+                </Tab>
+              )}
+            </Match>
+            <Match path="/dependencies">
+              {({ match }) => (
+                <Tab active={match}>
+                  <StyledLink to="/dependencies">
+                    <TabIcon src={Dependency} alt="dependencies" />
+                  </StyledLink>
+                </Tab>
+              )}
+            </Match>
+          </StyledTabBar>
+        </LeftContent>
+        <MiddleContent>
+          <SearchContext.Consumer>
+            {({ searchTerm, searchLabel, updateSearchTerm }) => (
+              <SearchBar
+                label={searchLabel}
+                value={searchTerm}
+                onChange={updateSearchTerm}
+              />
+            )}
+          </SearchContext.Consumer>
+        </MiddleContent>
+        <RightContent>
+          <StyledTabBar>
+            <Match path="/settings">
+              {({ match }) => (
+                <Tab active={match}>
+                  <StyledLink to="/settings">
+                    <TabIcon src={Settings} alt="settings" />
+                  </StyledLink>
+                </Tab>
+              )}
+            </Match>
+          </StyledTabBar>
+        </RightContent>
+      </AppBar>
+    );
+  }
+}
+
+export default AppBarLayout;
