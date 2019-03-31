@@ -43,16 +43,16 @@ const ChevronImg = styled.img`
   height: ${(p: ThemeProps) => p.theme.sizing('ms')};
 `;
 
-type Option = {
-  value: string,
+type Option<Key> = {
+  value: Key,
   label: string
 };
 
-type Props = {
+type Props<Key> = {
   disabled?: boolean,
   value: string,
-  options: Array<Option>,
-  onChange: (event: SyntheticInputEvent<EventTarget>) => void,
+  options: Array<Option<Key>>,
+  onChange: (event: Key) => void,
   className?: string
 };
 
@@ -93,7 +93,7 @@ class Select extends Component<Props> {
         <StyledSelect
           {...rest}
           value={value}
-          onChange={onChange}
+          onChange={e => this.props.onChange(e.target.value)}
           disabled={disabled}
         >
           {options}

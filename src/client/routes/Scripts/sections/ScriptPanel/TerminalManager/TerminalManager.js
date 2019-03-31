@@ -53,8 +53,8 @@ class TerminalManager extends PureComponent<Props, State> {
       };
     }
 
-    // $FlowFixMe: we debounce this as it is quite an expensive update and it needs to be ran often
-    this.updateContextValue = debounce(this.updateContextValue, 300);
+    // We debounce this as it is quite an expensive update and it needs to be ran often
+    // this.updateContextValue = debounce(this.updateContextValue, 300);
   }
 
   componentDidMount() {

@@ -10,7 +10,8 @@ export type Settings = {
 export type Script = {
   name: string,
   command: string,
-  output: string
+  output: string,
+  executing: boolean
 };
 
 export type Author = {
@@ -46,4 +47,10 @@ export type DependencySuggestion = {
   package: Package,
   score: number,
   highlight: string
+};
+
+type SortOder = 'asc' | 'desc';
+export type Sort<Keys> = {
+  key: Keys,
+  order: SortOder
 };

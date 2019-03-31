@@ -7,7 +7,7 @@ initialState = { selectedState: 2 };
     {value: 1, label: 'Scotland'},
     {value: 2, label: 'Ireland'}
   ]}
-  onChange={event => setState({ selectedState: parseInt(event.target.value) })} />
+  onChange={value => setState({ selectedState: parseInt(value) })} />
 ```
 
 Disabled
@@ -22,5 +22,5 @@ initialState = { selectedState: 1 };
     {value: 1, label: 'Scotland'},
     {value: 2, label: 'Ireland'}
   ]}
-  onChange={event => setState({ selectedState: parseInt(event.target.value) })} />
+  onChange={value => setState({ selectedState: parseInt(value) })} />
 ```

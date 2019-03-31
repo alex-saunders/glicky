@@ -1,17 +1,21 @@
 // @flow
-import * as React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Link, Match } from '@reach/router';
 
 import { type ThemeProps } from '~/theme';
 
+import {
+  withScriptsContext,
+  type ScriptsContextProps
+} from '~/context/ScriptsContext';
 import SearchContext from '~/context/SearchContext';
 
 import { SearchBar, TabBar, Tab } from '~/components';
 
 import { Dependency, Scripts, Settings } from './assets';
 
-type Props = {};
+type Props = ScriptsContextProps;
 
 type State = {};
 
@@ -59,12 +63,16 @@ const TabIcon = styled.img`
   height: ${(p: ThemeProps) => p.theme.sizing(1.25)};
 `;
 
-class AppBarLayout extends React.Component<Props, State> {
+class AppBarLayout extends Component<Props, State> {
   static defaultProps = {};
 
   state = {};
 
   render() {
+    const scriptIsExecuting = Object.values(this.props.scripts).some(
+      script => (script && script.executing) || false
+    );
+
     return (
       <AppBar>
         <LeftContent>
@@ -73,7 +81,11 @@ class AppBarLayout extends React.Component<Props, State> {
               {({ match }) => (
                 <Tab active={match}>
                   <StyledLink to="/">
-                    <TabIcon src={Scripts} alt="scripts" />
+                    {scriptIsExecuting ? (
+                      'e'
+                    ) : (
+                      <TabIcon src={Scripts} alt="scripts" />
+                    )}
                   </StyledLink>
                 </Tab>
               )}
@@ -118,4 +130,4 @@ class AppBarLayout extends React.Component<Props, State> {
   }
 }
 
-export default AppBarLayout;
+export default withScriptsContext(AppBarLayout);

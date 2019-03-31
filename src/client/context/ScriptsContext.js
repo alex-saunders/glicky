@@ -11,6 +11,7 @@ export type ScriptsContextProps = {
   },
   fetchScripts: () => void,
   updateScriptOutput: (id: string, output: string) => void,
+  setScriptExecuting: (id: string, isExecuting: boolean) => void,
   deleteScript: (scriptId: string) => Promise<Script>,
   addScript: (script: $Diff<Script, { output: any }>) => Promise<Script>,
   updateScript: (scriptId: string, newScript: Script) => Promise<void>
@@ -19,6 +20,7 @@ export const defaultScriptsContext = {
   scripts: {},
   fetchScripts: () => {},
   updateScriptOutput: () => {},
+  setScriptExecuting: () => {},
   deleteScript: () => new Promise(() => {}),
   addScript: () => new Promise(() => {}),
   updateScript: () => new Promise(() => {})
@@ -62,6 +64,25 @@ class ScriptsContextProvider extends React.Component<Props, State> {
         output
       }
     }));
+  };
+
+  setScriptExecuting = (id: string, isExecuting: boolean) => {
+    this.setState(prevState => {
+      const script = prevState[id];
+      if (
+        (script.executing && isExecuting) ||
+        (!script.executing && !isExecuting)
+      ) {
+        return {};
+      }
+
+      return {
+        [id]: {
+          ...prevState[id],
+          executing: isExecuting
+        }
+      };
+    });
   };
 
   // deletes script from package.json but doesn't update state
@@ -179,6 +200,7 @@ class ScriptsContextProvider extends React.Component<Props, State> {
           scripts: this.state,
           fetchScripts: this.fetchScripts,
           updateScriptOutput: this.updateScriptOutput,
+          setScriptExecuting: this.setScriptExecuting,
           addScript: this.addScript,
           deleteScript: this.deleteScript,
           updateScript: this.updateScript

@@ -5,7 +5,7 @@
 flow-typed/
 
 [version]
-0.74.0
+0.93.0
 
 [options]
 module.name_mapper='.*\(.s?css\)' -> 'empty/object'

@@ -6,6 +6,10 @@ import isEqual from 'react-fast-compare';
 
 import { type Script } from '../../../../../types';
 
+import {
+  withScriptsContext,
+  type ScriptsContextProps
+} from '~/context/ScriptsContext';
 import { withTheme, type ThemeContextProps } from '~/context/ThemeContext';
 
 import {
@@ -53,12 +57,13 @@ const Container = posed.div({
   scriptsContentOut: { opacity: 0, y: 10, transition: { duration: 250 } }
 });
 
-type Props = ThemeContextProps & {
-  script: Script,
-  scriptId: string,
-  onSave: Script => void,
-  onRequestDelete: () => void
-};
+type Props = ThemeContextProps &
+  ScriptsContextProps & {
+    script: Script,
+    scriptId: string,
+    onSave: Script => void,
+    onRequestDelete: () => void
+  };
 
 type State = {
   panelAnimating: boolean,
@@ -90,6 +95,16 @@ class ScriptPanel extends Component<Props, State> {
   shouldComponentUpdate(nextProps, nextState) {
     // if panel is not open, only bother comparing state
     return this.state.panelOpen || this.state !== nextState;
+  }
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    const { scriptId, setScriptExecuting } = this.props;
+    if (prevState.isExecuting && !this.state.isExecuting) {
+      setScriptExecuting(scriptId, false);
+    }
+    if (!prevState.isExecuting && this.state.isExecuting) {
+      setScriptExecuting(scriptId, true);
+    }
   }
 
   handleError = (_error: string) => {
@@ -313,4 +328,4 @@ class ScriptPanel extends Component<Props, State> {
   }
 }
 
-export default withTheme(ScriptPanel);
+export default withTheme(withScriptsContext(ScriptPanel));

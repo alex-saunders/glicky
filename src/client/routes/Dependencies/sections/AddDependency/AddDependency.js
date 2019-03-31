@@ -108,19 +108,10 @@ class AddDependency extends Component<Props, State> {
     });
   };
 
-  handleSelectChange = e => {
-    const dependencyType = e.target.value;
-    if (
-      dependencyType === 'dependency' ||
-      dependencyType === 'devDependency' ||
-      dependencyType === 'optionalDependency'
-    ) {
-      this.setState({
-        dependencyType
-      });
-    } else {
-      throw new TypeError('Wrong dependency type!');
-    }
+  handleSelectChange = (dependencyType: DependencyType) => {
+    this.setState({
+      dependencyType
+    });
   };
 
   handleInputChange = (value: string) => {

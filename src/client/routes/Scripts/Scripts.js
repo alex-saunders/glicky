@@ -12,7 +12,7 @@ import {
 } from '~/context/ScriptsContext';
 import { withSearch, type SearchContextProps } from '~/context/SearchContext';
 
-import { type Script } from '../../../types';
+import type { Script, Sort } from '../../../types';
 
 import Delete from './assets/Delete.js';
 
@@ -43,6 +43,14 @@ const SelectWrapper = styled.div`
   width: ${(p: ThemeProps) => p.theme.sizing(4.5)};
 `;
 
+const sortOptions = {
+  default: 'Package.json order',
+  alphabetical: 'A-Z',
+  executing: 'Prioritise running scripts'
+};
+
+type SortKey = $Keys<typeof sortOptions>;
+
 type Props = SearchContextProps & ScriptsContextProps;
 
 type State = {
@@ -50,11 +58,17 @@ type State = {
   selectedScript?: ?{
     id: string,
     name: string
-  }
+  },
+  sort: Sort<SortKey>
 };
 
 class Scripts extends React.Component<Props, State> {
-  state = {};
+  state = {
+    sort: {
+      key: 'default',
+      order: 'asc'
+    }
+  };
 
   componentDidMount() {
     this.props.updateSearchLabel('Search scripts');
@@ -66,8 +80,8 @@ class Scripts extends React.Component<Props, State> {
     }
   }
 
-  filterScripts() {
-    const { searchTerm, scripts } = this.props;
+  filterScripts(scripts: { [string]: Script }) {
+    const { searchTerm } = this.props;
     const scriptIds = Object.keys(scripts);
 
     return scriptIds.filter(id => {
@@ -77,6 +91,31 @@ class Scripts extends React.Component<Props, State> {
         (script.name.match(searchTerm) || script.command.match(searchTerm))
       );
     });
+  }
+
+  sortScripts(scriptIds: Array<string>) {
+    const { scripts } = this.props;
+    const { key } = this.state.sort;
+
+    const sortedScriptIds = [...scriptIds].sort((a, b) => {
+      const scriptA = scripts[a];
+      const scriptB = scripts[b];
+
+      return key === 'default'
+        ? 0 // default package.json order
+        : key === 'alphabetical'
+        ? scriptA.name < scriptB.name
+          ? -1 // alphabetical order
+          : 1
+        : scriptA.executing && !scriptB.executing
+        ? 1 // prioritising executing scripts
+        : scriptB.executing && !scriptA.executing
+        ? -1
+        : scriptA.name < scriptB.name
+        ? -1 // falling back to ordering alphabetically
+        : 1;
+    });
+    return sortedScriptIds;
   }
 
   handleScriptSave = async (scriptId: string, newScript: Script) => {
@@ -107,10 +146,19 @@ class Scripts extends React.Component<Props, State> {
     });
   };
 
+  handleSortChange = (key: SortKey) => {
+    this.setState({
+      sort: {
+        key,
+        order: 'asc'
+      }
+    });
+  };
+
   render() {
     const { scripts } = this.props;
 
-    const filteredScripts = this.filterScripts();
+    const filteredScripts = this.filterScripts(scripts);
 
     return (
       <Fragment>
@@ -120,19 +168,18 @@ class Scripts extends React.Component<Props, State> {
             <Title>Scripts</Title>
             <SelectWrapper>
               <Select
-                value={0}
-                options={[
-                  { value: 0, label: 'Package.json order' },
-                  { value: 1, label: 'a-z' },
-                  { value: 2, label: 'Prioritise running scripts' }
-                ]}
-                onChange={() => {}}
+                value={this.state.sort.key}
+                options={Object.entries(sortOptions).map(([key, label]) => ({
+                  value: key,
+                  label: String(label)
+                }))}
+                onChange={this.handleSortChange}
               />
             </SelectWrapper>
           </TitleRow>
 
           {filteredScripts.length > 0 &&
-            filteredScripts.map(scriptId => (
+            this.sortScripts(filteredScripts).map(scriptId => (
               <ScriptPanel
                 key={scriptId}
                 script={scripts[scriptId]}

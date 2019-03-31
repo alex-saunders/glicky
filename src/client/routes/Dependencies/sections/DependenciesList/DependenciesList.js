@@ -15,6 +15,8 @@ import {
   type Dependency
 } from '~/context/DependenciesContext';
 
+import type { Sort } from '../../../../types';
+
 import {
   Header,
   SortContainer,
@@ -32,11 +34,6 @@ import {
 import ArrowUp from './assets/arrow-up.svg';
 
 type SortKey = 'name' | 'type';
-type SortOder = 'asc' | 'desc';
-type Sort = {
-  key: SortKey,
-  order: SortOder
-};
 
 type Props = SocketContextProps &
   DependenciesContextProps & {
@@ -51,7 +48,7 @@ type State = {
       version: string
     }
   },
-  sort: Sort
+  sort: Sort<SortKey>
 };
 
 class DependenciesList extends Component<Props, State> {
