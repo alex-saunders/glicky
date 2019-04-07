@@ -1,7 +1,7 @@
 // @flow
 import React, { createContext, type Node, type ComponentType } from 'react';
 
-import { type Process } from '../../types';
+import type { Process, ProcessState } from '../../types';
 
 import { type SocketContextProps } from '~/context/SocketContext';
 
@@ -16,7 +16,8 @@ export type UnboundProcessContextProps = {
     output: string,
     opts?: { editable?: boolean, hasErrored?: boolean }
   ) => void,
-  removeFromOutput: (id: string, charsToRemove: number) => void
+  removeFromOutput: (id: string, charsToRemove: number) => void,
+  getProcessState: (id: string) => ProcessState
 };
 
 export type ProcessContextProps = {
@@ -27,7 +28,8 @@ export type ProcessContextProps = {
     output: string,
     opts?: { editable?: boolean, hasErrored?: boolean }
   ) => void,
-  removeFromOutput: (charsToRemove: number) => void
+  removeFromOutput: (charsToRemove: number) => void,
+  getProcessState: () => ProcessState
 };
 
 export const defaultProcessContext = {
@@ -35,7 +37,8 @@ export const defaultProcessContext = {
   executeProcess: () => new Promise(() => {}),
   killProcess: () => new Promise(() => {}),
   addToOutput: () => {},
-  removeFromOutput: () => {}
+  removeFromOutput: () => {},
+  getProcessState: () => 'inactive'
 };
 export const Context = createContext<UnboundProcessContextProps>(
   defaultProcessContext
@@ -101,9 +104,19 @@ class ScriptsContextProvider extends React.Component<Props, State> {
     });
   };
 
+  getProcessState = (id: string) => {
+    const proc = this.state[id];
+
+    return proc && proc.executing
+      ? proc.hasErrored
+        ? 'erroring'
+        : 'executing'
+      : 'inactive';
+  };
+
   executeCommand = async (id: string, command: string) => {
     const { socket } = this.props;
-    const process = this.state[id];
+    const process = this.state[id] || {};
 
     // terminal has never been opened so prompt has not been generated
     if (!process.output) {
@@ -178,30 +191,22 @@ class ScriptsContextProvider extends React.Component<Props, State> {
     const cleanedData = data.split('\n').join('\r\n');
 
     if (cleanedData) {
-      performance.mark('addToOutput');
-      this.setState(
-        prevState => {
-          const prevProcessObj = prevState[id];
+      this.setState(prevState => {
+        const prevProcessObj = prevState[id];
 
-          return {
-            [id]: {
-              ...prevProcessObj,
-              output:
-                (prevProcessObj ? prevProcessObj.output : '') + cleanedData,
-              // reset currLine if data is new data is not editable,
-              // else just add to currLine
-              currLine: editable
-                ? (prevProcessObj ? prevProcessObj.currLine : '') + cleanedData
-                : '',
-              hasErrored
-            }
-          };
-        },
-        () => {
-          performance.measure('measure addToOutput setState', 'addToOutput');
-          console.log(performance.getEntriesByType('measure'));
-        }
-      );
+        return {
+          [id]: {
+            ...prevProcessObj,
+            output: (prevProcessObj ? prevProcessObj.output : '') + cleanedData,
+            // reset currLine if data is new data is not editable,
+            // else just add to currLine
+            currLine: editable
+              ? (prevProcessObj ? prevProcessObj.currLine : '') + cleanedData
+              : '',
+            hasErrored
+          }
+        };
+      });
     }
   };
 
@@ -230,7 +235,8 @@ class ScriptsContextProvider extends React.Component<Props, State> {
           executeProcess: this.executeCommand,
           killProcess: this.killProcess,
           addToOutput: this.addToOutput,
-          removeFromOutput: this.removeFromOutput
+          removeFromOutput: this.removeFromOutput,
+          getProcessState: this.getProcessState
         }}
       >
         {this.props.children}
@@ -252,14 +258,16 @@ const ScriptsContextConsumer = ({ id, children }: ConsumerProps) => {
         executeProcess,
         killProcess,
         addToOutput,
-        removeFromOutput
+        removeFromOutput,
+        getProcessState
       }) =>
         children({
           process: processes[id],
           executeProcess: executeProcess.bind(null, id),
           killProcess: killProcess.bind(null, id),
           addToOutput: addToOutput.bind(null, id),
-          removeFromOutput: removeFromOutput.bind(null, id)
+          removeFromOutput: removeFromOutput.bind(null, id),
+          getProcessState: getProcessState.bind(null, id)
         })
       }
     </Context.Consumer>

@@ -11,7 +11,7 @@ export type ScriptsContextProps = {
   },
   fetchScripts: () => void,
   deleteScript: (scriptId: string) => Promise<Script>,
-  addScript: (script: $Diff<Script, { output: any }>) => Promise<Script>,
+  addScript: (script: Script) => Promise<Script>,
   updateScript: (scriptId: string, newScript: Script) => Promise<void>
 };
 export const defaultScriptsContext = {
@@ -126,21 +126,17 @@ class ScriptsContextProvider extends React.Component<Props, State> {
     });
   };
 
-  addScript = async (script: $Diff<Script, { output: any }>) => {
-    const scriptObj = {
-      ...script,
-      output: ''
-    };
+  addScript = async (script: Script) => {
     return new Promise(async (resolve, reject) => {
       try {
-        await this._addScript(scriptObj);
+        await this._addScript(script);
         this.setState(
           () => ({
             [script.name]: {
-              ...scriptObj
+              ...script
             }
           }),
-          resolve.bind(null, scriptObj)
+          resolve.bind(null, script)
         );
       } catch (err) {
         reject(err);

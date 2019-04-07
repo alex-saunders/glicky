@@ -9,12 +9,8 @@ import {
 
 import { Terminal } from '~/components';
 
-import type { Script } from '../../../../../../types';
-
 type Props = ProcessContextProps &
   SocketContextProps & {
-    scriptId: string,
-    script: Script,
     active: boolean
   };
 
@@ -30,6 +26,20 @@ class TerminalManager extends PureComponent<Props> {
       });
     }
   }
+
+  // shouldComponentUpdate(nextProps: Props) {
+  //   if (!this.props.process && nextProps.process) {
+  //     return true;
+  //   }
+  //   if (
+  //     (this.props.process && this.props.process.output) !==
+  //     (nextProps.process && nextProps.process.output)
+  //   ) {
+  //     return true;
+  //   }
+
+  //   return false;
+  // }
 
   // componentDidUpdate(prevProps: Props) {
   //   if (this.props.isExecuting && !prevProps.isExecuting) {

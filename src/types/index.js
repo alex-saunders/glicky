@@ -15,6 +15,8 @@ export type Process = {
   pid?: number
 };
 
+export type ProcessState = 'executing' | 'erroring' | 'inactive';
+
 export type Script = {
   name: string,
   command: string

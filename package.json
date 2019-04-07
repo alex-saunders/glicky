@@ -6,7 +6,7 @@
     "cli-gui": "./bin/index.js"
   },
   "scripts": {
-    "test3": "yarn test",
+    "test3": "yarn test\n",
     "killport": "kill-port 5000",
     "dev:styleguide": "styleguidist server --config config/styleguide.config.js --open",
     "watch:client": "webpack-dev-server --open --config config/webpack.config.js",
