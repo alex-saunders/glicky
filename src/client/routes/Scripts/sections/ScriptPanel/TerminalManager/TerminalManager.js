@@ -1,10 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 
-import {
-  withScriptsContext,
-  type ScriptsContextProps
-} from '~/context/ScriptsContext';
+import { type ProcessContextProps } from '~/context/ProcessContext';
 import {
   withSocketContext,
   type SocketContextProps
@@ -14,7 +11,7 @@ import { Terminal } from '~/components';
 
 import type { Script } from '../../../../../../types';
 
-type Props = ScriptsContextProps &
+type Props = ProcessContextProps &
   SocketContextProps & {
     scriptId: string,
     script: Script,
@@ -25,83 +22,80 @@ class TerminalManager extends PureComponent<Props> {
   constructor(props) {
     super(props);
 
-    const { script } = props;
+    const { process: proc } = props;
 
-    if (!script.output) {
+    if (!(proc && proc.output)) {
       this.getPrompt({
         withLeadingCarriageReturn: false
       });
     }
   }
 
-  componentDidUpdate(prevProps: Props) {
-    if (this.props.isExecuting && !prevProps.isExecuting) {
-      // TODO: spawn command in ScriptsContext
-      // const { scripts, scriptId, addToScriptOutput } = this.props;
-      // const { command } = scripts[scriptId];
-      // addToScriptOutput(scriptId, command);
-      // return this.spawnProcess(command);
-    }
-    if (!this.props.script.executing && prevProps.isExecuting) {
-      // TODO: kill process in ScriptsContext
-      // return this.killProcess();
-    }
-  }
+  // componentDidUpdate(prevProps: Props) {
+  //   if (this.props.isExecuting && !prevProps.isExecuting) {
+  //     // TODO: spawn command in ScriptsContext
+  //     // const { scripts, scriptId, addToScriptOutput } = this.props;
+  //     // const { command } = scripts[scriptId];
+  //     // addToScriptOutput(scriptId, command);
+  //     // return this.spawnProcess(command);
+  //   }
+  //   if (!this.props.script.executing && prevProps.isExecuting) {
+  //     // TODO: kill process in ScriptsContext
+  //     // return this.killProcess();
+  //   }
+  // }
 
   generateNewLine() {
-    this.props.addToScriptOutput(this.props.scriptId, '\n');
+    this.props.addToOutput('\n');
   }
 
   getPrompt(
     { withLeadingCarriageReturn } = { withLeadingCarriageReturn: true }
   ) {
-    const { socket, scriptId, addToScriptOutput } = this.props;
+    const { socket, addToOutput } = this.props;
 
     socket.emit('request', { resource: 'prompt' }, prompt => {
-      addToScriptOutput(
-        scriptId,
-        withLeadingCarriageReturn ? '\n' + prompt : prompt
-      );
+      addToOutput(withLeadingCarriageReturn ? '\n' + prompt : prompt);
     });
   }
 
   handleBackspace = () => {
-    this.props.removeFromScriptOutput(this.props.scriptId, 1);
+    this.props.removeFromOutput(1);
   };
 
   handleEnter = () => {
-    const { script, scriptId, executeCommand } = this.props;
+    const { process: proc, executeProcess } = this.props;
 
-    if (script.executing) {
+    if (proc && proc.executing) {
       return this.generateNewLine();
     }
 
-    if (!script.currLine) {
+    if (!(proc && proc.currLine)) {
       return this.getPrompt();
     }
 
-    executeCommand(scriptId, script.currLine);
+    executeProcess(proc.currLine);
   };
 
   handleKeyDown = (key: string) => {
-    this.props.addToScriptOutput(this.props.scriptId, key, {
+    this.props.addToOutput(key, {
       editable: true
     });
   };
 
   render() {
-    const { active, script } = this.props;
+    const { active, process: proc } = this.props;
 
     return (
       <Terminal
         onBackspace={this.handleBackspace}
         onEnter={this.handleEnter}
         onKeyDown={this.handleKeyDown}
-        value={script.output}
+        value={proc ? proc.output : ''}
         active={active}
       />
     );
   }
 }
 
-export default withScriptsContext(withSocketContext(TerminalManager));
+export default withSocketContext(TerminalManager);

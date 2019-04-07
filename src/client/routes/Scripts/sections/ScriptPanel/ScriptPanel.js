@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Ink from 'react-ink';
 import posed, { PoseGroup } from 'react-pose';
 
@@ -10,6 +10,8 @@ import {
   type ScriptsContextProps
 } from '~/context/ScriptsContext';
 import { withTheme, type ThemeContextProps } from '~/context/ThemeContext';
+
+import ProcessContext from '~/context/ProcessContext';
 
 import {
   ExpansionPanel,
@@ -84,12 +86,14 @@ class ScriptPanel extends Component<Props, State> {
   scriptNameField = React.createRef();
 
   // shouldComponentUpdate(nextProps, nextState) {
-  //   // if panel is not open, only then bother comparing state
-  //   return (
-  //     this.state.panelOpen ||
-  //     this.props.script.executing ||
-  //     this.state !== nextState
-  //   );
+  //   console.log('shouldComponentUpdate');
+  //   return true;
+  //   // // if panel is not open, only then bother comparing state
+  //   // return (
+  //   //   this.state.panelOpen ||
+  //   //   this.props.script.executing ||
+  //   //   this.state !== nextState
+  //   // );
   // }
 
   componentDidUpdate(prevProps: Props) {
@@ -166,129 +170,153 @@ class ScriptPanel extends Component<Props, State> {
     const { scriptId, script } = this.props;
     const { isEditingScript, script: stateScript } = this.state;
 
-    const buttonState = script.executing
-      ? script.hasErrored
-        ? 'error'
-        : 'valid'
-      : 'normal';
-
-    console.log(buttonState);
-
     return (
       <StyledPanel active={this.state.panelOpen} elevation="e0">
-        <ProgressBar
-          indeterminate={script.executing}
-          bgColour={'primary_light'}
-          barColour={'primary_dark'}
-        />
-        <Header>
-          <HeaderSection>
-            <PlayButton
-              elevation="e3"
-              icon={
-                script.executing ? (
-                  <Img src={Stop} />
-                ) : (
-                  <StyledPlayIcon colour="white" size="ms" />
-                )
-              }
-              onClick={
-                script.executing ? this.handleStopClick : this.handleStartClick
-              }
-              type={buttonState}
-            />
-            <AnimateHeight style={{ flex: 1 }}>
-              <PoseGroup
-                enterPose="scriptsContentIn"
-                exitPose="scriptsContentOut"
-                preEnterPose="scriptsContentOut"
-              >
-                {isEditingScript ? (
-                  <Container key="editing">
-                    <TitleText>
-                      <TextField
-                        label="Script name"
-                        fullWidth
-                        value={stateScript.name}
-                        font={"'Roboto Mono',monospace"}
-                        ref={this.scriptNameField}
-                        onChange={this.handleScriptChange.bind(null, 'name')}
-                      />
-                      <TextField
-                        label="Script command(s)"
-                        fullWidth
-                        multiline
-                        rows={2}
-                        value={stateScript.command}
-                        font={"'Roboto Mono',monospace"}
-                        style={{ paddingBottom: 0 }}
-                        onChange={this.handleScriptChange.bind(null, 'command')}
-                      />
-                    </TitleText>
-                  </Container>
-                ) : (
-                  <Container key="viewing">
-                    <TitleText>
-                      <Title size="s0" fontWeight="normal">
-                        {script.name}
-                      </Title>
-                      <Subtitle colour="text_secondary" size="sm2">
-                        {script.command}
-                      </Subtitle>
-                    </TitleText>
-                  </Container>
-                )}
-              </PoseGroup>
-            </AnimateHeight>
-          </HeaderSection>
-
-          <HeaderSection>
-            <RestartButton
-              elevation="e0"
-              icon={<Img src={Replay} />}
-              onClick={this.handleRestartClick}
-              disabled={!script.executing}
-            />
-            <SecondaryButton
-              elevation="e0"
-              icon={<Img src={isEditingScript ? Check : Edit} />}
-              onClick={this.toggleEditingMode}
-            />
-            <SecondaryButton
-              elevation="e0"
-              icon={<Delete />}
-              onClick={this.props.onRequestDelete}
-            />
-          </HeaderSection>
-        </Header>
-
-        <Body>
-          <ExpansionPanel
-            active={this.state.panelOpen}
-            renderTitle={({ active }) => (
-              <BodyTitleBar onClick={this.handlePanelToggle}>
-                <Ink />
-                <BodyTitleBarSection>
-                  <TerminalIcon />
-                  <BodyTitleBarText size="sm2" fontWeight="normal">
-                    Terminal
-                  </BodyTitleBarText>
-                </BodyTitleBarSection>
-                <BodyTitleBarSection>
-                  <PanelChevron src={Chevron} alt="expand" active={active} />
-                </BodyTitleBarSection>
-              </BodyTitleBar>
-            )}
-          >
-            {({ active }) => (
-              <TerminalManager
-                active={active}
-                scriptId={scriptId}
-                script={script}
+        <ProcessContext.Consumer id={scriptId}>
+          {({
+            process: proc,
+            killProcess,
+            executeProcess,
+            addToOutput,
+            removeFromOutput
+          }) => (
+            <Fragment>
+              <ProgressBar
+                indeterminate={proc ? proc.executing : false}
+                bgColour={'primary_light'}
+                barColour={'primary_dark'}
               />
-            )}
-          </ExpansionPanel>
-        </Body>
+              <Header>
+                <HeaderSection>
+                  <PlayButton
+                    elevation="e3"
+                    icon={
+                      proc && proc.executing ? (
+                        <Img src={Stop} />
+                      ) : (
+                        <StyledPlayIcon colour="white" size="ms" />
+                      )
+                    }
+                    onClick={
+                      proc && proc.executing
+                        ? killProcess
+                        : () => executeProcess(script.command)
+                    }
+                    type={
+                      proc && proc.executing
+                        ? proc.hasErrored
+                          ? 'error'
+                          : 'valid'
+                        : 'normal'
+                    }
+                  />
+                  <AnimateHeight style={{ flex: 1 }}>
+                    <PoseGroup
+                      enterPose="scriptsContentIn"
+                      exitPose="scriptsContentOut"
+                      preEnterPose="scriptsContentOut"
+                    >
+                      {isEditingScript ? (
+                        <Container key="editing">
+                          <TitleText>
+                            <TextField
+                              label="Script name"
+                              fullWidth
+                              value={stateScript.name}
+                              font={"'Roboto Mono',monospace"}
+                              ref={this.scriptNameField}
+                              onChange={this.handleScriptChange.bind(
+                                null,
+                                'name'
+                              )}
+                            />
+                            <TextField
+                              label="Script command(s)"
+                              fullWidth
+                              multiline
+                              rows={2}
+                              value={stateScript.command}
+                              font={"'Roboto Mono',monospace"}
+                              style={{ paddingBottom: 0 }}
+                              onChange={this.handleScriptChange.bind(
+                                null,
+                                'command'
+                              )}
+                            />
+                          </TitleText>
+                        </Container>
+                      ) : (
+                        <Container key="viewing">
+                          <TitleText>
+                            <Title size="s0" fontWeight="normal">
+                              {script.name}
+                            </Title>
+                            <Subtitle colour="text_secondary" size="sm2">
+                              {script.command}
+                            </Subtitle>
+                          </TitleText>
+                        </Container>
+                      )}
+                    </PoseGroup>
+                  </AnimateHeight>
+                </HeaderSection>
+
+                <HeaderSection>
+                  <RestartButton
+                    elevation="e0"
+                    icon={<Img src={Replay} />}
+                    onClick={this.handleRestartClick}
+                    disabled={!(proc && proc.executing)}
+                  />
+                  <SecondaryButton
+                    elevation="e0"
+                    icon={<Img src={isEditingScript ? Check : Edit} />}
+                    onClick={this.toggleEditingMode}
+                  />
+                  <SecondaryButton
+                    elevation="e0"
+                    icon={<Delete />}
+                    onClick={this.props.onRequestDelete}
+                  />
+                </HeaderSection>
+              </Header>
+
+              <Body>
+                <ExpansionPanel
+                  active={this.state.panelOpen}
+                  renderTitle={({ active }) => (
+                    <BodyTitleBar onClick={this.handlePanelToggle}>
+                      <Ink />
+                      <BodyTitleBarSection>
+                        <TerminalIcon />
+                        <BodyTitleBarText size="sm2" fontWeight="normal">
+                          Terminal
+                        </BodyTitleBarText>
+                      </BodyTitleBarSection>
+                      <BodyTitleBarSection>
+                        <PanelChevron
+                          src={Chevron}
+                          alt="expand"
+                          active={active}
+                        />
+                      </BodyTitleBarSection>
+                    </BodyTitleBar>
+                  )}
+                >
+                  {({ active }) => (
+                    <TerminalManager
+                      addToOutput={addToOutput}
+                      removeFromOutput={removeFromOutput}
+                      executeProcess={executeProcess}
+                      process={proc}
+                      active={active}
+                    />
+                  )}
+                </ExpansionPanel>
+              </Body>
+            </Fragment>
+          )}
+        </ProcessContext.Consumer>
       </StyledPanel>
     );
   }

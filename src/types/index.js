@@ -7,14 +7,17 @@ export type Settings = {
   filterOutdatedDependencies: boolean
 };
 
-export type Script = {
-  name: string,
-  command: string,
+export type Process = {
   output: string,
   currLine: string,
   executing: boolean,
   hasErrored: boolean,
   pid?: number
+};
+
+export type Script = {
+  name: string,
+  command: string
 };
 
 export type Author = {

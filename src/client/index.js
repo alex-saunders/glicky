@@ -6,6 +6,7 @@ import { A11yHandler } from './components';
 
 import ThemeContext from './context/ThemeContext';
 import SocketContext from './context/SocketContext';
+import ProcessContext from './context/ProcessContext';
 import SearchContext from './context/SearchContext';
 import SettingsContext from './context/SettingsContext';
 import DependenciesContext from './context/DependenciesContext';
@@ -21,15 +22,17 @@ const App = () => (
       <SocketContext.Consumer>
         {({ socket }) => (
           <SettingsContext.Provider socket={socket}>
-            <ThemeContext.Provider>
-              <SearchContext.Provider socket={socket}>
-                <DependenciesContext.Provider socket={socket}>
-                  <ScriptsContext.Provider socket={socket}>
-                    <AppLayout />
-                  </ScriptsContext.Provider>
-                </DependenciesContext.Provider>
-              </SearchContext.Provider>
-            </ThemeContext.Provider>
+            <ProcessContext.Provider socket={socket}>
+              <ThemeContext.Provider>
+                <SearchContext.Provider socket={socket}>
+                  <DependenciesContext.Provider socket={socket}>
+                    <ScriptsContext.Provider socket={socket}>
+                      <AppLayout />
+                    </ScriptsContext.Provider>
+                  </DependenciesContext.Provider>
+                </SearchContext.Provider>
+              </ThemeContext.Provider>
+            </ProcessContext.Provider>
           </SettingsContext.Provider>
         )}
       </SocketContext.Consumer>
