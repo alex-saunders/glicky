@@ -9,11 +9,11 @@ import React, {
 import io, { type Socket } from 'socket.io-client';
 
 export type SocketContextProps = {
-  socket: ?Socket
+  socket: Socket
 };
 
 export const defaultSocketContext: SocketContextProps = {
-  socket: null
+  socket: io()
 };
 
 export const Context = createContext(defaultSocketContext);

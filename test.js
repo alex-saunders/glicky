@@ -2,7 +2,7 @@ console.log('foo');
 console.log('bar');
 console.log('baz\n\n');
 
-console.log('running...')
+console.log('running...');
 setTimeout(() => {
-  console.log('')
-}, 10000)
+  console.log('');
+}, 5000);

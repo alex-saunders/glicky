@@ -68,7 +68,6 @@ class DependenciesList extends Component<Props, State> {
 
   getInstalledVersions() {
     const { socket } = this.props;
-    if (!socket) return;
 
     socket.emit(
       'request',

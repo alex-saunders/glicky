@@ -42,10 +42,6 @@ class SettingsContextProvider extends Component<Props, State> {
   componentDidMount() {
     const { socket } = this.props;
 
-    if (!socket) {
-      return;
-    }
-
     socket.emit('settings', null, settings => {
       this.setState({
         settings,
@@ -56,10 +52,6 @@ class SettingsContextProvider extends Component<Props, State> {
 
   setSettings = (newSettings: Settings) => {
     const { socket } = this.props;
-
-    if (!socket) {
-      return;
-    }
 
     this.setState({
       loading: true

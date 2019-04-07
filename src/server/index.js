@@ -156,9 +156,14 @@ io.on('connection', socket => {
   });
 
   // killing a process (controlled by a ProcessManager)
-  socket.on('kill', (pid: number) => {
+  socket.on('kill', (pid: number, fn) => {
     const procManager = processMap[pid];
-    procManager.kill();
+
+    console.log(procManager);
+    procManager
+      .kill()
+      .then(fn)
+      .catch(() => console.log('BIG ERROR'));
     // TODO - clear up processMap
   });
 

@@ -19,7 +19,7 @@ const FABHolder = styled.div`
   position: fixed;
   bottom: 25px;
   right: 25px;
-  z-index: 2;
+  z-index: 4;
 `;
 
 const Form = styled.form`

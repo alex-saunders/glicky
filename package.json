@@ -17,7 +17,8 @@
     "dev": "concurrently \"yarn dev:server\" \"yarn dev:styleguide\" \"yarn dev:client\"",
     "start": "yarn build:client && yarn build:server && NODE_ENV=production node dist/server/server.bundle.js",
     "test:continuous": "webpack-dev-server --config config/webpack.config.js",
-    "test": "node test.js"
+    "test": "node test.js",
+    "test2": "yarn test"
   },
   "resolutions": {
     "babel-core": "^7.0.0-bridge.0"
@@ -31,7 +32,7 @@
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@reach/router": "^1.2.1",
-    "babel-eslint": "^8.2.6",
+    "babel-eslint": "^10.0.1",
     "babel-jest": "^23.4.2",
     "babel-loader": "^8.0.0-beta.3",
     "babel-merge": "^2.0.1",
@@ -47,7 +48,7 @@
     "empty": "^0.10.1",
     "eslint": "4.19.1",
     "eslint-config-prettier": "^4.0.0",
-    "eslint-plugin-flowtype": "^3.4.2",
+    "eslint-plugin-flowtype": "^3.5.1",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.11.1",
     "execa": "^0.11.0",
@@ -69,7 +70,6 @@
     "ps-tree": "^1.2.0",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
-    "react-fast-compare": "^2.0.4",
     "react-focus-lock": "^1.17.7",
     "react-ink": "^6.4.0",
     "react-pose": "^4.0.8",

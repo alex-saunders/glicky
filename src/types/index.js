@@ -11,7 +11,10 @@ export type Script = {
   name: string,
   command: string,
   output: string,
-  executing: boolean
+  currLine: string,
+  executing: boolean,
+  hasErrored: boolean,
+  pid?: number
 };
 
 export type Author = {

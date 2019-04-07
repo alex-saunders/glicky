@@ -103,10 +103,6 @@ class DependenciesContextProvider extends React.Component<Props, State> {
   };
 
   async getAllDependencies() {
-    const { socket } = this.props;
-    if (!socket) {
-      return;
-    }
     const dependencyTypes = Object.keys(DEPENDENCY_TYPES);
     const dependencies = [];
 

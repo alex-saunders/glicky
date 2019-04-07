@@ -148,9 +148,6 @@ class AddDependency extends Component<Props, State> {
       },
       () => {
         const { socket } = this.props;
-        if (!socket) {
-          return this.handleModalRequestClose();
-        }
 
         socket.emit(
           'request',

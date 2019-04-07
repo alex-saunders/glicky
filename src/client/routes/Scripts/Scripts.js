@@ -101,19 +101,25 @@ class Scripts extends React.Component<Props, State> {
       const scriptA = scripts[a];
       const scriptB = scripts[b];
 
-      return key === 'default'
-        ? 0 // default package.json order
-        : key === 'alphabetical'
-        ? scriptA.name < scriptB.name
-          ? -1 // alphabetical order
-          : 1
-        : scriptA.executing && !scriptB.executing
-        ? 1 // prioritising executing scripts
-        : scriptB.executing && !scriptA.executing
-        ? -1
-        : scriptA.name < scriptB.name
-        ? -1 // falling back to ordering alphabetically
-        : 1;
+      // alphabetical order
+      if (key === 'alphabetical') {
+        return scriptA.name < scriptB.name ? -1 : 1;
+      }
+
+      // prioritise executing scripts
+      if (key === 'executing') {
+        return scriptA.executing && !scriptB.executing
+          ? -1
+          : !scriptA.executing && scriptB.executing
+          ? 1
+          : // falling back to alphabetical order
+          scriptA.name < scriptB.name
+          ? -1
+          : 1;
+      }
+
+      // default sort order - package.json order
+      return 0;
     });
     return sortedScriptIds;
   }

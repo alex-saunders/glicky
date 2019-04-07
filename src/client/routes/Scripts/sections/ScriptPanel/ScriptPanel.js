@@ -1,8 +1,7 @@
 // @flow
-import React, { Fragment, Component } from 'react';
+import React, { Component } from 'react';
 import Ink from 'react-ink';
 import posed, { PoseGroup } from 'react-pose';
-import isEqual from 'react-fast-compare';
 
 import { type Script } from '../../../../../types';
 
@@ -66,11 +65,7 @@ type Props = ThemeContextProps &
   };
 
 type State = {
-  panelAnimating: boolean,
   panelOpen: boolean,
-  isExecuting: boolean,
-  initialised: boolean,
-  hasErrored: boolean,
   script: Script,
   isEditingScript: boolean
 };
@@ -79,11 +74,7 @@ class ScriptPanel extends Component<Props, State> {
   static defaultProps = {};
 
   state = {
-    panelAnimating: false,
     panelOpen: false,
-    isExecuting: false,
-    initialised: false,
-    hasErrored: false,
     isEditingScript: false,
     script: this.props.script
   };
@@ -92,69 +83,47 @@ class ScriptPanel extends Component<Props, State> {
 
   scriptNameField = React.createRef();
 
-  shouldComponentUpdate(nextProps, nextState) {
-    // if panel is not open, only bother comparing state
-    return this.state.panelOpen || this.state !== nextState;
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   // if panel is not open, only then bother comparing state
+  //   return (
+  //     this.state.panelOpen ||
+  //     this.props.script.executing ||
+  //     this.state !== nextState
+  //   );
+  // }
 
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    const { scriptId, setScriptExecuting } = this.props;
-    if (prevState.isExecuting && !this.state.isExecuting) {
-      setScriptExecuting(scriptId, false);
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.script.executing && !this.props.script.executing) {
+      if (this.isRestarting) {
+        this.isRestarting = false;
+        this.handleStartClick();
+      }
     }
-    if (!prevState.isExecuting && this.state.isExecuting) {
-      setScriptExecuting(scriptId, true);
-    }
   }
-
-  handleError = (_error: string) => {
-    this.setState({
-      hasErrored: true
-    });
-  };
-
-  handleData = (_data: string) => {
-    this.setState({
-      hasErrored: false
-    });
-  };
-
-  handleInit = () => {
-    this.setState({
-      initialised: true
-    });
-  };
 
   handleStartClick = () => {
-    this.setState({
-      isExecuting: true
-    });
+    const { script, scriptId, executeCommand } = this.props;
+
+    if (script.executing) {
+      return;
+    }
+
+    executeCommand(scriptId, script.command);
   };
 
   handleStopClick = () => {
-    this.setState({
-      isExecuting: false
-    });
+    const { script, scriptId, stopProcess } = this.props;
+
+    if (!script.executing) {
+      return;
+    }
+
+    stopProcess(scriptId);
   };
 
   handleRestartClick = () => {
     this.isRestarting = true;
     this.handleStopClick();
-  };
-
-  handleExit = () => {
-    this.setState(
-      {
-        isExecuting: false,
-        hasErrored: false
-      },
-      () => {
-        if (this.isRestarting) {
-          this.isRestarting = false;
-          this.handleStartClick();
-        }
-      }
-    );
   };
 
   handlePanelToggle = () => {
@@ -194,19 +163,21 @@ class ScriptPanel extends Component<Props, State> {
   };
 
   render() {
-    const { scriptId } = this.props;
-    const { isExecuting, isEditingScript, hasErrored, script } = this.state;
+    const { scriptId, script } = this.props;
+    const { isEditingScript, script: stateScript } = this.state;
 
-    const buttonState = isExecuting
-      ? hasErrored
+    const buttonState = script.executing
+      ? script.hasErrored
         ? 'error'
         : 'valid'
       : 'normal';
 
+    console.log(buttonState);
+
     return (
       <StyledPanel active={this.state.panelOpen} elevation="e0">
         <ProgressBar
-          indeterminate={isExecuting}
+          indeterminate={script.executing}
           bgColour={'primary_light'}
           barColour={'primary_dark'}
         />
@@ -215,14 +186,14 @@ class ScriptPanel extends Component<Props, State> {
             <PlayButton
               elevation="e3"
               icon={
-                isExecuting ? (
+                script.executing ? (
                   <Img src={Stop} />
                 ) : (
                   <StyledPlayIcon colour="white" size="ms" />
                 )
               }
               onClick={
-                isExecuting ? this.handleStopClick : this.handleStartClick
+                script.executing ? this.handleStopClick : this.handleStartClick
               }
               type={buttonState}
             />
@@ -231,7 +202,6 @@ class ScriptPanel extends Component<Props, State> {
                 enterPose="scriptsContentIn"
                 exitPose="scriptsContentOut"
                 preEnterPose="scriptsContentOut"
-                withParent={false}
               >
                 {isEditingScript ? (
                   <Container key="editing">
@@ -239,7 +209,7 @@ class ScriptPanel extends Component<Props, State> {
                       <TextField
                         label="Script name"
                         fullWidth
-                        value={script.name}
+                        value={stateScript.name}
                         font={"'Roboto Mono',monospace"}
                         ref={this.scriptNameField}
                         onChange={this.handleScriptChange.bind(null, 'name')}
@@ -249,7 +219,7 @@ class ScriptPanel extends Component<Props, State> {
                         fullWidth
                         multiline
                         rows={2}
-                        value={script.command}
+                        value={stateScript.command}
                         font={"'Roboto Mono',monospace"}
                         style={{ paddingBottom: 0 }}
                         onChange={this.handleScriptChange.bind(null, 'command')}
@@ -277,7 +247,7 @@ class ScriptPanel extends Component<Props, State> {
               elevation="e0"
               icon={<Img src={Replay} />}
               onClick={this.handleRestartClick}
-              disabled={!isExecuting}
+              disabled={!script.executing}
             />
             <SecondaryButton
               elevation="e0"
@@ -312,13 +282,9 @@ class ScriptPanel extends Component<Props, State> {
           >
             {({ active }) => (
               <TerminalManager
-                onInit={this.handleInit}
-                onExit={this.handleExit}
-                onError={this.handleError}
-                onData={this.handleData}
                 active={active}
                 scriptId={scriptId}
-                isExecuting={isExecuting}
+                script={script}
               />
             )}
           </ExpansionPanel>

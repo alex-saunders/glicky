@@ -97,7 +97,6 @@ export default class ProcessManager {
   }
 
   emitError(err?: string) {
-    this.executing = false;
     this.emit('processError', this.createErrorObject(err));
   }
 
@@ -136,36 +135,45 @@ export default class ProcessManager {
   }
 
   kill(signal: KillSignal = 'SIGKILL') {
-    if (this.killing) {
-      this.emitError();
-    }
-    if (!this.executing) {
-      // child process has already exited
-      this.emitError();
-    }
-    this.killing = true;
-    const isWin = /^win/.test(process.platform);
-    if (!isWin) {
-      this.psTreeKill(signal)
-        .then(() => {
-          this.executing = false;
-          this.killing = false;
-        })
-        .catch(err => {
-          this.killing = false;
-          this.emitError(err);
-        });
-    } else {
-      execa('taskkill /PID ' + this.pid + ' /T /F')
-        .then(() => {
-          this.executing = false;
-          this.killing = false;
-        })
-        .catch(err => {
-          this.killing = false;
-          this.emitError(err);
-        });
-    }
+    return new Promise<void>((res, rej) => {
+      if (this.killing) {
+        this.emitError();
+        rej();
+      }
+      if (!this.executing) {
+        // child process has already exited
+        this.emitError();
+        rej();
+      }
+      this.killing = true;
+      const isWin = /^win/.test(process.platform);
+      if (!isWin) {
+        this.psTreeKill(signal)
+          .then(() => {
+            this.executing = false;
+            this.killing = false;
+            res();
+          })
+          .catch(err => {
+            this.killing = false;
+            this.emitError(err);
+            rej(err);
+          });
+      } else {
+        execa('taskkill /PID ' + this.pid + ' /T /F')
+          .then(() => {
+            this.executing = false;
+            this.killing = false;
+            res();
+          })
+          .catch(err => {
+            this.killing = false;
+            this.emitError(err);
+
+            rej(err);
+          });
+      }
+    });
   }
 
   execute() {

@@ -109,11 +109,11 @@ class AnimateHeight extends Component<Props, State> {
 
     return (
       <StyledBox
-        withParent={false}
         ref={this.ref}
         pose={pose}
         height={height}
         className={className}
+        withParent={false}
         {...rest}
       >
         {children}

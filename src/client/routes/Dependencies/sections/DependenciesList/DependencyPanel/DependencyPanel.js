@@ -77,7 +77,6 @@ class DependencyPanel extends Component<Props, State> {
 
   fetchPackageInfo() {
     const { socket, dependency } = this.props;
-    if (!socket) return;
 
     socket.emit(
       'request',
