@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { type ThemeProps } from '../../theme';
 
-import Chevron from './assets/chevron.svg';
+import Icon from '../Icon/Icon';
 
 const StyledSelect = styled.select`
   width: 100%;
@@ -25,20 +25,20 @@ const SelectedValue = styled.span`
 `;
 
 const SelectWrapper = styled.div`
-  border: 1px solid ${(p: ThemeProps) => p.theme.colour('grey')};
+  border: 1px solid ${(p: ThemeProps) => p.theme.colour('border')};
   display: flex;
   flex-grow: 1;
   flex-shrink: 1;
   justify-content: space-between;
   align-items: center;
   position: relative;
-  background: ${({ theme }: ThemeProps) => theme.colour('white')};
+  background: ${({ theme }: ThemeProps) => theme.colour('background_panel')};
   padding: ${({ theme }: ThemeProps) => theme.sizing('xxs')}
     ${({ theme }: ThemeProps) => theme.sizing('xs')};
-  color: ${({ theme }: ThemeProps) => theme.colour('text_secondary')};
+  color: ${({ theme }: ThemeProps) => theme.colour('text')};
 `;
 
-const ChevronImg = styled.img`
+const StyledIcon = styled(Icon)`
   width: ${(p: ThemeProps) => p.theme.sizing('ms')};
   height: ${(p: ThemeProps) => p.theme.sizing('ms')};
 `;
@@ -56,7 +56,7 @@ type Props<Key> = {
   className?: string
 };
 
-class Select extends Component<Props> {
+class Select<Key> extends Component<Props<Key>> {
   static defaultProps = {
     disabled: false,
     hideLabel: false
@@ -67,7 +67,7 @@ class Select extends Component<Props> {
 
     return options.map<Node>(option => {
       const op = (
-        <option key={option.value} value={option.value}>
+        <option key={String(option.value)} value={option.value}>
           {option.label}
         </option>
       );
@@ -99,7 +99,7 @@ class Select extends Component<Props> {
           {options}
         </StyledSelect>
         {this.renderSelectedValue()}
-        <ChevronImg src={Chevron} />
+        <StyledIcon type="chevron" />
       </SelectWrapper>
     );
   }

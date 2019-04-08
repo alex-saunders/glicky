@@ -4,6 +4,8 @@ import posed from 'react-pose';
 
 import { type ThemeProps, type ThemedComponent } from '~/theme';
 
+import { Icon } from '~/components';
+
 import DependencyPanel from './DependencyPanel/DependencyPanel';
 
 const GUTTER = 20;
@@ -125,7 +127,9 @@ type SortProps = {
   isActive: boolean,
   direction: 'asc' | 'desc'
 };
-export const SortIcon: ThemedComponent<SortProps> = styled.img`
+export const SortIcon: ThemedComponent<SortProps> = styled(Icon).attrs({
+  type: 'arrow'
+})`
   position: absolute;
   top: 0;
   left: 0;

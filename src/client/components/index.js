@@ -26,6 +26,7 @@ export { default as Modal } from './Modal/Modal';
 export { default as TextField } from './TextField/TextField';
 export { default as Select } from './Select/Select';
 export { default as Spinner } from './Spinner/Spinner';
+export { default as Icon } from './Icon/Icon';
 
 /* Utilities */
 export { default as AnimateHeight } from './utils/AnimateHeight/AnimateHeight';

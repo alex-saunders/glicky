@@ -4,8 +4,7 @@ import styled, { css } from 'styled-components';
 
 import type { ThemeProps, ThemedComponent } from '~/theme';
 
-import SearchIcon from './assets/search.svg';
-import ClearIcon from './assets/clear.svg';
+import Icon from '../Icon/Icon';
 
 const Container = styled.div`
   display: flex;
@@ -40,16 +39,21 @@ const iconStyles = css`
   width: ${(p: ThemeProps) => p.theme.sizing('md')};
   height: ${(p: ThemeProps) => p.theme.sizing('md')};
 `;
+
 type SearchIconprops = {
   focused: boolean
 };
-const Search: ThemedComponent<SearchIconprops> = styled.img`
+const Search: ThemedComponent<SearchIconprops> = styled(Icon).attrs({
+  type: 'search'
+})`
   ${iconStyles};
 
   opacity: ${(p: SearchIconprops) => (p.focused ? 1 : 0.5)};
   transition: opacity 0.2s linear;
 `;
-const Clear = styled.img`
+const Clear = styled(Icon).attrs({
+  type: 'clear'
+})`
   ${iconStyles};
 
   padding: ${(p: ThemeProps) => p.theme.sizing(-2)};
@@ -104,7 +108,7 @@ class SearchBar extends React.Component<Props, State> {
     focused: false
   };
 
-  input = React.createRef();
+  input = React.createRef<HTMLElement>();
 
   handleChange = (e: SyntheticInputEvent<*>) => {
     const { value } = e.target;
@@ -142,7 +146,7 @@ class SearchBar extends React.Component<Props, State> {
     return (
       <Container>
         <IconWrapper onClick={this.focusInput}>
-          <Search src={SearchIcon} alt="search" focused={focused} />
+          <Search focused={focused} />
         </IconWrapper>
         <InputWrapper>
           <Input
@@ -158,7 +162,7 @@ class SearchBar extends React.Component<Props, State> {
           disabled={value.length < 1}
           onClick={this.handleClearClick}
         >
-          <Clear src={ClearIcon} alt="clear" />
+          <Clear />
         </IconWrapper>
       </Container>
     );

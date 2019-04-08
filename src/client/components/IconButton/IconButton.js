@@ -6,6 +6,8 @@ import Ink from 'react-ink';
 import { type ThemeProps, type ThemedComponent } from '../../theme';
 import { type Elevation } from '../../theme/elevation';
 
+import Icon, { type Icon as IconType } from '../Icon/Icon';
+
 type ButtonProps = {
   elevation: Elevation,
   disabled?: boolean
@@ -18,7 +20,7 @@ const Button: ThemedComponent<ButtonProps> = styled.button`
 
   height: ${(p: ThemeProps) => p.theme.sizing('xl')};
   width: ${(p: ThemeProps) => p.theme.sizing('xl')};
-  background: ${(p: ThemeProps) => p.theme.colour('white')};
+  background: ${(p: ThemeProps) => p.theme.colour('background_panel')};
   border-radius: 50%;
   border: 1px solid transparent;
   overflow: hidden;
@@ -47,7 +49,7 @@ const Button: ThemedComponent<ButtonProps> = styled.button`
   }
 `;
 
-const Img = styled.img`
+const StyledIcon = styled(Icon)`
   height: 50%;
   width: 50%;
 `;
@@ -56,7 +58,7 @@ type Props = {
   /** Generic onClick event - passes `SyntheticMouseEvent<*>` */
   onClick?: (e: SyntheticMouseEvent<*>) => void,
   /** A link to an svg or a react element */
-  icon: string | Node,
+  icon: IconType | Node,
   /** Elevation property from theme */
   elevation: Elevation,
   disabled?: boolean
@@ -73,7 +75,7 @@ class IconButton extends React.Component<Props> {
         elevation={elevation}
       >
         <Ink radius={200} />
-        {typeof icon === 'string' ? <Img src={icon} /> : icon}
+        {typeof icon === 'string' ? <StyledIcon type={icon} /> : icon}
       </Button>
     );
   }

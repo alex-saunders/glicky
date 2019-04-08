@@ -1,7 +1,7 @@
 ```js
 const styled = require('styled-components').default;
 
-const Update = require('./assets/update.svg');
+const Icon = require('../Icon/Icon').default;
 
 const Container = styled.div`
   display: flex;
@@ -22,7 +22,7 @@ const Container = styled.div`
 
   <Button type="disabled">Disabled</Button>
 
-  <Button type="primary" icon={Update}>Icon</Button>
+  <Button type="primary" icon={<Icon type="add" />}>Icon</Button>
 </Container>
 
 ```

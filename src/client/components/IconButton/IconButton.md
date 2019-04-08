@@ -1,7 +1,6 @@
 Enabled
 
 ```js
-const Stop = require('./assets/stop.svg');
 const styled = require('styled-components').default;
 
 const Row = styled.div`
@@ -15,31 +14,31 @@ const Row = styled.div`
 <Row>
   <IconButton
     elevation="e4"
-    icon={<img src={Stop} />}
+    icon={'stop'}
     onClick={() => console.log('click')}
     disabled={false}
   />
   <IconButton
     elevation="e3"
-    icon={<img src={Stop} />}
+    icon={'stop'}
     onClick={() => console.log('click')}
     disabled={false}
   />
   <IconButton
     elevation="e2"
-    icon={<img src={Stop} />}
+    icon={'stop'}
     onClick={() => console.log('click')}
     disabled={false}
   />
   <IconButton
     elevation="e1"
-    icon={<img src={Stop} />}
+    icon={'stop'}
     onClick={() => console.log('click')}
     disabled={false}
   />
   <IconButton
     elevation="e0"
-    icon={<img src={Stop} />}
+    icon={'stop'}
     onClick={() => console.log('click')}
     disabled={false}
   />
@@ -49,11 +48,10 @@ const Row = styled.div`
 Disabled
 
 ```js
-const Stop = require('./assets/stop.svg');
 
 <IconButton
   elevation="e3"
-  icon={<img src={Stop} />}
+  icon={'stop'}
   onClick={() => console.log('click')}
   disabled={true}
 />

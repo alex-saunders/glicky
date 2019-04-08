@@ -10,7 +10,8 @@ import type {
   Elevation
 } from '~/theme';
 
-import { Text } from '~/components';
+import Text from '../Text/Text';
+import Icon, { type IconType } from '../Icon/Icon';
 
 type ThemeColourButtonTypes = 'primary' | 'secondary' | 'disabled' | 'error';
 type ButtonType = ThemeColourButtonTypes | 'ghost';
@@ -24,7 +25,7 @@ type SCProps = {
 type Props = {
   type: ButtonType,
   elevation: Elevation,
-  icon?: string | Node,
+  icon?: IconType | Node,
   submit?: boolean,
   children: string
 };
@@ -77,7 +78,7 @@ const IconWrapper = styled.div`
   margin-right: ${(p: ThemeProps) => p.theme.sizing('xxs')};
 `;
 
-const Icon = styled.img`
+const StyledIcon = styled(Icon)`
   width: 100%;
   height: 100%;
 `;
@@ -100,7 +101,7 @@ const Button = ({
     <Ink />
     {icon && (
       <IconWrapper>
-        {typeof icon === 'string' ? <Icon src={icon} /> : icon}
+        {typeof icon === 'string' ? <StyledIcon type={icon} /> : icon}
       </IconWrapper>
     )}
     <Text colour={getTextColour(type)} weight="normal" size="sm1">

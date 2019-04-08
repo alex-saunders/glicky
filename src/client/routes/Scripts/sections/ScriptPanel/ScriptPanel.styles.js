@@ -2,10 +2,7 @@
 import styled from 'styled-components';
 
 import { type ThemeProps, type ThemedComponent } from '~/theme';
-import { Panel, IconButton, Text } from '~/components';
-import { PlayIcon } from '~/components/icons';
-
-import Terminal from '../../assets/Terminal.js';
+import { Panel, IconButton, Text, Icon } from '~/components';
 
 type PanelProps = {
   active: ?boolean,
@@ -68,8 +65,10 @@ export const PlayButton: ThemedComponent<IconButtonProps> = styled(IconButton)`
   flex-shrink: 0;
 `;
 
-export const StyledPlayIcon = styled(PlayIcon)`
-  transform: translateX(2px);
+export const StyledPlayIcon = styled(Icon)`
+  width: ${(p: ThemeProps) => p.theme.sizing('md')};
+  height: ${(p: ThemeProps) => p.theme.sizing('md')};
+  fill: ${(p: ThemeProps) => p.theme.colour('white')};
 `;
 
 export const TitleText = styled.div`
@@ -88,11 +87,6 @@ export const Subtitle = styled(Text)`
   font-family: 'Roboto Mono', monospace;
 `;
 
-export const Img = styled.img`
-  height: ${(p: ThemeProps) => p.theme.sizing('md')};
-  width: ${(p: ThemeProps) => p.theme.sizing('md')};
-`;
-
 export const Body = styled.div`
   border-top: 1px solid ${(p: ThemeProps) => p.theme.colour('border')};
   background: none;
@@ -108,7 +102,7 @@ export const BodyTitleBar = styled.button`
   background: ${(p: ThemeProps) => p.theme.colour('background_panel')};
   padding: ${(p: ThemeProps) => p.theme.sizing('ms')};
   margin: 0;
-  border: 0;
+  border-top: 1px solid ${(p: ThemeProps) => p.theme.colour('border')};
   outline: 0;
   cursor: pointer;
   overflow: hidden;
@@ -123,7 +117,9 @@ export const BodyTitleBarSection = styled.div`
   color: ${(p: ThemeProps) => p.theme.colour('text')};
 `;
 
-export const TerminalIcon = styled(Terminal)`
+export const TerminalIcon = styled(Icon).attrs({
+  type: 'terminal'
+})`
   width: ${(p: ThemeProps) => p.theme.sizing('xs')};
   height: ${(p: ThemeProps) => p.theme.sizing('xs')};
   margin-right: ${(p: ThemeProps) => p.theme.sizing(-1)};
@@ -137,7 +133,9 @@ export const BodyTitleBarText = styled(Text)`
 type ChevronProps = {
   active: boolean
 };
-export const PanelChevron: ThemedComponent<ChevronProps> = styled.img`
+export const ChevronIcon: ThemedComponent<ChevronProps> = styled(Icon).attrs({
+  type: 'chevron'
+})`
   width: ${(p: ThemeProps) => p.theme.sizing(0.75)};
   height: ${(p: ThemeProps) => p.theme.sizing(0.75)};
 

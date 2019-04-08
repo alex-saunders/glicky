@@ -5,6 +5,8 @@ import posed from 'react-pose';
 
 import type { ThemedComponent, ThemeProps } from '../../theme';
 
+import Icon, { type Icon as IconType } from '../Icon/Icon';
+
 type WrapperProps = {
   fullWidth: boolean,
   disabled?: boolean,
@@ -180,6 +182,11 @@ const IconWrapper = styled.div`
   padding: 0 ${(p: ThemeProps) => p.theme.sizing('xxs')};
 `;
 
+const StyledIcon = styled(Icon)`
+  width: ${(p: ThemeProps) => p.theme.sizing('ms')};
+  height: ${(p: ThemeProps) => p.theme.sizing('ms')};
+`;
+
 const ErrorTextContainer = styled.div`
   position: absolute;
   bottom: 0;
@@ -217,7 +224,7 @@ type Props = {
   error?: boolean,
   errorText?: string,
   disabled?: boolean,
-  icon?: Node
+  icon?: IconType | Node
 };
 
 type State = {
@@ -326,7 +333,15 @@ class TextField extends Component<Props, State> {
               tabIndex={disabled ? -1 : 0}
             />
           )}
-          {this.props.icon && <IconWrapper>{this.props.icon}</IconWrapper>}
+          {this.props.icon && (
+            <IconWrapper>
+              {typeof this.props.icon === 'string' ? (
+                <StyledIcon type={this.props.icon} />
+              ) : (
+                this.props.icon
+              )}
+            </IconWrapper>
+          )}
         </InputWrapper>
 
         <ErrorTextContainer>

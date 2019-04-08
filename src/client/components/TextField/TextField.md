@@ -41,14 +41,14 @@ Single line with icon
 
 ```js
 const styled = require('styled-components').default;
-const Pencil = require('./assets/pencil.svg');
+const Icon = require('../Icon/Icon').default;
 
-const IconImg = styled.img`
+const StyledIcon = styled(Icon)`
   width: 16px;
   height: 16px;  
 `;
 
-<TextField label="I have an icon"  icon={<IconImg src={Pencil} />}/>
+<TextField label="I have an icon"  icon='edit' />
 ```
 
 Multiline controlled

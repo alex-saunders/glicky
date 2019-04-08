@@ -2,7 +2,7 @@
 import React, { Component, Fragment } from 'react';
 import posed, { PoseGroup } from 'react-pose';
 
-import { ProgressBar, TextField, AnimateHeight } from '~/components';
+import { ProgressBar, TextField, AnimateHeight, Icon } from '~/components';
 
 import type { Script, ProcessState } from '../../../../../../types';
 
@@ -15,15 +15,8 @@ import {
   TitleText,
   Title,
   Subtitle,
-  Img,
   SecondaryButton
 } from '../ScriptPanel.styles';
-
-import Replay from '../../../assets/replay.svg';
-import Stop from '../../../assets/stop.svg';
-import Edit from '../../../assets/edit.svg';
-import Check from '../../../assets/check.svg';
-import Delete from '../../../assets/Delete.js';
 
 type Props = {
   processState: ProcessState,
@@ -146,13 +139,7 @@ class ScriptPanelToolbar extends Component<Props, State> {
           <HeaderSection>
             <PlayButton
               elevation="e3"
-              icon={
-                isExecuting ? (
-                  <Img src={Stop} />
-                ) : (
-                  <StyledPlayIcon colour="white" size="ms" />
-                )
-              }
+              icon={<StyledPlayIcon type={isExecuting ? 'stop' : 'play'} />}
               onClick={
                 isExecuting ? this.handleStopClick : this.handleStartClick
               }
@@ -212,18 +199,18 @@ class ScriptPanelToolbar extends Component<Props, State> {
           <HeaderSection>
             <RestartButton
               elevation="e0"
-              icon={<Img src={Replay} />}
+              icon={<Icon type="replay" />}
               onClick={this.handleRestartClick}
               disabled={!isExecuting}
             />
             <SecondaryButton
               elevation="e0"
-              icon={<Img src={isEditingScript ? Check : Edit} />}
+              icon={<Icon type={isEditingScript ? 'check' : 'edit'} />}
               onClick={this.toggleEditingMode}
             />
             <SecondaryButton
               elevation="e0"
-              icon={<Delete />}
+              icon={<Icon type="remove" />}
               onClick={this.props.onRequestDelete}
             />
           </HeaderSection>

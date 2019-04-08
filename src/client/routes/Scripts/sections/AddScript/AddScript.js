@@ -11,9 +11,9 @@ import {
   type SocketContextProps
 } from '~/context/SocketContext';
 
-import { FAB, Modal, TextField, Spacing, Button } from '~/components';
+import type { ThemeProps } from '~/theme';
 
-import Add from '../../assets/add.svg';
+import { FAB, Modal, TextField, Spacing, Button, Icon } from '~/components';
 
 const FABHolder = styled.div`
   position: fixed;
@@ -25,6 +25,10 @@ const FABHolder = styled.div`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
+`;
+
+const StyledIcon = styled(Icon)`
+  fill: ${(p: ThemeProps) => p.theme.colour('white')};
 `;
 
 type Props = SocketContextProps & ScriptsContextProps;
@@ -105,7 +109,7 @@ class AddScript extends Component<Props, State> {
     return (
       <FABHolder>
         <FAB
-          icon={<img src={Add} />}
+          icon={<StyledIcon type="add" />}
           label="Add script"
           onClick={this.handleFabClick}
         />

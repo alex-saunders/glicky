@@ -11,9 +11,7 @@ import {
 } from '~/context/ScriptsContext';
 import SearchContext from '~/context/SearchContext';
 
-import { SearchBar, TabBar, Tab } from '~/components';
-
-import { Dependency, Scripts, Settings } from './assets';
+import { SearchBar, TabBar, Tab, Icon } from '~/components';
 
 type Props = ScriptsContextProps;
 
@@ -58,7 +56,7 @@ const StyledLink = styled(Link)`
   height: 100%;
 `;
 
-const TabIcon = styled.img`
+const TabIcon = styled(Icon)`
   width: ${(p: ThemeProps) => p.theme.sizing(1.25)};
   height: ${(p: ThemeProps) => p.theme.sizing(1.25)};
 `;
@@ -81,11 +79,7 @@ class AppBarLayout extends Component<Props, State> {
               {({ match }) => (
                 <Tab active={match}>
                   <StyledLink to="/">
-                    {scriptIsExecuting ? (
-                      'e'
-                    ) : (
-                      <TabIcon src={Scripts} alt="scripts" />
-                    )}
+                    {scriptIsExecuting ? 'e' : <TabIcon type="scripts" />}
                   </StyledLink>
                 </Tab>
               )}
@@ -94,7 +88,7 @@ class AppBarLayout extends Component<Props, State> {
               {({ match }) => (
                 <Tab active={match}>
                   <StyledLink to="/dependencies">
-                    <TabIcon src={Dependency} alt="dependencies" />
+                    <TabIcon type="dependency" />
                   </StyledLink>
                 </Tab>
               )}
@@ -118,7 +112,7 @@ class AppBarLayout extends Component<Props, State> {
               {({ match }) => (
                 <Tab active={match}>
                   <StyledLink to="/settings">
-                    <TabIcon src={Settings} alt="settings" />
+                    <TabIcon type="settings" />
                   </StyledLink>
                 </Tab>
               )}

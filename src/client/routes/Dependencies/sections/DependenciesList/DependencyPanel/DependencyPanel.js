@@ -12,9 +12,6 @@ import type { Package, Dependency } from '../../../../../../types';
 
 import { Description, Maintainers, Version } from './sections';
 
-import Update from './assets/update.svg';
-import Delete from './assets/delete.svg';
-
 import {
   BodyWrapper,
   PanelBody,
@@ -189,13 +186,17 @@ class DependencyPanel extends Component<Props, State> {
             <PanelFooter>
               {this.props.dependency.outdated && (
                 <Fade>
-                  <Button type="primary" icon={Update}>
+                  <Button type="primary" icon={'update'}>
                     Update
                   </Button>
                 </Fade>
               )}
               <Fade>
-                <Button type="error" icon={Delete} onClick={this.removePackage}>
+                <Button
+                  type="error"
+                  icon={'remove'}
+                  onClick={this.removePackage}
+                >
                   Remove
                 </Button>
               </Fade>

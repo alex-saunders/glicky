@@ -24,10 +24,8 @@ import {
   BodyTitleBarSection,
   BodyTitleBarText,
   TerminalIcon,
-  PanelChevron
+  ChevronIcon
 } from './ScriptPanel.styles';
-
-import Chevron from '../../assets/chevron.svg';
 
 type Props = ThemeContextProps &
   ScriptsContextProps & {
@@ -87,7 +85,7 @@ class ScriptPanel extends PureComponent<Props, State> {
                   </BodyTitleBarText>
                 </BodyTitleBarSection>
                 <BodyTitleBarSection>
-                  <PanelChevron src={Chevron} alt="expand" active={active} />
+                  <ChevronIcon active={active} />
                 </BodyTitleBarSection>
               </BodyTitleBar>
             )}

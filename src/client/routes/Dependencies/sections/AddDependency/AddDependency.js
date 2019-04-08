@@ -9,15 +9,22 @@ import {
   type SocketContextProps
 } from '~/context/SocketContext';
 
-import { FAB, Modal, TextField, Spacing, Select, Spinner } from '~/components';
+import {
+  FAB,
+  Modal,
+  TextField,
+  Spacing,
+  Select,
+  Spinner,
+  Icon
+} from '~/components';
+
+import { type ThemeProps } from '~/theme';
 
 import type {
   DependencySuggestion,
   DependencyType
 } from '../../../../../types';
-
-import Add from '../../assets/add.svg';
-import Tick from '../../assets/Tick';
 
 import SearchSuggestions from './SearchSuggestions';
 
@@ -32,6 +39,15 @@ const RewardHolder = styled.div`
   position: absolute;
   top: 0;
   left: 50%;
+`;
+
+const StyledCheck = styled(Icon).attrs({
+  type: 'check'
+})`
+  width: ${(p: ThemeProps) => p.theme.sizing('md')};
+  height: ${(p: ThemeProps) => p.theme.sizing('md')};
+  fill: ${(p: ThemeProps) =>
+    p.theme.colour(p.theme.mode === 'dark' ? 'white' : 'green')};
 `;
 
 type Props = SocketContextProps;
@@ -210,7 +226,7 @@ class AddDependency extends Component<Props, State> {
     return (
       <FABHolder>
         <FAB
-          icon={<img src={Add} />}
+          icon={<Icon type="add" />}
           label="Add Dependency"
           onClick={this.handleFabClick}
         />
@@ -262,7 +278,7 @@ class AddDependency extends Component<Props, State> {
                           startVelocity: 25
                         }}
                       >
-                        <Tick size="md" />
+                        <StyledCheck />
                       </Reward>
                     ) : (
                       <Spinner size="md" width={3} />

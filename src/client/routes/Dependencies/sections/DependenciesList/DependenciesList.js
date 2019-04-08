@@ -11,11 +11,10 @@ import {
 } from '~/context/SocketContext';
 import {
   withDependencies,
-  type DependenciesContextProps,
-  type Dependency
+  type DependenciesContextProps
 } from '~/context/DependenciesContext';
 
-import type { Sort } from '../../../../types';
+import type { Sort, Dependency } from '../../../../../types';
 
 import {
   Header,
@@ -30,8 +29,6 @@ import {
   OutdatedIcon,
   Name
 } from './DependenciesList.styles';
-
-import ArrowUp from './assets/arrow-up.svg';
 
 type SortKey = 'name' | 'type';
 
@@ -152,7 +149,6 @@ class DependenciesList extends Component<Props, State> {
                   <SortIcon
                     isActive={this.state.sort.key === 'name'}
                     direction={this.state.sort.order}
-                    src={ArrowUp}
                   />
                   <SortText isActive={this.state.sort.key === 'name'}>
                     {'Name'}
@@ -167,7 +163,6 @@ class DependenciesList extends Component<Props, State> {
                   <SortIcon
                     isActive={this.state.sort.key === 'type'}
                     direction={this.state.sort.order}
-                    src={ArrowUp}
                   />
                   <SortText isActive={this.state.sort.key === 'type'}>
                     {'Type'}

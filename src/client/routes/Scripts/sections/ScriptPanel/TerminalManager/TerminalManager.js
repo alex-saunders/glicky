@@ -26,35 +26,6 @@ class TerminalManager extends PureComponent<Props> {
       });
     }
   }
-
-  // shouldComponentUpdate(nextProps: Props) {
-  //   if (!this.props.process && nextProps.process) {
-  //     return true;
-  //   }
-  //   if (
-  //     (this.props.process && this.props.process.output) !==
-  //     (nextProps.process && nextProps.process.output)
-  //   ) {
-  //     return true;
-  //   }
-
-  //   return false;
-  // }
-
-  // componentDidUpdate(prevProps: Props) {
-  //   if (this.props.isExecuting && !prevProps.isExecuting) {
-  //     // TODO: spawn command in ScriptsContext
-  //     // const { scripts, scriptId, addToScriptOutput } = this.props;
-  //     // const { command } = scripts[scriptId];
-  //     // addToScriptOutput(scriptId, command);
-  //     // return this.spawnProcess(command);
-  //   }
-  //   if (!this.props.script.executing && prevProps.isExecuting) {
-  //     // TODO: kill process in ScriptsContext
-  //     // return this.killProcess();
-  //   }
-  // }
-
   generateNewLine() {
     this.props.addToOutput('\n');
   }
