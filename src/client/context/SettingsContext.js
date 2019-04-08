@@ -22,7 +22,7 @@ export const defaultSettingsContext: SettingsContextProps = {
   setSettings: () => {}
 };
 
-const Context = createContext(defaultSettingsContext);
+const Context = createContext<SettingsContextProps>(defaultSettingsContext);
 
 type Props = SocketContextProps & {
   children: Node

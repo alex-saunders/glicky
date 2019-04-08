@@ -1,5 +1,10 @@
 // @flow
-import React, { createContext, type Node, type ComponentType } from 'react';
+import React, {
+  createContext,
+  Component,
+  type Node,
+  type ComponentType
+} from 'react';
 
 import { type Script } from '../../types';
 
@@ -161,15 +166,21 @@ class ScriptsContextProvider extends React.Component<Props, State> {
   }
 }
 
-export function withScriptsContext<Props: {}>(Component: ComponentType<Props>) {
-  return function WrappedComponent(props: Props) {
-    return (
-      <Context.Consumer>
-        {contextProps => <Component {...props} {...contextProps} />}
-      </Context.Consumer>
-    );
+export const withScriptsContext = <P>(
+  WrappedComponent: ComponentType<*>
+): ComponentType<P> => {
+  return class WithSettingsContext extends Component<P> {
+    render() {
+      return (
+        <Context.Consumer>
+          {contextProps => (
+            <WrappedComponent {...contextProps} {...this.props} />
+          )}
+        </Context.Consumer>
+      );
+    }
   };
-}
+};
 
 export default {
   Provider: ScriptsContextProvider,

@@ -1,5 +1,10 @@
 // @flow
-import React, { createContext, type Node, type ComponentType } from 'react';
+import React, {
+  createContext,
+  Component,
+  type Node,
+  type ComponentType
+} from 'react';
 import { navigate } from '@reach/router';
 
 import {
@@ -180,21 +185,21 @@ class DependenciesContextProvider extends React.Component<Props, State> {
   }
 }
 
-export function withDependencies<Props: {}>(Component: ComponentType<Props>) {
-  return function WrappedComponent(props: Props) {
-    return (
-      <Context.Consumer>
-        {({ dependencies, fetchDependencies }) => (
-          <Component
-            {...props}
-            dependencies={dependencies}
-            fetchDependencies={fetchDependencies}
-          />
-        )}
-      </Context.Consumer>
-    );
+export const withDependencies = <P>(
+  WrappedComponent: ComponentType<*>
+): ComponentType<P> => {
+  return class WithSettingsContext extends Component<P> {
+    render() {
+      return (
+        <Context.Consumer>
+          {contextProps => (
+            <WrappedComponent {...contextProps} {...this.props} />
+          )}
+        </Context.Consumer>
+      );
+    }
   };
-}
+};
 
 export default {
   Provider: withSettings(DependenciesContextProvider),

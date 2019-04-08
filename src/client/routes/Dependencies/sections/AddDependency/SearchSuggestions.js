@@ -72,7 +72,7 @@ class SearchSuggestions extends Component<Props, State> {
 
   state = {};
 
-  container = createRef();
+  container = createRef<HTMLElement>();
 
   componentDidMount() {
     window.addEventListener('click', this.handleClick);

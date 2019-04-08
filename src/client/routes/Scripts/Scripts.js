@@ -4,7 +4,15 @@ import styled from 'styled-components';
 import posed, { PoseGroup } from 'react-pose';
 
 import { type ThemeProps } from '~/theme';
-import { Title, Modal, Text, Button, Spacing, Select } from '~/components';
+import {
+  Title,
+  Modal,
+  Text,
+  Button,
+  Spacing,
+  Select,
+  Icon
+} from '~/components';
 
 import {
   withScriptsContext,
@@ -13,8 +21,6 @@ import {
 import { withSearch, type SearchContextProps } from '~/context/SearchContext';
 
 import type { Script, Sort } from '../../../types';
-
-import Delete from './assets/Delete.js';
 
 import ScriptPanel from './sections/ScriptPanel';
 import AddScript from './sections/AddScript';
@@ -48,6 +54,12 @@ const sortOptions = {
   alphabetical: 'A-Z',
   executing: 'Prioritise running scripts'
 };
+
+const DeleteIcon = styled(Icon).attrs({
+  type: 'remove'
+})`
+  fill: ${(p: ThemeProps) => p.theme.colour('white')};
+`;
 
 type SortKey = $Keys<typeof sortOptions>;
 
@@ -223,7 +235,7 @@ class Scripts extends React.Component<Props, State> {
                 <Spacing left="sm" />
                 <Button
                   type="error"
-                  icon={<Delete fill="white" />}
+                  icon={<DeleteIcon />}
                   onClick={this.handleScriptDelete.bind(
                     null,
                     this.state.selectedScript.id

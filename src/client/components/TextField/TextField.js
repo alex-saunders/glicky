@@ -5,7 +5,7 @@ import posed from 'react-pose';
 
 import type { ThemedComponent, ThemeProps } from '../../theme';
 
-import Icon, { type Icon as IconType } from '../Icon/Icon';
+import Icon, { type IconType } from '../Icon/Icon';
 
 type WrapperProps = {
   fullWidth: boolean,
@@ -352,7 +352,8 @@ class TextField extends Component<Props, State> {
   }
 }
 
-// $FlowFixMe
-export default React.forwardRef((props, ref) => (
+const forwardedTextField = React.forwardRef<any, any>((props, ref) => (
   <TextField innerRef={ref} {...props} />
 ));
+forwardedTextField.displayName = 'TextField';
+export default forwardedTextField;

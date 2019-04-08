@@ -7,8 +7,9 @@ import { type ThemeProps } from '~/theme';
 
 import { BodyText, SkeletonScreen } from '~/components';
 
+import { type Author } from '../../../../../../../../types';
+
 import AvatarChip from '../../AvatarChip/AvatarChip';
-import { type Author } from '../../DependencyPanel';
 
 const Container = styled.div`
   display: flex;

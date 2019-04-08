@@ -6,7 +6,7 @@ import Ink from 'react-ink';
 import { type ThemeProps, type ThemedComponent } from '../../theme';
 import { type Elevation } from '../../theme/elevation';
 
-import Icon, { type Icon as IconType } from '../Icon/Icon';
+import Icon, { type IconType } from '../Icon/Icon';
 
 type ButtonProps = {
   elevation: Elevation,

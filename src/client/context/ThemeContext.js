@@ -1,5 +1,10 @@
 // @flow
-import React, { createContext, type Node, type ComponentType } from 'react';
+import React, {
+  createContext,
+  Component,
+  type Node,
+  type ComponentType
+} from 'react';
 import { ThemeProvider } from 'styled-components';
 
 import { theme, type ThemeProps } from '../theme';
@@ -9,17 +14,17 @@ import { withSettings, type SettingsContextProps } from './SettingsContext';
 export type ThemeContextProps = ThemeProps;
 
 export const defaultThemeContext: ThemeContextProps = {
-  theme: theme('dark', '#2196f3'),
+  theme: theme('dark', '#ff0000'),
   setThemeMode: () => {},
   setPrimaryColour: () => {}
 };
-export const Context = createContext(defaultThemeContext);
+export const Context = createContext<ThemeContextProps>(defaultThemeContext);
 
 type Props = SettingsContextProps & {
   children: Node
 };
 
-class ThemeContextProvider extends React.Component<Props> {
+class ThemeContextProvider extends Component<Props> {
   render() {
     const { settings } = this.props;
     if (!settings) {
@@ -45,15 +50,21 @@ class ThemeContextProvider extends React.Component<Props> {
   }
 }
 
-export function withTheme<Props: {}>(Component: ComponentType<Props>) {
-  return function WrappedComponent(props: Props) {
-    return (
-      <Context.Consumer>
-        {({ theme }) => <Component {...props} theme={theme} />}
-      </Context.Consumer>
-    );
+export const withTheme = <P>(
+  WrappedComponent: ComponentType<*>
+): ComponentType<P> => {
+  return class WithThemeContext extends Component<P> {
+    render() {
+      return (
+        <Context.Consumer>
+          {contextProps => (
+            <WrappedComponent {...contextProps} {...this.props} />
+          )}
+        </Context.Consumer>
+      );
+    }
   };
-}
+};
 
 export default {
   Provider: withSettings(ThemeContextProvider),

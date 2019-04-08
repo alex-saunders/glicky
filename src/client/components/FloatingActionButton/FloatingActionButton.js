@@ -6,6 +6,7 @@ import Ink from 'react-ink';
 import { type ThemeProps } from '../../theme';
 
 import Text from '../Text/Text';
+import Icon, { type IconType } from '../Icon/Icon';
 
 const Button = styled.button`
   position: relative;
@@ -41,14 +42,16 @@ const IconWrapper = styled.div`
 `;
 
 type Props = {
-  icon: Node,
+  icon: IconType | Node,
   label: string
 };
 
 const FAB = ({ icon, label, ...rest }: Props) => {
   return (
     <Button {...rest}>
-      <IconWrapper>{icon}</IconWrapper>
+      <IconWrapper>
+        {typeof icon === 'string' ? <Icon type={icon} /> : icon}
+      </IconWrapper>
       <Text colour="white" size="sm1" uppercase spacing="medium">
         {label}
       </Text>

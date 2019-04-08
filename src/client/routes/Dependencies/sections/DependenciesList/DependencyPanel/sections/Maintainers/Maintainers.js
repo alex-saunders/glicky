@@ -4,10 +4,9 @@ import styled from 'styled-components';
 
 import { type ThemeProps } from '~/theme';
 
-import { Grid } from '~/components';
+import { type Author } from '../../../../../../../../types';
 
 import AvatarChip from '../../AvatarChip/AvatarChip';
-import { type Author } from '../../DependencyPanel';
 
 type Props = {
   maintainers: Array<Author>

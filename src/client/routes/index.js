@@ -1,7 +1,11 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
-import { Router, Location } from '@reach/router';
+import {
+  Router,
+  Location,
+  type LocationProviderRenderFnParams
+} from '@reach/router';
 import posed, { PoseGroup } from 'react-pose';
 
 import { type ThemeProps } from '~/theme';
@@ -14,7 +18,7 @@ import Settings from '~/routes/Settings/Settings';
 
 const Main = styled.main`
   max-width: ${(p: ThemeProps) => p.theme.sizing('max')};
-  margin: 0 auto;
+  margin: 0 auto ${(p: ThemeProps) => p.theme.sizing(3.5)};
   min-height: 100%;
 `;
 
@@ -27,7 +31,7 @@ const Routes = () => (
     {({ socket }) => (
       <Main>
         <Location>
-          {({ location }) => (
+          {({ location }: LocationProviderRenderFnParams) => (
             <PoseGroup
               enterPose="routeEnter"
               exitPose="routeExit"

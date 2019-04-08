@@ -1,5 +1,10 @@
 // @flow
-import React, { createContext, type Node, type ComponentType } from 'react';
+import React, {
+  createContext,
+  Component,
+  type Node,
+  type ComponentType
+} from 'react';
 
 import type { Process, ProcessState } from '../../types';
 
@@ -52,7 +57,7 @@ type State = {
   [string]: Process
 };
 
-class ScriptsContextProvider extends React.Component<Props, State> {
+class ProcessContextProvider extends React.Component<Props, State> {
   state = {};
 
   componentDidMount() {
@@ -250,7 +255,7 @@ type ConsumerProps = {
   children: ProcessContextProps => Node
 };
 
-const ScriptsContextConsumer = ({ id, children }: ConsumerProps) => {
+const ProcessContextConsumer = ({ id, children }: ConsumerProps) => {
   return (
     <Context.Consumer>
       {({
@@ -274,19 +279,26 @@ const ScriptsContextConsumer = ({ id, children }: ConsumerProps) => {
   );
 };
 
-export default {
-  Provider: ScriptsContextProvider,
-  Consumer: ScriptsContextConsumer
+export const withProcessContext = <
+  P: {
+    id: string
+  }
+>(
+  WrappedComponent: ComponentType<*>
+): ComponentType<P> => {
+  return class WithSettingsContext extends Component<P> {
+    render() {
+      const { id, ...rest } = this.props;
+      return (
+        <ProcessContextConsumer id={id}>
+          {contextProps => <WrappedComponent {...contextProps} {...rest} />}
+        </ProcessContextConsumer>
+      );
+    }
+  };
 };
 
-export function withProcessContext<Props: ConsumerProps>(
-  Component: ComponentType<ConsumerProps>
-) {
-  return function WrappedComponent(props: Props) {
-    return (
-      <ScriptsContextConsumer id={props.id}>
-        {contextProps => <Component {...props} {...contextProps} />}
-      </ScriptsContextConsumer>
-    );
-  };
-}
+export default {
+  Provider: ProcessContextProvider,
+  Consumer: ProcessContextConsumer
+};

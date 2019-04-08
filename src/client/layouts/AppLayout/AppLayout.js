@@ -1,6 +1,8 @@
 // @flow
 import * as React from 'react';
-import styled, { ThemeProps } from 'styled-components';
+import styled from 'styled-components';
+
+import { type ThemeProps } from '../../theme';
 
 import AppBarLayout from '../AppBarLayout';
 import Routes from '../../routes';

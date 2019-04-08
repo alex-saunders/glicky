@@ -16,7 +16,7 @@ export const defaultSocketContext: SocketContextProps = {
   socket: io()
 };
 
-export const Context = createContext(defaultSocketContext);
+export const Context = createContext<SocketContextProps>(defaultSocketContext);
 
 type Props = {
   children: Node

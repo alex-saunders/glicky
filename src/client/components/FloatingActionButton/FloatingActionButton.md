@@ -1,10 +1,9 @@
 ```js
 const styled = require('styled-components').default;
-const icon = require('./assets/add.svg');
 
 <FAB
   onClick={() => alert('click')}
-  icon={<img src={icon} />}
+  icon="add"
   label="Add to cart" 
 />
 ```

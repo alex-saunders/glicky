@@ -1,5 +1,10 @@
 // @flow
-import React, { createContext, type Node, type ComponentType } from 'react';
+import React, {
+  createContext,
+  Component,
+  type Node,
+  type ComponentType
+} from 'react';
 
 export type SearchContextProps = {
   searchTerm: string,
@@ -13,7 +18,7 @@ export const defaultSearchContext: SearchContextProps = {
   updateSearchTerm: () => {},
   updateSearchLabel: () => {}
 };
-export const Context = createContext(defaultSearchContext);
+export const Context = createContext<SearchContextProps>(defaultSearchContext);
 
 type Props = {
   children: Node
@@ -58,23 +63,21 @@ class SearchContextProvider extends React.Component<Props, State> {
   }
 }
 
-export function withSearch<Props: {}>(Component: ComponentType<Props>) {
-  return function WrappedComponent(props: Props) {
-    return (
-      <Context.Consumer>
-        {({ searchTerm, searchLabel, updateSearchLabel, updateSearchTerm }) => (
-          <Component
-            {...props}
-            searchTerm={searchTerm}
-            searchLabel={searchLabel}
-            updateSearchLabel={updateSearchLabel}
-            updateSearchTerm={updateSearchTerm}
-          />
-        )}
-      </Context.Consumer>
-    );
+export const withSearch = <P>(
+  WrappedComponent: ComponentType<*>
+): ComponentType<P> => {
+  return class WithSettingsContext extends Component<P> {
+    render() {
+      return (
+        <Context.Consumer>
+          {contextProps => (
+            <WrappedComponent {...contextProps} {...this.props} />
+          )}
+        </Context.Consumer>
+      );
+    }
   };
-}
+};
 
 export default {
   Provider: SearchContextProvider,

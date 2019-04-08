@@ -67,7 +67,7 @@ class AddDependency extends Component<Props, State> {
 
   state = {
     modalIsActive: false,
-    dependencyType: 'dependency',
+    dependencyType: 'dependencies',
     searchValue: '',
     searchSuggestions: [],
     isFocused: false,
@@ -94,7 +94,7 @@ class AddDependency extends Component<Props, State> {
     this.setState(
       {
         modalIsActive: true,
-        dependencyType: 'dependency',
+        dependencyType: 'dependencies',
         searchValue: '',
         isDisabled: false,
         hasAddedDependency: false
@@ -242,11 +242,11 @@ class AddDependency extends Component<Props, State> {
               <Select
                 options={[
                   {
-                    value: 'dependency',
+                    value: 'dependencies',
                     label: 'Dependency'
                   },
                   {
-                    value: 'devDependency',
+                    value: 'devDependencies',
                     label: 'Dev Dependency'
                   },
                   {
