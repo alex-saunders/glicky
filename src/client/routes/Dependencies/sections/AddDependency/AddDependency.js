@@ -281,7 +281,7 @@ class AddDependency extends Component<Props, State> {
                         <StyledCheck />
                       </Reward>
                     ) : (
-                      <Spinner size="md" width={3} />
+                      <Spinner size="md" lineWidth={3} />
                     )
                   ) : null
                 }

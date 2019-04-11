@@ -10,7 +10,7 @@ import type { Process, ProcessState } from '../../types';
 
 import { type SocketContextProps } from '~/context/SocketContext';
 
-export type UnboundProcessContextProps = {
+export type WithProcessContextProps = {
   processes: {
     [string]: Process
   },
@@ -45,7 +45,7 @@ export const defaultProcessContext = {
   removeFromOutput: () => {},
   getProcessState: () => 'inactive'
 };
-export const Context = createContext<UnboundProcessContextProps>(
+export const Context = createContext<WithProcessContextProps>(
   defaultProcessContext
 );
 
@@ -250,6 +250,7 @@ class ProcessContextProvider extends React.Component<Props, State> {
   }
 }
 
+// ProcessContextConsumer returns the process for the given `id` prop
 type ConsumerProps = {
   id: string,
   children: ProcessContextProps => Node
@@ -279,20 +280,18 @@ const ProcessContextConsumer = ({ id, children }: ConsumerProps) => {
   );
 };
 
-export const withProcessContext = <
-  P: {
-    id: string
-  }
->(
+// withProcessContext returns all processes
+export const withProcessContext = <P>(
   WrappedComponent: ComponentType<*>
 ): ComponentType<P> => {
-  return class WithSettingsContext extends Component<P> {
+  return class WithProcessContext extends Component<P> {
     render() {
-      const { id, ...rest } = this.props;
       return (
-        <ProcessContextConsumer id={id}>
-          {contextProps => <WrappedComponent {...contextProps} {...rest} />}
-        </ProcessContextConsumer>
+        <Context.Consumer>
+          {contextProps => (
+            <WrappedComponent {...contextProps} {...this.props} />
+          )}
+        </Context.Consumer>
       );
     }
   };

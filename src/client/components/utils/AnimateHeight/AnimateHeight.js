@@ -43,7 +43,7 @@ class AnimateHeight extends Component<Props, State> {
     onTransitionEnd: () => {}
   };
 
-  ref = React.createRef();
+  ref = React.createRef<HTMLElement>();
 
   state = {
     height: 'auto',

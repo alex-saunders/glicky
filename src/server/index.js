@@ -143,6 +143,41 @@ async function addDependency({
   }
 }
 
+async function removeDependency({
+  dependencyName,
+  dependencyType
+}: {
+  dependencyName: string,
+  dependencyType: DependencyType
+}) {
+  const yarnInstalled = await hasYarn();
+
+  let command;
+  if (yarnInstalled) {
+    command = `yarn remove ${dependencyName};`;
+  } else {
+    command = `npm uninstall ${dependencyName} ${
+      dependencyType === 'devDependency'
+        ? '--save-dev'
+        : dependencyType === 'optionalDependency'
+        ? '--save-optional'
+        : '--save'
+    }`;
+  }
+
+  try {
+    const { stdout } = await execa.shell(command);
+
+    return stdout;
+  } catch (err) {
+    // eslint-disable-next-line
+    console.error(err);
+    return {
+      error: true
+    };
+  }
+}
+
 io.on('connection', socket => {
   log(`new connection ${socket.id}`);
 
@@ -204,6 +239,9 @@ io.on('connection', socket => {
         break;
       case 'add-dependency':
         fn(await addDependency(opts));
+        break;
+      case 'remove-dependency':
+        fn(await removeDependency(opts));
         break;
       default:
         null;

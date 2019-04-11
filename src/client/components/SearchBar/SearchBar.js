@@ -38,6 +38,7 @@ const IconWrapper: ThemedComponent<IconWrapperProps> = styled.button`
 const iconStyles = css`
   width: ${(p: ThemeProps) => p.theme.sizing('md')};
   height: ${(p: ThemeProps) => p.theme.sizing('md')};
+  fill: ${(p: ThemeProps) => p.theme.colour('white')};
 `;
 
 type SearchIconprops = {
@@ -94,7 +95,8 @@ type Props = {
   label: string,
   value: string,
   /** Recieves input value as only parameter */
-  onChange: string => void
+  onChange: string => void,
+  location?: string
 };
 
 type State = {
@@ -109,6 +111,17 @@ class SearchBar extends React.Component<Props, State> {
   };
 
   input = React.createRef<HTMLElement>();
+
+  componentDidUpdate(prevProps: Props) {
+    // reset search between route changes
+    if (
+      prevProps.location &&
+      this.props.location &&
+      prevProps.location !== this.props.location
+    ) {
+      this.props.onChange('');
+    }
+  }
 
   handleChange = (e: SyntheticInputEvent<*>) => {
     const { value } = e.target;
@@ -142,6 +155,8 @@ class SearchBar extends React.Component<Props, State> {
   render() {
     const { focused } = this.state;
     const { value } = this.props;
+
+    console.log(this.props.location);
 
     return (
       <Container>

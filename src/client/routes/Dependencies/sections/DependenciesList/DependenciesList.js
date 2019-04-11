@@ -3,7 +3,7 @@ import React, { Fragment, Component } from 'react';
 import idx from 'idx';
 import Ink from 'react-ink';
 
-import { Text } from '~/components';
+import { Text, Modal, Button, Spacing } from '~/components';
 
 import {
   withSocketContext,
@@ -27,6 +27,7 @@ import {
   PanelWrapper,
   StyledDependencyPanel,
   OutdatedIcon,
+  DeleteIcon,
   Name
 } from './DependenciesList.styles';
 
@@ -45,7 +46,8 @@ type State = {
       version: string
     }
   },
-  sort: Sort<SortKey>
+  sort: Sort<SortKey>,
+  modalOpen: boolean
 };
 
 class DependenciesList extends Component<Props, State> {
@@ -53,6 +55,7 @@ class DependenciesList extends Component<Props, State> {
 
   state = {
     expandedItem: false,
+    modalOpen: false,
     sort: {
       key: 'name',
       order: 'asc'
@@ -134,6 +137,22 @@ class DependenciesList extends Component<Props, State> {
     });
   };
 
+  handleDependencyRequestDelete = () => {
+    this.setState({
+      modalOpen: true
+    });
+  };
+
+  handleModalRequestClose = () => {
+    this.setState({
+      modalOpen: false
+    });
+  };
+
+  handleDependencyDelete = () => {
+    console.log('ok delete');
+  };
+
   render() {
     const { filteredDependencies } = this.props;
 
@@ -192,6 +211,7 @@ class DependenciesList extends Component<Props, State> {
                 dependency={dependency}
                 active={expanded}
                 installedVersion={installedVersion}
+                onRequestDelete={this.handleDependencyRequestDelete}
                 renderTitle={() => (
                   <Row onClick={() => this.togglePanel(dependency)}>
                     <RowSection>
@@ -224,6 +244,40 @@ class DependenciesList extends Component<Props, State> {
             </PanelWrapper>
           );
         })}
+
+        <Modal
+          isActive={!!this.state.modalOpen}
+          onRequestClose={this.handleModalRequestClose}
+          title="Are you sure?"
+          renderBody={() =>
+            this.state.expandedDependency && (
+              <Text tag="p" size="s0">
+                {'Are you sure you want to delete'}
+                <Text font="'Roboto Mono',monospace">{` ${
+                  this.state.expandedDependency.name
+                }`}</Text>
+                {'?'}
+              </Text>
+            )
+          }
+          renderFooter={() =>
+            this.state.expandedDependency && (
+              <Fragment>
+                <Button type="ghost" onClick={this.handleModalRequestClose}>
+                  Cancel
+                </Button>
+                <Spacing left="sm" />
+                <Button
+                  type="error"
+                  icon={<DeleteIcon />}
+                  onClick={this.handleDependencyDelete}
+                >
+                  Remove
+                </Button>
+              </Fragment>
+            )
+          }
+        />
       </Fragment>
     );
   }

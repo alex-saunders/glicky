@@ -19,14 +19,14 @@ const spin = keyframes`
 `;
 
 type Props = {
-  size: Space,
+  size: Space | number,
   colour: ColourName,
-  width: number
+  lineWidth: number
 };
 
 const SCSpinner: ThemedComponent<Props> = styled.div`
   display: inline-block;
-  border: ${(p: Props) => `${p.width}px`} solid rgba(0, 0, 0, 0.1);
+  border: ${(p: Props) => `${p.lineWidth}px`} solid rgba(0, 0, 0, 0.1);
   border-left-color: ${(p: ThemeProps & Props) => p.theme.colour(p.colour)};
   border-radius: 50%;
   width: ${(p: ThemeProps & Props) => p.theme.sizing(p.size)};
@@ -34,14 +34,14 @@ const SCSpinner: ThemedComponent<Props> = styled.div`
   animation: ${spin} 1.2s linear infinite;
 `;
 
-const Spinner = ({ colour, size, width }: Props) => (
-  <SCSpinner colour={colour} size={size} width={width} />
+const Spinner = ({ colour, size, lineWidth }: Props) => (
+  <SCSpinner colour={colour} size={size} lineWidth={lineWidth} />
 );
 
 Spinner.defaultProps = {
   colour: 'primary',
   size: 'lg',
-  width: 4
+  lineWidth: 4
 };
 
 export default Spinner;

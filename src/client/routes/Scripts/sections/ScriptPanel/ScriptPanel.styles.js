@@ -1,5 +1,6 @@
 // @flow
 import styled from 'styled-components';
+import posed from 'react-pose';
 
 import { type ThemeProps, type ThemedComponent } from '~/theme';
 import { Panel, IconButton, Text, Icon } from '~/components';
@@ -113,8 +114,18 @@ export const BodyTitleBarSection = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  align-items: flex-end;
+  align-items: center;
   color: ${(p: ThemeProps) => p.theme.colour('text')};
+`;
+
+const PosedSpinnerWrapper = posed.div({
+  enter: { opacity: 1 },
+  exit: { opacity: 0 }
+});
+
+export const SpinnerWrapper = styled(PosedSpinnerWrapper)`
+  display: inline-flex;
+  margin-right: ${(p: ThemeProps) => p.theme.sizing('sm')};
 `;
 
 export const TerminalIcon = styled(Icon).attrs({

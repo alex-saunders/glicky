@@ -108,7 +108,12 @@ class Terminal extends Component<Props, State> {
         return this.props.onEnter();
       }
 
-      return this.props.onKeyDown(key);
+      if (keyCode === 27 || keyCode === 9) {
+        // prevent arrow keys or tab character
+        return;
+      }
+
+      this.props.onKeyDown(key);
     });
 
     // ensure terminal always fits container

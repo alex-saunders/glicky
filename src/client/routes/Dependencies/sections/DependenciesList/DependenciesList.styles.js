@@ -201,3 +201,9 @@ export const Name: ThemedComponent<NameProps> = styled.div`
       transform: translateX(${p.theme.sizing(1.75)});
     `};
 `;
+
+export const DeleteIcon = styled(Icon).attrs({
+  type: 'remove'
+})`
+  fill: ${(p: ThemeProps) => p.theme.colour('white')};
+`;

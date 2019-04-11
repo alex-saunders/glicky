@@ -11,7 +11,7 @@ import {
 
 import { type ThemeProps } from '~/theme';
 
-import { Title, Spacing, SkeletonScreen } from '~/components';
+import { Title, Spacing, SkeletonScreen, Icon } from '~/components';
 
 import DependenciesList from './sections/DependenciesList';
 import AddDependency from './sections/AddDependency';

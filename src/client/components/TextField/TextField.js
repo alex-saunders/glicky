@@ -60,7 +60,7 @@ const InputWrapper: ThemedComponent<InputWrapperProps> = styled.div`
     left: 0;
     bottom: 0;
     width: 100%;
-    border-bottom: 1px solid ${(p: ThemeProps) => p.theme.colour('black')};
+    border-bottom: 1px solid ${(p: ThemeProps) => p.theme.colour('text')};
     opacity: 0.42;
 
     transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -75,7 +75,15 @@ const InputWrapper: ThemedComponent<InputWrapperProps> = styled.div`
     width: 100%;
     border-bottom: 2px solid
       ${(p: ThemeProps & InputWrapperProps) =>
-        p.theme.colour(p.disabled ? 'black' : p.error ? 'red' : 'primary')};
+        p.theme.colour(
+          p.disabled
+            ? 'black'
+            : p.error
+            ? 'red'
+            : p.theme.mode === 'dark'
+            ? 'white'
+            : 'primary'
+        )};
 
     transform: scaleX(
       ${(p: InputWrapperProps) => (p.focused || p.error ? 1 : 0)}
@@ -86,10 +94,10 @@ const InputWrapper: ThemedComponent<InputWrapperProps> = styled.div`
   &:hover {
     ${(p: InputWrapperProps) =>
       !p.focused &&
+      !p.disabled &&
       css`
         &:before {
-          border-bottom: 2px solid ${(p: ThemeProps) => p.theme.colour('black')};
-          opacity: 0.87;
+          border-bottom: 2px solid ${(p: ThemeProps) => p.theme.colour('text')};
         }
       `};
   }
@@ -117,7 +125,9 @@ const Label: ThemedComponent<LabelProps> = styled.label`
         : p.error
         ? 'red'
         : p.focused
-        ? 'primary'
+        ? p.theme.mode === 'dark'
+          ? 'text'
+          : 'primary'
         : 'text_secondary'
     )};
   opacity: 0.8;
@@ -151,6 +161,7 @@ const Base = css`
   width: 100%;
   z-index: 2;
   margin: ${(p: ThemeProps) => p.theme.sizing('xxs')} 0;
+  color: ${(p: ThemeProps) => p.theme.colour('text')};
 
   ${(p: ThemeProps & InputProps) =>
     p.font &&

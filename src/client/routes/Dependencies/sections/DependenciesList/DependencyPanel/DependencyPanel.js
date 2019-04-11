@@ -32,7 +32,8 @@ type Props = SocketContextProps & {
   active: boolean,
   renderTitle: () => void,
   installedVersion: ?string,
-  className?: string
+  className?: string,
+  onRequestDelete: () => {}
 };
 
 class DependencyPanel extends Component<Props, State> {
@@ -94,17 +95,6 @@ class DependencyPanel extends Component<Props, State> {
       }
     );
   }
-
-  removePackage = () => {
-    console.log(this.props.dependency.name);
-    // socket.emit(
-    //   'request',
-    //   {
-    //     resource: 'remove-dependency',
-    //     dependencyName: suggestion.package.name,
-    //   },
-    //   result => {
-  };
 
   renderDependencyInfo() {
     const packageInfo = this.state.packageInfo || false;
@@ -169,7 +159,7 @@ class DependencyPanel extends Component<Props, State> {
   }
 
   render() {
-    const { className } = this.props;
+    const { className, onRequestDelete } = this.props;
     const { panelActive } = this.state;
 
     return (
@@ -192,11 +182,7 @@ class DependencyPanel extends Component<Props, State> {
                 </Fade>
               )}
               <Fade>
-                <Button
-                  type="error"
-                  icon={'remove'}
-                  onClick={this.removePackage}
-                >
+                <Button type="error" icon={'remove'} onClick={onRequestDelete}>
                   Remove
                 </Button>
               </Fade>

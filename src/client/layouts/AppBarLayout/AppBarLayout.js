@@ -1,19 +1,26 @@
 // @flow
 import React, { Component } from 'react';
-import styled from 'styled-components';
-import { Link, Match } from '@reach/router';
+import styled, { css } from 'styled-components';
+import posed, { PoseGroup } from 'react-pose';
+import {
+  Link,
+  Match,
+  Location,
+  type LocationProviderRenderFnParams
+} from '@reach/router';
 
-import { type ThemeProps } from '~/theme';
+import type { ThemeProps, ThemedComponent } from '~/theme';
 
 import {
-  withScriptsContext,
-  type ScriptsContextProps
-} from '~/context/ScriptsContext';
+  withProcessContext,
+  type WithProcessContextProps
+} from '~/context/ProcessContext';
+
 import SearchContext from '~/context/SearchContext';
 
-import { SearchBar, TabBar, Tab, Icon } from '~/components';
+import { SearchBar, TabBar, Tab, Icon, Spinner } from '~/components';
 
-type Props = ScriptsContextProps;
+type Props = WithProcessContextProps;
 
 type State = {};
 
@@ -56,9 +63,36 @@ const StyledLink = styled(Link)`
   height: 100%;
 `;
 
-const TabIcon = styled(Icon)`
+type TabIconProps = {
+  opacity?: number
+};
+const TabIcon: ThemedComponent<TabIconProps> = styled(Icon)`
   width: ${(p: ThemeProps) => p.theme.sizing(1.25)};
   height: ${(p: ThemeProps) => p.theme.sizing(1.25)};
+  fill: ${(p: ThemeProps) => p.theme.colour('white')};
+
+  ${(p: ThemeProps & TabIconProps) =>
+    p.opacity &&
+    css`
+    transition: opacity 0.2s linear;
+    opacity: {p.opacity}
+  `};
+`;
+
+const PosedSpinnerWrapper = posed.div({
+  enter: { opacity: 1 },
+  exit: { opacity: 0 }
+});
+
+const SpinnerWrapper = styled(PosedSpinnerWrapper)`
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 `;
 
 class AppBarLayout extends Component<Props, State> {
@@ -67,9 +101,16 @@ class AppBarLayout extends Component<Props, State> {
   state = {};
 
   render() {
-    const scriptIsExecuting = Object.values(this.props.scripts).some(
-      script => (script && script.executing) || false
-    );
+    const { getProcessState, processes } = this.props;
+
+    let processHasErrored = false;
+    const executingProcesses = Object.keys(processes).filter(key => {
+      const processState = getProcessState(key);
+      if (processState === 'erroring') {
+        processHasErrored = true;
+      }
+      return processState !== 'inactive';
+    });
 
     return (
       <AppBar>
@@ -79,7 +120,21 @@ class AppBarLayout extends Component<Props, State> {
               {({ match }) => (
                 <Tab active={match}>
                   <StyledLink to="/">
-                    {scriptIsExecuting ? 'e' : <TabIcon type="scripts" />}
+                    <PoseGroup>
+                      {executingProcesses.length > 0 && (
+                        <SpinnerWrapper key="processIsExecuting">
+                          <Spinner
+                            size={'md'}
+                            colour={processHasErrored ? 'red' : 'white'}
+                            lineWidth={2}
+                          />
+                        </SpinnerWrapper>
+                      )}
+                    </PoseGroup>
+                    <TabIcon
+                      type="scripts"
+                      opacity={executingProcesses.length > 0 ? 0.5 : 1}
+                    />
                   </StyledLink>
                 </Tab>
               )}
@@ -96,15 +151,20 @@ class AppBarLayout extends Component<Props, State> {
           </StyledTabBar>
         </LeftContent>
         <MiddleContent>
-          <SearchContext.Consumer>
-            {({ searchTerm, searchLabel, updateSearchTerm }) => (
-              <SearchBar
-                label={searchLabel}
-                value={searchTerm}
-                onChange={updateSearchTerm}
-              />
+          <Location>
+            {({ location }: LocationProviderRenderFnParams) => (
+              <SearchContext.Consumer>
+                {({ searchTerm, searchLabel, updateSearchTerm }) => (
+                  <SearchBar
+                    label={searchLabel}
+                    value={searchTerm}
+                    onChange={updateSearchTerm}
+                    location={location.key}
+                  />
+                )}
+              </SearchContext.Consumer>
             )}
-          </SearchContext.Consumer>
+          </Location>
         </MiddleContent>
         <RightContent>
           <StyledTabBar>
@@ -124,4 +184,4 @@ class AppBarLayout extends Component<Props, State> {
   }
 }
 
-export default withScriptsContext(AppBarLayout);
+export default withProcessContext(AppBarLayout);

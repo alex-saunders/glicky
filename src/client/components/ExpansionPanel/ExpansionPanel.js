@@ -78,6 +78,7 @@ class ExpansionPanel extends React.Component<Props, State> {
   }
 
   handleClick = () => {
+    console.log(this.props);
     if ('active' in this.props) {
       return;
     }

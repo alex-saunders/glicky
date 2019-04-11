@@ -1,6 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 import Ink from 'react-ink';
+import { PoseGroup } from 'react-pose';
 
 import { type Script } from '../../../../../types';
 
@@ -12,7 +13,7 @@ import { withTheme, type ThemeContextProps } from '~/context/ThemeContext';
 
 import ProcessContext from '~/context/ProcessContext';
 
-import { ExpansionPanel } from '~/components';
+import { ExpansionPanel, Spinner } from '~/components';
 
 import Toolbar from './Toolbar/Toolbar';
 import TerminalManager from './TerminalManager/TerminalManager';
@@ -24,7 +25,8 @@ import {
   BodyTitleBarSection,
   BodyTitleBarText,
   TerminalIcon,
-  ChevronIcon
+  ChevronIcon,
+  SpinnerWrapper
 } from './ScriptPanel.styles';
 
 type Props = ThemeContextProps &
@@ -36,7 +38,9 @@ type Props = ThemeContextProps &
   };
 
 type State = {
-  panelOpen: boolean
+  panelOpen: boolean,
+  displayIcon: boolean,
+  displayContent: boolean
 };
 
 class ScriptPanel extends PureComponent<Props, State> {
@@ -44,14 +48,38 @@ class ScriptPanel extends PureComponent<Props, State> {
 
   state = {
     panelOpen: false,
-    isEditingScript: false,
-    script: this.props.script
+    displayIcon: false,
+    displayContent: false
   };
 
+  timeout: TimeoutID;
+
   handlePanelToggle = () => {
-    this.setState(prevState => ({
-      panelOpen: !prevState.panelOpen
-    }));
+    this.setState(
+      prevState => ({
+        displayIcon: !prevState.panelOpen,
+        panelOpen: !prevState.panelOpen
+      }),
+      () => {
+        if (this.timeout);
+        clearTimeout(this.timeout);
+
+        // yeesh, I know.
+        // xterm takes a little while to spin up so rather than immediately
+        // rendering the Terminal renderer (which will lock the main thread
+        // while xterm starts up), we introduce a fake loading timeout so
+        // that we can show a loading spinner before we attempt to render
+        // the terminal
+        //
+        // sometimes a beautiful lie is better than the ugly truth - someone, sometime.
+        this.timeout = setTimeout(() => {
+          this.setState(prevState => ({
+            displayContent: prevState.panelOpen,
+            displayIcon: !prevState.panelOpen
+          }));
+        }, 200);
+      }
+    );
   };
 
   render() {
@@ -85,29 +113,38 @@ class ScriptPanel extends PureComponent<Props, State> {
                   </BodyTitleBarText>
                 </BodyTitleBarSection>
                 <BodyTitleBarSection>
+                  <PoseGroup>
+                    {this.state.displayIcon && this.state.panelOpen && (
+                      <SpinnerWrapper key="loadingTerminal">
+                        <Spinner colour="white" size="sm" lineWidth={2} />
+                      </SpinnerWrapper>
+                    )}
+                  </PoseGroup>
                   <ChevronIcon active={active} />
                 </BodyTitleBarSection>
               </BodyTitleBar>
             )}
           >
-            {({ active }) => (
-              <ProcessContext.Consumer id={scriptId}>
-                {({
-                  process: proc,
-                  executeProcess,
-                  addToOutput,
-                  removeFromOutput
-                }) => (
-                  <TerminalManager
-                    addToOutput={addToOutput}
-                    removeFromOutput={removeFromOutput}
-                    executeProcess={executeProcess}
-                    process={proc}
-                    active={active}
-                  />
-                )}
-              </ProcessContext.Consumer>
-            )}
+            {({ active }) =>
+              this.state.displayContent && (
+                <ProcessContext.Consumer id={scriptId}>
+                  {({
+                    process: proc,
+                    executeProcess,
+                    addToOutput,
+                    removeFromOutput
+                  }) => (
+                    <TerminalManager
+                      addToOutput={addToOutput}
+                      removeFromOutput={removeFromOutput}
+                      executeProcess={executeProcess}
+                      process={proc}
+                      active={active}
+                    />
+                  )}
+                </ProcessContext.Consumer>
+              )
+            }
           </ExpansionPanel>
         </Body>
       </StyledPanel>

@@ -49,7 +49,7 @@ const getTextColour = (buttonType: ButtonType): ColourName => {
     ? 'white'
     : buttonType === 'disabled'
     ? 'grey'
-    : 'black';
+    : 'text';
 };
 
 const Base: ThemedComponent<SCProps> = styled.button`
