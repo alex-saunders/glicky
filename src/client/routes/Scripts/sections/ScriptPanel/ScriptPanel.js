@@ -77,7 +77,7 @@ class ScriptPanel extends PureComponent<Props, State> {
             displayContent: prevState.panelOpen,
             displayIcon: !prevState.panelOpen
           }));
-        }, 200);
+        }, 300);
       }
     );
   };

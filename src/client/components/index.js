@@ -31,3 +31,4 @@ export { default as Icon } from './Icon/Icon';
 /* Utilities */
 export { default as AnimateHeight } from './utils/AnimateHeight/AnimateHeight';
 export { default as A11yHandler } from './utils/A11yHandler/A11yHandler';
+export { default as ManageScroll } from './utils/ManageScroll/ManageScroll';

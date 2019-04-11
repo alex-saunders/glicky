@@ -14,6 +14,8 @@ const Container = styled.div`
   background: ${(p: ThemeProps) => p.theme.colour('primary_dark')};
   box-shadow: inset 0px 0px 4px rgba(0, 0, 0, 0.12);
   border-radius: 3px;
+
+  transition: background 0.2s linear;
 `;
 
 type IconWrapperProps = {

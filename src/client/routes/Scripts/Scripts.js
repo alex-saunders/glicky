@@ -23,12 +23,6 @@ import { withSearch, type SearchContextProps } from '~/context/SearchContext';
 import type { Script, Sort } from '../../../types';
 
 import ScriptPanel from './sections/ScriptPanel';
-import AddScript from './sections/AddScript';
-
-const Section = posed.div({
-  routeEnter: { x: 0, opacity: 1, delay: 300 },
-  routeExit: { x: -50, opacity: 0 }
-});
 
 const Content = posed.div({
   scriptEnter: {
@@ -180,36 +174,33 @@ class Scripts extends React.Component<Props, State> {
 
     return (
       <Fragment>
-        <AddScript />
-        <Section>
-          <TitleRow>
-            <Title>Scripts</Title>
-            <SelectWrapper>
-              <Select
-                value={this.state.sort.key}
-                options={Object.entries(sortOptions).map(([key, label]) => ({
-                  value: key,
-                  label: String(label)
-                }))}
-                onChange={this.handleSortChange}
-              />
-            </SelectWrapper>
-          </TitleRow>
+        <TitleRow>
+          <Title>Scripts</Title>
+          <SelectWrapper>
+            <Select
+              value={this.state.sort.key}
+              options={Object.entries(sortOptions).map(([key, label]) => ({
+                value: key,
+                label: String(label)
+              }))}
+              onChange={this.handleSortChange}
+            />
+          </SelectWrapper>
+        </TitleRow>
 
-          {filteredScripts.length > 0 &&
-            this.sortScripts(filteredScripts).map(scriptId => (
-              <ScriptPanel
-                key={scriptId}
-                script={scripts[scriptId]}
-                scriptId={scriptId}
-                onSave={this.handleScriptSave.bind(null, scriptId)}
-                onRequestDelete={this.handleRequestScriptDelete.bind(
-                  null,
-                  scriptId
-                )}
-              />
-            ))}
-        </Section>
+        {filteredScripts.length > 0 &&
+          this.sortScripts(filteredScripts).map(scriptId => (
+            <ScriptPanel
+              key={scriptId}
+              script={scripts[scriptId]}
+              scriptId={scriptId}
+              onSave={this.handleScriptSave.bind(null, scriptId)}
+              onRequestDelete={this.handleRequestScriptDelete.bind(
+                null,
+                scriptId
+              )}
+            />
+          ))}
 
         <Modal
           isActive={!!this.state.selectedScript}

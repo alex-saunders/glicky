@@ -21,16 +21,6 @@ import {
   ColourPicker
 } from '~/components';
 
-const Wrapper = posed.div({
-  routeEnter: {
-    opacity: 1,
-    staggerChildren: 10,
-    delay: 300,
-    delayChildren: 250
-  },
-  routeExit: { opacity: 0 }
-});
-
 const Section = posed.div({
   routeEnter: { y: 0, opacity: 1 },
   routeExit: { y: 50, opacity: 0 }
@@ -58,10 +48,6 @@ type Props = ThemeContextProps & SettingsContextProps;
 type State = {};
 
 class Settings extends Component<Props, State> {
-  static defaultProps = {};
-
-  state = {};
-
   handleThemeToggle = active => {
     this.props.setSettings({
       dark: active
@@ -94,7 +80,7 @@ class Settings extends Component<Props, State> {
     }
 
     return (
-      <Wrapper>
+      <Fragment>
         <Section>
           <Title>settings</Title>
         </Section>
@@ -171,7 +157,7 @@ class Settings extends Component<Props, State> {
             </Row>
           </Section>
         </Container>
-      </Wrapper>
+      </Fragment>
     );
   }
 }

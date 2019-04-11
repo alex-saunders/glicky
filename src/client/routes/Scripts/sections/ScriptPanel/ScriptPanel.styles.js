@@ -125,7 +125,7 @@ const PosedSpinnerWrapper = posed.div({
 
 export const SpinnerWrapper = styled(PosedSpinnerWrapper)`
   display: inline-flex;
-  margin-right: ${(p: ThemeProps) => p.theme.sizing('sm')};
+  padding: 0 ${(p: ThemeProps) => p.theme.sizing('sm')};
 `;
 
 export const TerminalIcon = styled(Icon).attrs({

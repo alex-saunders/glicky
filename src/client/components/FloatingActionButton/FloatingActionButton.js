@@ -2,19 +2,13 @@
 import React, { type Node } from 'react';
 import styled, { css } from 'styled-components';
 import Ink from 'react-ink';
-import posed from 'react-pose';
 
 import { type ThemeProps } from '../../theme';
 
 import Text from '../Text/Text';
 import Icon, { type IconType } from '../Icon/Icon';
 
-const PosedButton = posed.button({
-  routeEnter: { opacity: 1, delay: 300 },
-  routeExit: { opacity: 0 }
-});
-
-const Button = styled(PosedButton)`
+const Button = styled.button`
   position: relative;
   display: flex;
   flex-direction: row;

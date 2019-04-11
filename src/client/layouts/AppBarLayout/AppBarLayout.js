@@ -32,6 +32,8 @@ const AppBar = styled.header`
   height: ${(p: ThemeProps) => p.theme.sizing(2.2)};
   background: ${(p: ThemeProps) => p.theme.colour('primary')};
   ${(p: ThemeProps) => p.theme.elevation('e2')};
+
+  transition: background 0.2s linear;
 `;
 
 const LeftContent = styled.div`

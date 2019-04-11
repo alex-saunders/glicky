@@ -1,5 +1,5 @@
 // @flow
-import * as React from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import { type ThemeProps } from '../../theme';
@@ -13,6 +13,7 @@ const Container = styled.div`
   flex-direction: row;
   height: 100vh;
   width: 100vw;
+  transition: background 0.2s linear;
   background: ${(p: ThemeProps) => p.theme.colour('background_body')};
 `;
 
@@ -30,22 +31,27 @@ const ScrollingContent = styled.div`
   padding: 0 ${(p: ThemeProps) => p.theme.sizing('md')};
 `;
 
-type Props = {};
-
-type State = {};
-
 class AppLayout extends React.Component<Props, State> {
-  static defaultProps = {};
+  scrollingContent = React.createRef<HTMLElement>();
 
-  state = {};
+  scrollToTop = () => {
+    // setTimeout(() => {
+    const { current } = this.scrollingContent;
+    if (!current) {
+      return;
+    }
+    console.log('scrolling to top');
+    current.scrollTop = 0;
+    // }, 250);
+  };
 
   render() {
     return (
       <Container>
         <MainWrapper>
-          <AppBarLayout />
-          <ScrollingContent>
-            <Routes />
+          <AppBarLayout scrollToTop={this.scrollToTop} />
+          <ScrollingContent ref={this.scrollingContent}>
+            <Routes scrollToTop={this.scrollToTop} />
           </ScrollingContent>
         </MainWrapper>
       </Container>

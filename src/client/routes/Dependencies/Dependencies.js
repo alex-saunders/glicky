@@ -14,12 +14,6 @@ import { type ThemeProps } from '~/theme';
 import { Title, Spacing, SkeletonScreen, Icon } from '~/components';
 
 import DependenciesList from './sections/DependenciesList';
-import AddDependency from './sections/AddDependency';
-
-const Section = posed.div({
-  routeEnter: { x: 0, opacity: 1, delay: 300 },
-  routeExit: { x: 50, opacity: 0 }
-});
 
 const Content = posed.div({
   dependenciesEnter: {
@@ -59,32 +53,29 @@ class Dependencies extends React.Component<Props, {}> {
   render() {
     return (
       <Fragment>
-        <AddDependency />
-        <Section>
-          <Title>Dependencies</Title>
+        <Title>Dependencies</Title>
 
-          <PanelWrapper>
-            {this.props.dependencies.length > 0 ? (
-              <DependenciesList
-                filteredDependencies={this.filterDependencies()}
-              />
-            ) : (
-              <Fragment>
-                <SkeletonScreen width={5.4} absoluteWidth={510} />
-                <Spacing top="xs" />
-                <SkeletonScreen width={5} absoluteWidth={390} />
-                <Spacing top="xs" />
-                <SkeletonScreen width={5.2} absoluteWidth={450} />
+        <PanelWrapper>
+          {this.props.dependencies.length > 0 ? (
+            <DependenciesList
+              filteredDependencies={this.filterDependencies()}
+            />
+          ) : (
+            <Fragment>
+              <SkeletonScreen width={5.4} absoluteWidth={510} />
+              <Spacing top="xs" />
+              <SkeletonScreen width={5} absoluteWidth={390} />
+              <Spacing top="xs" />
+              <SkeletonScreen width={5.2} absoluteWidth={450} />
 
-                <Spacing top="xxl" />
+              <Spacing top="xxl" />
 
-                <SkeletonScreen width={5} absoluteWidth={384} />
-                <Spacing top="xs" />
-                <SkeletonScreen width={4.5} absoluteWidth={271} />
-              </Fragment>
-            )}
-          </PanelWrapper>
-        </Section>
+              <SkeletonScreen width={5} absoluteWidth={384} />
+              <Spacing top="xs" />
+              <SkeletonScreen width={4.5} absoluteWidth={271} />
+            </Fragment>
+          )}
+        </PanelWrapper>
       </Fragment>
     );
   }
