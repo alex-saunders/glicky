@@ -18,12 +18,23 @@ import { type SocketContextProps } from './SocketContext';
 
 export type DependenciesContextProps = {
   dependencies: Array<Dependency>,
-  fetchDependencies: () => void
+  fetchDependencies: () => void,
+  addDependency: (
+    dependencyName: string,
+    dependencyType: DependencyType
+  ) => Promise<Dependency>,
+  deleteDependency: Dependency => Promise<Dependency>,
+  updateDependency: Dependency => void
 };
-export const defaultContext = {
+
+const defaultContext = {
   dependencies: [],
-  fetchDependencies: () => {}
+  fetchDependencies: () => {},
+  addDependency: () => new Promise(() => {}),
+  deleteDependency: () => new Promise(() => {}),
+  updateDependency: () => {}
 };
+
 export const Context = createContext<DependenciesContextProps>(defaultContext);
 
 type Props = SocketContextProps &
@@ -81,9 +92,13 @@ class DependenciesContextProvider extends React.Component<Props, State> {
     }
   }
 
-  fetchDependencies = () => {
-    this.getAllDependencies();
-    this.getOutdatedDependencies();
+  fetchDependencies = async () => {
+    this.setState(
+      {
+        dependencies: await this.getAllDependencies()
+      },
+      this.getOutdatedDependencies
+    );
   };
 
   getOutdatedDependencies = () => {
@@ -129,9 +144,7 @@ class DependenciesContextProvider extends React.Component<Props, State> {
       dependencies.push(...packages);
     }
 
-    this.setState({
-      dependencies
-    });
+    return dependencies;
   }
 
   getDependencies(
@@ -150,6 +163,93 @@ class DependenciesContextProvider extends React.Component<Props, State> {
       }
     });
   }
+
+  _addDependency = async (
+    dependencyName: string,
+    dependencyType: DependencyType
+  ) => {
+    return new Promise((resolve, reject) => {
+      const { socket } = this.props;
+
+      socket.emit(
+        'request',
+        {
+          resource: 'add-dependency',
+          dependencyName: dependencyName,
+          dependencyType: dependencyType
+        },
+        result => {
+          if (!result.error) {
+            resolve();
+          } else {
+            reject();
+          }
+        }
+      );
+    });
+  };
+
+  // uninstalls + deletes dependency from package.json but doesn't update state
+  _deleteDependency = async (dependency: Dependency) => {
+    return new Promise((resolve, reject) => {
+      const { socket } = this.props;
+
+      socket.emit(
+        'request',
+        {
+          resource: 'remove-dependency',
+          dependencyName: dependency.name,
+          dependencyType: dependency.type
+        },
+        res => {
+          if (!res) {
+            reject('did not recieve a response');
+          }
+
+          resolve(res);
+        }
+      );
+    });
+  };
+
+  addDependency = (dependencyName: string, dependencyType: DependencyType) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await this._addDependency(dependencyName, dependencyType);
+        this.setState(
+          {
+            dependencies: await this.getAllDependencies()
+          },
+          resolve
+        );
+      } catch (err) {
+        reject(err);
+      }
+    });
+  };
+
+  deleteDependency = (dependency: Dependency) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const currDependency = this.state.dependencies.find(
+          dep => dep.name === dependency.name
+        );
+        await this._deleteDependency(dependency);
+        this.setState(
+          prevState => ({
+            dependencies: prevState.dependencies.filter(
+              dep => dep.name !== dependency.name
+            )
+          }),
+          resolve.bind(null, { ...currDependency })
+        );
+      } catch (err) {
+        reject(err);
+      }
+    });
+  };
+
+  updateDependency = () => {};
 
   render() {
     const { dependencies, outdatedDependencies } = this.state;
@@ -176,7 +276,10 @@ class DependenciesContextProvider extends React.Component<Props, State> {
       <Context.Provider
         value={{
           dependencies: updatedDependencies,
-          fetchDependencies: this.fetchDependencies
+          fetchDependencies: this.fetchDependencies,
+          addDependency: this.addDependency,
+          deleteDependency: this.deleteDependency,
+          updateDependency: this.updateDependency
         }}
       >
         {this.props.children}

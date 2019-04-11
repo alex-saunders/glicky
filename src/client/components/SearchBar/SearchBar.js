@@ -156,8 +156,6 @@ class SearchBar extends React.Component<Props, State> {
     const { focused } = this.state;
     const { value } = this.props;
 
-    console.log(this.props.location);
-
     return (
       <Container>
         <IconWrapper onClick={this.focusInput}>

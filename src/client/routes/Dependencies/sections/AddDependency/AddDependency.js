@@ -5,9 +5,9 @@ import debounce from 'lodash/debounce';
 import Reward from 'react-rewards';
 
 import {
-  withSocketContext,
-  type SocketContextProps
-} from '~/context/SocketContext';
+  withDependencies,
+  type DependenciesContextProps
+} from '~/context/DependenciesContext';
 
 import {
   FAB,
@@ -50,7 +50,13 @@ const StyledCheck = styled(Icon).attrs({
     p.theme.colour(p.theme.mode === 'dark' ? 'white' : 'green')};
 `;
 
-type Props = SocketContextProps;
+const StyledAdd = styled(Icon).attrs({
+  type: 'add'
+})`
+  fill: ${(p: ThemeProps) => p.theme.colour('white')};
+`;
+
+type Props = DependenciesContextProps;
 
 type State = {
   modalIsActive: boolean,
@@ -163,36 +169,29 @@ class AddDependency extends Component<Props, State> {
         searchValue: suggestion.package.name
       },
       () => {
-        const { socket } = this.props;
-
-        socket.emit(
-          'request',
-          {
-            resource: 'add-dependency',
-            dependencyName: suggestion.package.name,
-            dependencyType: this.state.dependencyType
-          },
-          result => {
-            if (!result.error) {
-              this.setState(
-                {
-                  hasAddedDependency: true
-                },
-                () => {
-                  const reward = this.reward.current;
-                  if (!reward) {
-                    return;
-                  }
-
-                  reward.rewardMe();
-                  setTimeout(() => {
-                    this.handleModalRequestClose();
-                  }, 2000);
+        this.props
+          .addDependency(suggestion.package.name, this.state.dependencyType)
+          .then(() => {
+            this.setState(
+              {
+                hasAddedDependency: true
+              },
+              () => {
+                const reward = this.reward.current;
+                if (!reward) {
+                  return;
                 }
-              );
-            }
-          }
-        );
+
+                reward.rewardMe();
+                setTimeout(() => {
+                  this.handleModalRequestClose();
+                }, 2000);
+              }
+            );
+          })
+          .catch(() => {
+            // handle error case
+          });
       }
     );
   };
@@ -226,7 +225,7 @@ class AddDependency extends Component<Props, State> {
     return (
       <FABHolder>
         <FAB
-          icon={<Icon type="add" />}
+          icon={<StyledAdd />}
           label="Add Dependency"
           onClick={this.handleFabClick}
         />
@@ -304,4 +303,4 @@ class AddDependency extends Component<Props, State> {
   }
 }
 
-export default withSocketContext(AddDependency);
+export default withDependencies(AddDependency);

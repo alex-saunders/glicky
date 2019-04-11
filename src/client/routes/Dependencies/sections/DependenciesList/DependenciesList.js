@@ -2,8 +2,9 @@
 import React, { Fragment, Component } from 'react';
 import idx from 'idx';
 import Ink from 'react-ink';
+import { PoseGroup } from 'react-pose';
 
-import { Text, Modal, Button, Spacing } from '~/components';
+import { Text, Modal, Button, Spacing, Spinner } from '~/components';
 
 import {
   withSocketContext,
@@ -27,6 +28,7 @@ import {
   PanelWrapper,
   StyledDependencyPanel,
   OutdatedIcon,
+  IconHolder,
   DeleteIcon,
   Name
 } from './DependenciesList.styles';
@@ -47,6 +49,7 @@ type State = {
     }
   },
   sort: Sort<SortKey>,
+  deletingDependency: boolean,
   modalOpen: boolean
 };
 
@@ -56,6 +59,7 @@ class DependenciesList extends Component<Props, State> {
   state = {
     expandedItem: false,
     modalOpen: false,
+    deletingDependency: false,
     sort: {
       key: 'name',
       order: 'asc'
@@ -150,7 +154,29 @@ class DependenciesList extends Component<Props, State> {
   };
 
   handleDependencyDelete = () => {
-    console.log('ok delete');
+    if (!this.state.expandedDependency || this.state.deletingDependency) {
+      return;
+    }
+    const { expandedDependency } = this.state;
+
+    this.setState(
+      {
+        deletingDependency: true
+      },
+      () => {
+        this.props
+          .deleteDependency(expandedDependency)
+          .then(() => {
+            this.setState({
+              deletingDependency: false,
+              modalOpen: false
+            });
+          })
+          .catch(() => {
+            // handle error case
+          });
+      }
+    );
   };
 
   render() {
@@ -269,7 +295,19 @@ class DependenciesList extends Component<Props, State> {
                 <Spacing left="sm" />
                 <Button
                   type="error"
-                  icon={<DeleteIcon />}
+                  icon={
+                    <PoseGroup>
+                      {this.state.deletingDependency ? (
+                        <IconHolder key="deletingDependency">
+                          <Spinner size="md" colour="white" lineWidth={3} />
+                        </IconHolder>
+                      ) : (
+                        <IconHolder key="notDeletingDependency">
+                          <DeleteIcon />
+                        </IconHolder>
+                      )}
+                    </PoseGroup>
+                  }
                   onClick={this.handleDependencyDelete}
                 >
                   Remove

@@ -2,13 +2,19 @@
 import React, { type Node } from 'react';
 import styled, { css } from 'styled-components';
 import Ink from 'react-ink';
+import posed from 'react-pose';
 
 import { type ThemeProps } from '../../theme';
 
 import Text from '../Text/Text';
 import Icon, { type IconType } from '../Icon/Icon';
 
-const Button = styled.button`
+const PosedButton = posed.button({
+  routeEnter: { opacity: 1, delay: 300 },
+  routeExit: { opacity: 0 }
+});
+
+const Button = styled(PosedButton)`
   position: relative;
   display: flex;
   flex-direction: row;
@@ -20,6 +26,11 @@ const Button = styled.button`
   background: ${(p: ThemeProps) => p.theme.colour('primary')};
   border-radius: ${(p: ThemeProps) => p.theme.sizing('xxl')};
   ${(p: ThemeProps) => p.theme.elevation('e3')};
+  ${(p: ThemeProps) =>
+    p.theme.mode === 'dark' &&
+    css`
+      border: 1px solid ${(p: ThemeProps) => p.theme.colour('primary_dark')};
+    `}
 
   transition: transform 0.1s linear;
   &:hover {

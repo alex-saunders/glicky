@@ -81,6 +81,7 @@ const IconWrapper = styled.div`
 const StyledIcon = styled(Icon)`
   width: 100%;
   height: 100%;
+  fill: ${(p: ThemeProps) => p.theme.colour('white')};
 `;
 
 const Button = ({

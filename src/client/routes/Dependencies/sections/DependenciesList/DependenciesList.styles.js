@@ -202,6 +202,16 @@ export const Name: ThemedComponent<NameProps> = styled.div`
     `};
 `;
 
+const PosedIconHolder = posed.div({
+  enter: { opacity: 1 },
+  exit: { opacity: 0 }
+});
+
+export const IconHolder = styled(PosedIconHolder)`
+  width: ${(p: ThemeProps) => p.theme.sizing('md')};
+  height: ${(p: ThemeProps) => p.theme.sizing('md')};
+`;
+
 export const DeleteIcon = styled(Icon).attrs({
   type: 'remove'
 })`

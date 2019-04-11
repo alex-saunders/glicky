@@ -83,7 +83,7 @@ class ScriptPanel extends PureComponent<Props, State> {
   };
 
   render() {
-    const { scriptId, script } = this.props;
+    const { scriptId, script, theme } = this.props;
 
     return (
       <StyledPanel active={this.state.panelOpen} elevation="e0">
@@ -116,7 +116,11 @@ class ScriptPanel extends PureComponent<Props, State> {
                   <PoseGroup>
                     {this.state.displayIcon && this.state.panelOpen && (
                       <SpinnerWrapper key="loadingTerminal">
-                        <Spinner colour="white" size="sm" lineWidth={2} />
+                        <Spinner
+                          colour={theme.mode === 'dark' ? 'white' : 'primary'}
+                          size="sm"
+                          lineWidth={2}
+                        />
                       </SpinnerWrapper>
                     )}
                   </PoseGroup>
