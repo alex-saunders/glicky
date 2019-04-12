@@ -8,6 +8,7 @@ aliases:
   - &restore-cache
     keys:
       - v1-dependencies-{{ checksum "package.json" }}
+      - v1-dependencies-
     paths:
       - ~/repo
   - &save-cache
@@ -26,12 +27,15 @@ jobs:
     docker: *base-image
     working_directory: ~/repo
     steps:
+      - checkout
       - restore_cache: *restore-cache
       - run: yarn lint
   flow:
     docker: *base-image
     working_directory: ~/repo
     steps:
+      - checkout
+      - run: ls -l ~/repo
       - restore_cache: *restore-cache
       - run: yarn flow
 workflows:
