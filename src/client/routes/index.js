@@ -57,49 +57,41 @@ type Props = {
 };
 
 const Routes = ({ scrollToTop }: Props) => (
-  <SocketContext.Consumer>
-    {({ socket }) => (
-      <Main>
-        <Location>
-          {({ location }: LocationProviderRenderFnParams) => (
-            <Fragment>
-              <PoseGroup
-                enterPose="routeEnter"
-                exitPose="routeExit"
-                preEnterPose="routeExit"
-                flipMove={true}
-              >
-                <RoutesContainer key={location.key} location={location}>
-                  <Router location={location}>
-                    <Scripts socket={socket} path="/" />
-                    <Dependencies
-                      socket={socket}
-                      path="/dependencies"
-                      location={location}
-                    />
-                    <Settings path="/settings" />
-                  </Router>
-                </RoutesContainer>
-              </PoseGroup>
-              <PoseGroup
-                enterPose="fabEnter"
-                exitPose="fabExit"
-                preEnterPose="fabExit"
-              >
-                <FABContainer key={location.key} location={location}>
-                  <Router location={location}>
-                    <AddScript path="/" />
-                    <AddDependency path="/dependencies" />
-                  </Router>
-                </FABContainer>
-              </PoseGroup>
-              <ManageScroll location={location} scrollToTop={scrollToTop} />
-            </Fragment>
-          )}
-        </Location>
-      </Main>
-    )}
-  </SocketContext.Consumer>
+  <Main>
+    <Location>
+      {({ location }: LocationProviderRenderFnParams) => (
+        <Fragment>
+          <PoseGroup
+            enterPose="routeEnter"
+            exitPose="routeExit"
+            preEnterPose="routeExit"
+            flipMove={true}
+          >
+            <RoutesContainer key={location.key} location={location}>
+              <Router location={location}>
+                <Scripts path="/" />
+                <Dependencies path="/dependencies" location={location} />
+                <Settings path="/settings" />
+              </Router>
+            </RoutesContainer>
+          </PoseGroup>
+          <PoseGroup
+            enterPose="fabEnter"
+            exitPose="fabExit"
+            preEnterPose="fabExit"
+          >
+            <FABContainer key={location.key} location={location}>
+              <Router location={location}>
+                <AddScript path="/" />
+                <AddDependency path="/dependencies" />
+              </Router>
+            </FABContainer>
+          </PoseGroup>
+          <ManageScroll location={location} scrollToTop={scrollToTop} />
+        </Fragment>
+      )}
+    </Location>
+  </Main>
 );
 
 export default Routes;

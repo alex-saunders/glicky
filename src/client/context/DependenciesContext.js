@@ -255,9 +255,13 @@ class DependenciesContextProvider extends React.Component<Props, State> {
     return new Promise(async (resolve, reject) => {
       try {
         await this._addDependency(dependencyName, dependencyType);
+        const dependencies = await this.getAllDependencies();
+        const installedVersions = await this.getInstalledVersions();
+
         this.setState(
           {
-            dependencies: await this.getAllDependencies()
+            dependencies,
+            installedVersions
           },
           resolve
         );
