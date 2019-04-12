@@ -48,6 +48,7 @@ export type DependencyType = $Keys<typeof DEPENDENCY_TYPES>;
 
 export type Dependency = Package & {
   outdated: boolean,
+  installedVersion?: string,
   type: DependencyType
 };
 

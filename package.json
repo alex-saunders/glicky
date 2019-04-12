@@ -6,7 +6,6 @@
     "cli-gui": "./bin/index.js"
   },
   "scripts": {
-    "test3": "yarn test\n",
     "killport": "kill-port 5000",
     "dev:styleguide": "styleguidist server --config config/styleguide.config.js --open",
     "watch:client": "webpack-dev-server --open --config config/webpack.config.js",
@@ -18,7 +17,8 @@
     "dev": "concurrently \"yarn dev:server\" \"yarn dev:styleguide\" \"yarn dev:client\"",
     "start": "yarn build:client && yarn build:server && NODE_ENV=production node dist/server/server.bundle.js",
     "test:continuous": "webpack-dev-server --config config/webpack.config.js",
-    "test": "node test.js"
+    "test": "node test.js",
+    "test3": "yarn test"
   },
   "resolutions": {
     "babel-core": "^7.0.0-bridge.0"

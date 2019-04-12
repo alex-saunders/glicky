@@ -1,13 +1,11 @@
 // @flow
-import styled, { css, keyframes } from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { darken } from 'polished';
+import posed from 'react-pose';
 
-import { ExpansionPanel } from '~/components';
+import { ExpansionPanel, Icon } from '~/components';
 
 import type { ThemeProps, ThemedComponent } from '~/theme';
-
-// space between expanded panel and rest of list items
-const GUTTER = 20;
 
 const fadeIn = keyframes`
   from {
@@ -59,4 +57,20 @@ export const PanelFooter = styled.div`
   & > * {
     margin-left: ${(p: ThemeProps) => p.theme.sizing('sm')};
   }
+`;
+
+const PosedIconHolder = posed.div({
+  enter: { opacity: 1 },
+  exit: { opacity: 0 }
+});
+
+export const IconHolder = styled(PosedIconHolder)`
+  width: ${(p: ThemeProps) => p.theme.sizing('md')};
+  height: ${(p: ThemeProps) => p.theme.sizing('md')};
+`;
+
+export const UpdateIcon = styled(Icon).attrs({
+  type: 'update'
+})`
+  fill: ${(p: ThemeProps) => p.theme.colour('white')};
 `;

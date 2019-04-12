@@ -35,14 +35,11 @@ class AppLayout extends React.Component<Props, State> {
   scrollingContent = React.createRef<HTMLElement>();
 
   scrollToTop = () => {
-    // setTimeout(() => {
     const { current } = this.scrollingContent;
     if (!current) {
       return;
     }
-    console.log('scrolling to top');
     current.scrollTop = 0;
-    // }, 250);
   };
 
   render() {

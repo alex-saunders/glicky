@@ -11,16 +11,16 @@ import {
 
 import { type ThemeProps } from '~/theme';
 
-import { Title, Spacing, SkeletonScreen, Icon } from '~/components';
+import { Title } from '~/components';
 
 import DependenciesList from './sections/DependenciesList';
 
-const Content = posed.div({
-  dependenciesEnter: {
+const DependenciesListContainer = posed.div({
+  dependenciesLoaded: {
     opacity: 1,
     transition: { ease: 'linear', duration: 300 }
   },
-  dependenciesExit: { opacity: 0 }
+  dependenciesLoading: { opacity: 0 }
 });
 
 const PanelWrapper = styled.div`
@@ -51,30 +51,26 @@ class Dependencies extends React.Component<Props, {}> {
   }
 
   render() {
+    const { dependencies } = this.props;
     return (
       <Fragment>
         <Title>Dependencies</Title>
 
         <PanelWrapper>
-          {this.props.dependencies.length > 0 ? (
-            <DependenciesList
-              filteredDependencies={this.filterDependencies()}
-            />
-          ) : (
-            <Fragment>
-              <SkeletonScreen width={5.4} absoluteWidth={510} />
-              <Spacing top="xs" />
-              <SkeletonScreen width={5} absoluteWidth={390} />
-              <Spacing top="xs" />
-              <SkeletonScreen width={5.2} absoluteWidth={450} />
-
-              <Spacing top="xxl" />
-
-              <SkeletonScreen width={5} absoluteWidth={384} />
-              <Spacing top="xs" />
-              <SkeletonScreen width={4.5} absoluteWidth={271} />
-            </Fragment>
-          )}
+          <DependenciesListContainer
+            withParent={false}
+            pose={
+              dependencies.length > 0
+                ? 'dependenciesLoaded'
+                : 'dependenciesLoading'
+            }
+          >
+            {dependencies.length > 0 && (
+              <DependenciesList
+                filteredDependencies={this.filterDependencies()}
+              />
+            )}
+          </DependenciesListContainer>
         </PanelWrapper>
       </Fragment>
     );

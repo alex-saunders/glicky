@@ -1,7 +1,7 @@
 // @flow
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
-import posed, { PoseGroup } from 'react-pose';
+import posed from 'react-pose';
 
 import { type ThemeProps } from '~/theme';
 import {
@@ -24,12 +24,18 @@ import type { Script, Sort } from '../../../types';
 
 import ScriptPanel from './sections/ScriptPanel';
 
-const Content = posed.div({
-  scriptEnter: {
+const ScriptsContainer = posed.div({
+  scriptsLoaded: {
+    staggerChildren: 50
+  }
+});
+
+const ScriptWrapper = posed.div({
+  scriptsLoaded: {
     opacity: 1,
     transition: { ease: 'linear', duration: 300 }
   },
-  scriptExit: { opacity: 0 }
+  scriptsLoading: { opacity: 0 }
 });
 
 const TitleRow = styled.div`
@@ -188,19 +194,29 @@ class Scripts extends React.Component<Props, State> {
           </SelectWrapper>
         </TitleRow>
 
-        {filteredScripts.length > 0 &&
-          this.sortScripts(filteredScripts).map(scriptId => (
-            <ScriptPanel
-              key={scriptId}
-              script={scripts[scriptId]}
-              scriptId={scriptId}
-              onSave={this.handleScriptSave.bind(null, scriptId)}
-              onRequestDelete={this.handleRequestScriptDelete.bind(
-                null,
-                scriptId
-              )}
-            />
-          ))}
+        <ScriptsContainer
+          withParent={false}
+          pose={filteredScripts.length > 0 ? 'scriptsLoaded' : 'scriptsLoading'}
+        >
+          {filteredScripts.length > 0 &&
+            this.sortScripts(filteredScripts).map(scriptId => (
+              <ScriptWrapper
+                key={scriptId}
+                initialPose="scriptsLoading"
+                pose="scriptsLoaded"
+              >
+                <ScriptPanel
+                  script={scripts[scriptId]}
+                  scriptId={scriptId}
+                  onSave={this.handleScriptSave.bind(null, scriptId)}
+                  onRequestDelete={this.handleRequestScriptDelete.bind(
+                    null,
+                    scriptId
+                  )}
+                />
+              </ScriptWrapper>
+            ))}
+        </ScriptsContainer>
 
         <Modal
           isActive={!!this.state.selectedScript}

@@ -44,9 +44,15 @@ type Props = SocketContextProps &
 
 type State = {
   dependencies: Array<Dependency>,
+  installedVersions?: {
+    [string]: {
+      version: string
+    }
+  },
   outdatedDependencies: ?Array<string>
 };
 
+// this probably needs quite a big refactor, it's all quite nasty.
 class DependenciesContextProvider extends React.Component<Props, State> {
   hasFetchedOutdatedDeps = false;
 
@@ -97,30 +103,61 @@ class DependenciesContextProvider extends React.Component<Props, State> {
       {
         dependencies: await this.getAllDependencies()
       },
-      this.getOutdatedDependencies
+      () => {
+        Promise.all([
+          this.getOutdatedDependencies(),
+          this.getInstalledVersions()
+        ]).then(([outdatedDependencies, installedVersions]) => {
+          this.setState({
+            outdatedDependencies,
+            installedVersions
+          });
+        });
+      }
     );
   };
 
   getOutdatedDependencies = () => {
-    if (this.hasFetchedOutdatedDeps || !this.props.socket) {
-      return;
-    }
-
-    this.hasFetchedOutdatedDeps = true;
-    const { socket } = this.props;
-
-    socket.emit('exec', 'npm outdated --json', json => {
-      const outdatedDependencies = Object.keys(JSON.parse(json));
-      const numOutdatedDependencies = outdatedDependencies.length;
-      if (numOutdatedDependencies > 0) {
-        this.triggerNotification(numOutdatedDependencies);
+    return new Promise((res, rej) => {
+      if (this.hasFetchedOutdatedDeps) {
+        rej();
+        return;
       }
 
-      this.setState({
-        outdatedDependencies
+      this.hasFetchedOutdatedDeps = true;
+      const { socket } = this.props;
+
+      socket.emit('exec', 'npm outdated --json', json => {
+        const outdatedDependencies = Object.keys(JSON.parse(json));
+        const numOutdatedDependencies = outdatedDependencies.length;
+        if (numOutdatedDependencies > 0) {
+          this.triggerNotification(numOutdatedDependencies);
+        }
+
+        res(outdatedDependencies);
+
+        this.setState({
+          outdatedDependencies
+        });
       });
     });
   };
+
+  getInstalledVersions() {
+    return new Promise(res => {
+      const { socket } = this.props;
+
+      socket.emit(
+        'request',
+        {
+          resource: 'installed-versions'
+        },
+        installedVersions => {
+          res(installedVersions);
+        }
+      );
+    });
+  }
 
   async getAllDependencies() {
     const dependencyTypes = Object.keys(DEPENDENCY_TYPES);
@@ -135,7 +172,9 @@ class DependenciesContextProvider extends React.Component<Props, State> {
         arr.push({
           name,
           version,
-          outdated: false,
+          outdated: this.state.outdatedDependencies.some(
+            outdatedDep => outdatedDep.name === name
+          ),
           type: dependencyType
         });
         return arr;
@@ -249,27 +288,56 @@ class DependenciesContextProvider extends React.Component<Props, State> {
     });
   };
 
-  updateDependency = () => {};
+  updateDependency = (dependency: Dependency) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await this._addDependency(dependency.name, dependency.type);
+        const dependencies = await this.getAllDependencies();
+        const installedVersions = await this.getInstalledVersions();
+
+        this.setState(prevState => {
+          const outdatedDependencies = prevState.outdatedDependencies.filter(
+            dep => dep !== dependency.name
+          );
+          return {
+            dependencies,
+            outdatedDependencies,
+            installedVersions
+          };
+        }, resolve.bind(null, dependency));
+      } catch (err) {
+        reject(err);
+      }
+    });
+  };
 
   render() {
     const { dependencies, outdatedDependencies } = this.state;
     const { filterOutdatedDependencies } = this.props.settings || {};
 
+    let updatedDependencies = [...dependencies];
+
+    if (this.state.installedVersions) {
+      updatedDependencies = dependencies.map(dependency => ({
+        ...dependency,
+        installedVersion: this.state.installedVersions[dependency.name].version
+      }));
+    }
+
     // filter out up to date dependencies if required by settings
-    let updatedDependencies = [];
     if (filterOutdatedDependencies) {
-      updatedDependencies = dependencies
+      updatedDependencies = updatedDependencies
         .filter(dependency => outdatedDependencies.includes(dependency.name))
         .map(dependency => ({ ...dependency, outdated: true }));
     } else {
       // else update dependency objects with correct `outdated` value
       updatedDependencies =
         outdatedDependencies.length > 0
-          ? dependencies.map(dependency => ({
+          ? updatedDependencies.map(dependency => ({
               ...dependency,
               outdated: outdatedDependencies.includes(dependency.name)
             }))
-          : dependencies;
+          : updatedDependencies;
     }
 
     return (

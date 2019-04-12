@@ -1,15 +1,10 @@
 // @flow
 import React, { Fragment, Component } from 'react';
-import idx from 'idx';
 import Ink from 'react-ink';
 import { PoseGroup } from 'react-pose';
 
 import { Text, Modal, Button, Spacing, Spinner } from '~/components';
 
-import {
-  withSocketContext,
-  type SocketContextProps
-} from '~/context/SocketContext';
 import {
   withDependencies,
   type DependenciesContextProps
@@ -35,19 +30,13 @@ import {
 
 type SortKey = 'name' | 'type';
 
-type Props = SocketContextProps &
-  DependenciesContextProps & {
-    filteredDependencies: Array<Dependency>
-  };
+type Props = DependenciesContextProps & {
+  filteredDependencies: Array<Dependency>
+};
 
 type State = {
   expandedItem: boolean,
   expandedDependency?: Dependency,
-  installedVersions?: {
-    [string]: {
-      version: string
-    }
-  },
   sort: Sort<SortKey>,
   deletingDependency: boolean,
   modalOpen: boolean
@@ -65,26 +54,6 @@ class DependenciesList extends Component<Props, State> {
       order: 'asc'
     }
   };
-
-  componentDidMount() {
-    this.getInstalledVersions();
-  }
-
-  getInstalledVersions() {
-    const { socket } = this.props;
-
-    socket.emit(
-      'request',
-      {
-        resource: 'installed-versions'
-      },
-      installedVersions => {
-        this.setState({
-          installedVersions
-        });
-      }
-    );
-  }
 
   sortDependencies(dependencies: Array<Dependency>) {
     const { key, order } = this.state.sort;
@@ -218,10 +187,6 @@ class DependenciesList extends Component<Props, State> {
           </Row>
         </Header>
         {sortedDependencies.map(dependency => {
-          const installedVersion =
-            this.state.installedVersions &&
-            idx(this.state.installedVersions, _ => _[dependency.name].version);
-
           const expanded =
             this.state.expandedItem &&
             this.state.expandedDependency &&
@@ -236,8 +201,9 @@ class DependenciesList extends Component<Props, State> {
               <StyledDependencyPanel
                 dependency={dependency}
                 active={expanded}
-                installedVersion={installedVersion}
+                installedVersion={dependency.installedVersion}
                 onRequestDelete={this.handleDependencyRequestDelete}
+                onRequestUpdate={this.props.updateDependency}
                 renderTitle={() => (
                   <Row onClick={() => this.togglePanel(dependency)}>
                     <RowSection>
@@ -278,7 +244,7 @@ class DependenciesList extends Component<Props, State> {
           renderBody={() =>
             this.state.expandedDependency && (
               <Text tag="p" size="s0">
-                {'Are you sure you want to delete'}
+                {'Are you sure you want to remove'}
                 <Text font="'Roboto Mono',monospace">{` ${
                   this.state.expandedDependency.name
                 }`}</Text>
@@ -321,4 +287,4 @@ class DependenciesList extends Component<Props, State> {
   }
 }
 
-export default withDependencies(withSocketContext(DependenciesList));
+export default withDependencies(DependenciesList);

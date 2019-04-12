@@ -1,12 +1,19 @@
 // @flow
 import React, { Component, Fragment } from 'react';
+import { PoseGroup } from 'react-pose';
 
 import {
   withSocketContext,
   type SocketContextProps
 } from '~/context/SocketContext';
 
-import { Subtitle, Button, SkeletonScreen, Spacing } from '~/components';
+import {
+  Subtitle,
+  Button,
+  SkeletonScreen,
+  Spacing,
+  Spinner
+} from '~/components';
 
 import type { Package, Dependency } from '../../../../../../types';
 
@@ -18,13 +25,17 @@ import {
   StyledExpansionPanel,
   InfoSection,
   Fade,
-  PanelFooter
+  PanelFooter,
+  IconHolder,
+  UpdateIcon
 } from './DependencyPanel.styles';
 
 type State = {
   panelActive: boolean,
   packageInfo?: Package,
-  fetchingPackageInfo: boolean
+  installedVersion: ?string,
+  isFetchingPackageInfo: boolean,
+  isUpdating: boolean
 };
 
 type Props = SocketContextProps & {
@@ -33,7 +44,8 @@ type Props = SocketContextProps & {
   renderTitle: () => void,
   installedVersion: ?string,
   className?: string,
-  onRequestDelete: () => {}
+  onRequestDelete: () => {},
+  onRequestUpdate: Dependency => Promise<Dependency>
 };
 
 class DependencyPanel extends Component<Props, State> {
@@ -41,29 +53,26 @@ class DependencyPanel extends Component<Props, State> {
 
   state = {
     panelActive: false,
-    fetchingPackageInfo: true
+    isFetchingPackageInfo: true,
+    isUpdating: false
   };
 
   body: ?HTMLDivElement;
 
   static getDerivedStateFromProps(nextProps: Props, state: State) {
-    if (state.panelActive !== nextProps.active) {
-      return {
-        panelActive: nextProps.active
-      };
-    }
     return {
+      installedVersion: nextProps.installedVersion,
       panelActive: nextProps.active
     };
   }
 
   shouldComponentUpdate(nextProps: Props) {
-    if (!nextProps.active && !this.props.active) {
-      if (nextProps.dependency.outdated !== this.props.dependency.outdated) {
-        return true;
-      }
-      return false;
-    }
+    // if (!nextProps.active && !this.props.active) {
+    //   if (nextProps.dependency.outdated !== this.props.dependency.outdated) {
+    //     return true;
+    //   }
+    //   return false;
+    // }
     return true;
   }
 
@@ -71,6 +80,22 @@ class DependencyPanel extends Component<Props, State> {
     if (this.state.panelActive && !this.state.packageInfo) {
       this.fetchPackageInfo();
     }
+  };
+
+  handleClickUpdate = () => {
+    this.setState(
+      {
+        isUpdating: true
+      },
+      () => {
+        this.props.onRequestUpdate(this.props.dependency).then(() => {
+          this.setState({
+            installedVersion: null,
+            isUpdating: false
+          });
+        });
+      }
+    );
   };
 
   fetchPackageInfo() {
@@ -86,7 +111,7 @@ class DependencyPanel extends Component<Props, State> {
         this.setState(
           {
             packageInfo: info,
-            fetchingPackageInfo: false
+            isFetchingPackageInfo: false
           },
           () => {
             this.setState({});
@@ -123,7 +148,7 @@ class DependencyPanel extends Component<Props, State> {
           {packageInfo ? (
             <Fade>
               <Version
-                installedVersion={this.props.installedVersion}
+                installedVersion={this.state.installedVersion}
                 latestVersion={packageInfo.version}
                 publishDate={packageInfo.time}
                 publisher={packageInfo.author}
@@ -176,7 +201,23 @@ class DependencyPanel extends Component<Props, State> {
             <PanelFooter>
               {this.props.dependency.outdated && (
                 <Fade>
-                  <Button type="primary" icon={'update'}>
+                  <Button
+                    type="primary"
+                    icon={
+                      <PoseGroup>
+                        {this.state.isUpdating ? (
+                          <IconHolder key="updatingDependency">
+                            <Spinner size="md" colour="white" lineWidth={3} />
+                          </IconHolder>
+                        ) : (
+                          <IconHolder key="notUpdatingDependency">
+                            <UpdateIcon />
+                          </IconHolder>
+                        )}
+                      </PoseGroup>
+                    }
+                    onClick={this.handleClickUpdate}
+                  >
                     Update
                   </Button>
                 </Fade>
