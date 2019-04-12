@@ -16,9 +16,6 @@
     "build:server": "rollup --config config/rollup.config.js",
     "dev": "concurrently \"yarn dev:server\" \"yarn dev:styleguide\" \"yarn dev:client\"",
     "start": "yarn build:client && yarn build:server && NODE_ENV=production node dist/server/server.bundle.js",
-    "test:continuous": "webpack-dev-server --config config/webpack.config.js",
-    "test": "node test.js",
-    "test3": "yarn test",
     "lint": "eslint -c .eslintrc src/**/* bin/**/* ",
     "flow": "flow check src"
   },
@@ -50,7 +47,7 @@
     "empty": "^0.10.1",
     "eslint": "4.19.1",
     "eslint-config-prettier": "^4.0.0",
-    "eslint-plugin-flowtype": "^3.5.1",
+    "eslint-plugin-flowtype": "^3.6.1",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.11.1",
     "execa": "^0.11.0",
