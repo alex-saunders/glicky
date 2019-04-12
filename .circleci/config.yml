@@ -2,7 +2,6 @@
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
-version: 2
 aliases:
   - &base-image
     - image: circleci/node:10.11
@@ -34,3 +33,14 @@ jobs:
     steps:
       - restore_cache: *restore-cache
       - run: yarn flow
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - build
+      - lint:
+          requires:
+            - build
+      - flow:
+          requires:
+            - build
