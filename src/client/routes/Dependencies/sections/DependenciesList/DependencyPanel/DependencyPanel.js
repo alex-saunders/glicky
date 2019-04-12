@@ -33,7 +33,7 @@ import {
 type State = {
   panelActive: boolean,
   packageInfo?: Package,
-  installedVersion: ?string,
+  installedVersion?: ?string,
   isFetchingPackageInfo: boolean,
   isUpdating: boolean
 };
@@ -59,21 +59,11 @@ class DependencyPanel extends Component<Props, State> {
 
   body: ?HTMLDivElement;
 
-  static getDerivedStateFromProps(nextProps: Props, state: State) {
+  static getDerivedStateFromProps(nextProps: Props) {
     return {
       installedVersion: nextProps.installedVersion,
       panelActive: nextProps.active
     };
-  }
-
-  shouldComponentUpdate(nextProps: Props) {
-    // if (!nextProps.active && !this.props.active) {
-    //   if (nextProps.dependency.outdated !== this.props.dependency.outdated) {
-    //     return true;
-    //   }
-    //   return false;
-    // }
-    return true;
   }
 
   handlePanelTransitionEnd = () => {
@@ -148,7 +138,7 @@ class DependencyPanel extends Component<Props, State> {
           {packageInfo ? (
             <Fade>
               <Version
-                installedVersion={this.state.installedVersion}
+                installedVersion={this.state.installedVersion || null}
                 latestVersion={packageInfo.version}
                 publishDate={packageInfo.time}
                 publisher={packageInfo.author}

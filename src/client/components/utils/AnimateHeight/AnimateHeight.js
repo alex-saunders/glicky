@@ -2,7 +2,6 @@
 import React, { Component, type Node } from 'react';
 import styled from 'styled-components';
 import posed from 'react-pose';
-import { request } from 'http';
 
 const Box = posed.div({
   auto: {

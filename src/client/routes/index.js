@@ -12,8 +12,6 @@ import { ManageScroll } from '~/components';
 
 import { type ThemeProps } from '~/theme';
 
-import SocketContext from '~/context/SocketContext';
-
 import Scripts from '~/routes/Scripts/Scripts';
 import Dependencies from '~/routes/Dependencies/Dependencies';
 import Settings from '~/routes/Settings/Settings';
