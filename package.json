@@ -18,7 +18,8 @@
     "start": "yarn build:client && yarn build:server && NODE_ENV=production node dist/server/server.bundle.js",
     "test:continuous": "webpack-dev-server --config config/webpack.config.js",
     "test": "node test.js",
-    "test3": "yarn test"
+    "test3": "yarn test",
+    "lint": "eslint -c .eslintrc src/**/* bin/**/* "
   },
   "resolutions": {
     "babel-core": "^7.0.0-bridge.0"
