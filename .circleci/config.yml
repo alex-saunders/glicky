@@ -8,10 +8,11 @@ aliases:
   - &restore-cache
     keys:
       - v1-dependencies-{{ checksum "package.json" }}
-      - v1-dependencies-
+    paths:
+      - ~/repo
   - &save-cache
     paths:
-      - node_modules
+      - ~/repo
     key: v1-dependencies-{{ checksum "package.json" }}
 jobs:
   build:
