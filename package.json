@@ -19,7 +19,8 @@
     "test:continuous": "webpack-dev-server --config config/webpack.config.js",
     "test": "node test.js",
     "test3": "yarn test",
-    "lint": "eslint -c .eslintrc src/**/* bin/**/* "
+    "lint": "eslint -c .eslintrc src/**/* bin/**/* ",
+    "flow": "flow check src"
   },
   "resolutions": {
     "babel-core": "^7.0.0-bridge.0"
