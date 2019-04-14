@@ -53,8 +53,6 @@
     "eslint-plugin-flowtype": "^3.6.1",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.11.1",
-    "execa": "^0.11.0",
-    "express": "^4.16.3",
     "fbjs": "^0.8.17",
     "file-loader": "^2.0.0",
     "flow-bin": "^0.93.0",
@@ -79,7 +77,6 @@
     "react-rewards": "^1.0.7",
     "react-styleguidist": "^7.3.9",
     "react-window": "^1.6.2",
-    "read-pkg-up": "^4.0.0",
     "rollup": "^0.64.1",
     "rollup-plugin-babel": "^4.3.2",
     "rollup-plugin-commonjs": "^9.1.6",
@@ -94,7 +91,6 @@
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.5",
     "webpack-merge": "^4.1.4",
-    "write-pkg": "^3.2.0",
     "xterm": "^3.11.0"
   },
   "dependencies": {
@@ -105,7 +101,12 @@
     "inquirer": "^6.2.0",
     "minimist": "^1.2.0",
     "opn": "^5.4.0",
-    "ora": "^3.0.0"
+    "ora": "^3.0.0",
+    "express": "^4.16.3",
+    "socket.io": "^2.1.1",
+    "read-pkg-up": "^4.0.0",
+    "write-pkg": "^3.2.0",
+    "execa": "^0.11.0"
   },
   "readme": "ERROR: No README data found!",
   "_id": "cli-gui@1.0.0"
