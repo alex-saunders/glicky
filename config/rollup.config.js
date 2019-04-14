@@ -1,5 +1,7 @@
 const babel = require('rollup-plugin-babel');
 const commonjs = require('rollup-plugin-commonjs');
+const nodeResolve = require('rollup-plugin-node-resolve');
+const json = require('rollup-plugin-json');
 const { eslint } = require('rollup-plugin-eslint');
 
 const babelConfig = require('./babel.config');
@@ -20,28 +22,25 @@ module.exports = {
       throwOnError: true
     }),
     babel(babelConfig),
-    commonjs()
-  ],
-  external: [
-    'express',
-    'path',
-    'fs',
-    'http',
-    'socket.io',
-    'child_process',
-    'execa',
-    'ps-tree',
-    'chalk',
-    'supports-color',
-    '@babel/polyfill',
-    'os',
-    'ospath',
-    'read-pkg-up',
-    'write-pkg',
-    'minimist'
+    json(),
+    commonjs({
+      // non-CommonJS modules will be ignored, but you can also
+      // specifically include/exclude files
+      include: ['src/server/index.js', 'node_modules/**'], // Default: undefined
+
+      // if true then uses of `global` won't be dealt with by this plugin
+      ignoreGlobal: false, // Default: false
+
+      // if false then skip sourceMap generation for CommonJS modules
+      sourceMap: false // Default: true
+    }),
+    nodeResolve({
+      jsnext: true,
+      main: false
+    })
   ],
   output: {
     file: 'dist/server/server.bundle.js',
-    format: 'cjs'
+    format: 'iife'
   }
 };
