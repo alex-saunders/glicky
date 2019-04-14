@@ -1,10 +1,12 @@
 {
-  "name": "cli-gui",
-  "version": "1.0.0",
+  "name": "glicky",
+  "version": "0.0.0",
   "license": "MIT",
-  "bin": {
-    "cli-gui": "./bin/index.js"
-  },
+  "bin": "./bin/index.js",
+  "files": [
+    "dist",
+    "bin"
+  ],
   "scripts": {
     "killport": "kill-port 5000",
     "dev:styleguide": "styleguidist server --config config/styleguide.config.js --open",
@@ -14,6 +16,7 @@
     "watch:server": " concurrently \"nodemon dist/server/server.bundle.js -w dist/server/server.bundle.js -q --signal SIGTERM\" \"node config/rollup.watch.js\"",
     "dev:server": "yarn killport && yarn build:server && yarn watch:server",
     "build:server": "rollup --config config/rollup.config.js",
+    "build": "yarn build:server && yarn build:client",
     "dev": "concurrently \"yarn dev:server\" \"yarn dev:styleguide\" \"yarn dev:client\"",
     "start": "yarn build:client && yarn build:server && NODE_ENV=production node dist/server/server.bundle.js",
     "lint": "eslint -c .eslintrc src/**/* bin/**/* ",
