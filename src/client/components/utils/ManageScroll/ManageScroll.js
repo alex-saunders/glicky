@@ -1,11 +1,11 @@
 // @flow
 import { Component } from 'react';
 
-import { type Location } from '@reach/router';
+import { type LocationType } from '@reach/router';
 
 type Props = {
-  scrollToTop: () => {},
-  location: Location
+  scrollToTop: () => void,
+  location: LocationType
 };
 
 // We could potentially extend this class to restore scroll positions per route

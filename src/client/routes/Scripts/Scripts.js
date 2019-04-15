@@ -49,10 +49,9 @@ const SelectWrapper = styled.div`
   width: ${(p: ThemeProps) => p.theme.sizing(4.5)};
 `;
 
-const sortOptions = {
+const SORT_OPTIONS = {
   default: 'Package.json order',
-  alphabetical: 'A-Z',
-  executing: 'Prioritise running scripts'
+  alphabetical: 'A-Z'
 };
 
 const DeleteIcon = styled(Icon).attrs({
@@ -61,7 +60,7 @@ const DeleteIcon = styled(Icon).attrs({
   fill: ${(p: ThemeProps) => p.theme.colour('white')};
 `;
 
-type SortKey = $Keys<typeof sortOptions>;
+type SortKey = $Keys<typeof SORT_OPTIONS>;
 
 type Props = SearchContextProps & ScriptsContextProps;
 
@@ -116,18 +115,6 @@ class Scripts extends React.Component<Props, State> {
       // alphabetical order
       if (key === 'alphabetical') {
         return scriptA.name < scriptB.name ? -1 : 1;
-      }
-
-      // prioritise executing scripts
-      if (key === 'executing') {
-        return scriptA.executing && !scriptB.executing
-          ? -1
-          : !scriptA.executing && scriptB.executing
-          ? 1
-          : // falling back to alphabetical order
-          scriptA.name < scriptB.name
-          ? -1
-          : 1;
       }
 
       // default sort order - package.json order
@@ -185,9 +172,9 @@ class Scripts extends React.Component<Props, State> {
           <SelectWrapper>
             <Select
               value={this.state.sort.key}
-              options={Object.entries(sortOptions).map(([key, label]) => ({
+              options={Object.keys(SORT_OPTIONS).map(key => ({
                 value: key,
-                label: String(label)
+                label: SORT_OPTIONS[key]
               }))}
               onChange={this.handleSortChange}
             />
@@ -219,7 +206,9 @@ class Scripts extends React.Component<Props, State> {
         </ScriptsContainer>
 
         <Modal
-          isActive={!!this.state.selectedScript}
+          isActive={
+            this.state.selectedScript ? !!this.state.selectedScript : false
+          }
           onRequestClose={this.handleModalRequestClose}
           title="Are you sure?"
           renderBody={() =>

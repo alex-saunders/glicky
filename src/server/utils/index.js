@@ -35,9 +35,15 @@ export const parsePackageInfo = (info: Object) => {
     maintainers = maintainerKeys.reduce((acc, key) => {
       // TODO: this is a fairly nasty reduce function - refactor
       const matches = /maintainers\[([0-9]+)\]\.(email|name)/.exec(key);
+      if (!matches) {
+        return acc;
+      }
+
       const index = parseInt(matches[1], 10);
       const property = matches[2];
+
       acc[index] = { ...acc[index], [property]: info[key] };
+
       return acc;
     }, []);
   } else {

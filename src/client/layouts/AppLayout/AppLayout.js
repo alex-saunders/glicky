@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 
 import { type ThemeProps } from '../../theme';
@@ -31,7 +31,7 @@ const ScrollingContent = styled.div`
   padding: 0 ${(p: ThemeProps) => p.theme.sizing('md')};
 `;
 
-class AppLayout extends React.Component<Props, State> {
+class AppLayout extends Component<{}, {}> {
   scrollingContent = React.createRef<HTMLElement>();
 
   scrollToTop = () => {

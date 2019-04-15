@@ -6,7 +6,7 @@
 declare module '@reach/router' {
   declare type NavigateFn = (to: string, options?: NavigateOptions<{}>) => void;
   declare export var navigate: NavigateFn;
-  declare export type Location = {
+  declare export type LocationType = {
     ancestorOrigins?: Array<string>,
     hash?: string,
     host?: string,
@@ -65,7 +65,7 @@ declare module '@reach/router' {
   };
 
   declare export type LocationProviderRenderFnParams = {|
-    location: Location,
+    location: LocationType,
     navigate: NavigateFn
   |};
 
@@ -77,7 +77,7 @@ declare module '@reach/router' {
     children?: React$Node,
     basepath?: string,
     primary?: boolean,
-    location?: Location
+    location?: LocationType
   |}> {}
 
   declare export class Link<State> extends React$Component<{

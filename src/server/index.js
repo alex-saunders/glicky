@@ -1,6 +1,4 @@
 // @flow
-import '@babel/polyfill';
-
 import os from 'os';
 import path from 'path';
 import http from 'http';
@@ -282,7 +280,9 @@ if (process.env.NODE_ENV === 'production') {
 const args = minimist(process.argv.slice(2));
 const port = args.port || 5000;
 
-server.listen(port, undefined, undefined, () => {
-  // eslint-disable-next-line
-  console.log(`🚀 CLI-GUI running on port ${port}!`);
-});
+if (typeof port === 'string' || typeof port === 'number') {
+  server.listen(parseInt(port), undefined, undefined, () => {
+    // eslint-disable-next-line
+    console.log(`🚀 CLI-GUI running on port ${port}!`);
+  });
+}

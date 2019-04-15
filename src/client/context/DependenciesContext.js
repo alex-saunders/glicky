@@ -18,21 +18,21 @@ import { type SocketContextProps } from './SocketContext';
 
 export type DependenciesContextProps = {
   dependencies: Array<Dependency>,
-  fetchDependencies: () => void,
+  fetchDependencies: () => Promise<void>,
   addDependency: (
     dependencyName: string,
     dependencyType: DependencyType
-  ) => Promise<Dependency>,
+  ) => Promise<void>,
   deleteDependency: Dependency => Promise<Dependency>,
-  updateDependency: Dependency => void
+  updateDependency: Dependency => Promise<Dependency>
 };
 
 const defaultContext = {
   dependencies: [],
-  fetchDependencies: () => {},
+  fetchDependencies: () => new Promise(() => {}),
   addDependency: () => new Promise(() => {}),
   deleteDependency: () => new Promise(() => {}),
-  updateDependency: () => {}
+  updateDependency: () => new Promise(() => {})
 };
 
 export const Context = createContext<DependenciesContextProps>(defaultContext);
@@ -172,9 +172,11 @@ class DependenciesContextProvider extends React.Component<Props, State> {
         arr.push({
           name,
           version,
-          outdated: this.state.outdatedDependencies.some(
-            outdatedDep => outdatedDep.name === name
-          ),
+          outdated: this.state.outdatedDependencies
+            ? this.state.outdatedDependencies.some(
+                outdatedDep => outdatedDep === name
+              )
+            : false,
           type: dependencyType
         });
         return arr;
@@ -300,9 +302,11 @@ class DependenciesContextProvider extends React.Component<Props, State> {
         const installedVersions = await this.getInstalledVersions();
 
         this.setState(prevState => {
-          const outdatedDependencies = prevState.outdatedDependencies.filter(
-            dep => dep !== dependency.name
-          );
+          const outdatedDependencies = prevState.outdatedDependencies
+            ? prevState.outdatedDependencies.filter(
+                dep => dep !== dependency.name
+              )
+            : [];
           return {
             dependencies,
             outdatedDependencies,
@@ -322,21 +326,22 @@ class DependenciesContextProvider extends React.Component<Props, State> {
     let updatedDependencies = [...dependencies];
 
     if (this.state.installedVersions) {
+      const { installedVersions } = this.state;
       updatedDependencies = dependencies.map(dependency => ({
         ...dependency,
-        installedVersion: this.state.installedVersions[dependency.name].version
+        installedVersion: installedVersions[dependency.name].version
       }));
     }
 
     // filter out up to date dependencies if required by settings
-    if (filterOutdatedDependencies) {
+    if (filterOutdatedDependencies && outdatedDependencies) {
       updatedDependencies = updatedDependencies
         .filter(dependency => outdatedDependencies.includes(dependency.name))
         .map(dependency => ({ ...dependency, outdated: true }));
     } else {
       // else update dependency objects with correct `outdated` value
       updatedDependencies =
-        outdatedDependencies.length > 0
+        outdatedDependencies && outdatedDependencies.length > 0
           ? updatedDependencies.map(dependency => ({
               ...dependency,
               outdated: outdatedDependencies.includes(dependency.name)

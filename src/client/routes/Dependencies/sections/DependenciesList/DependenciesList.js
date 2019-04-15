@@ -59,19 +59,27 @@ class DependenciesList extends Component<Props, State> {
     const { key, order } = this.state.sort;
 
     const sortedDependencies = [...dependencies].sort((a, b) => {
-      return a[key] < b[key]
-        ? order === 'asc'
-          ? -1
-          : 1
-        : a[key] > b[key]
-        ? order === 'asc'
-          ? 1
-          : -1
-        : // fallback to sorting by name if values are the same
-        // (e.g sorting by dependency type is likely to be the same)
-        a.name < b.name
-        ? -1
-        : 1;
+      // sort by type
+      if (key === 'type') {
+        if (a.type < b.type) {
+          return order === 'asc' ? -1 : 1;
+        }
+        if (a.type > b.type) {
+          return order === 'asc' ? 1 : -1;
+        }
+
+        /// fallback to sorting by name if types are the same
+        return a.name < b.name ? -1 : 1;
+      }
+
+      // sort by name
+      if (a.name < b.name) {
+        return order === 'asc' ? -1 : 1;
+      }
+      if (a.name > b.name) {
+        return order === 'asc' ? 1 : -1;
+      }
+      return 0;
     });
 
     return sortedDependencies;

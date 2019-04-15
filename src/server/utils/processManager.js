@@ -111,7 +111,7 @@ export default class ProcessManager {
 
   psTreeKill(signal: KillSignal = 'SIGKILL') {
     let killTree = true;
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       if (killTree) {
         psTree(this.pid, (err, children) => {
           [this.pid].concat(children.map(p => p.PID)).forEach(tpid => {

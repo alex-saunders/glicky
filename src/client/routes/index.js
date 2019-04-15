@@ -51,7 +51,7 @@ const FABContainer = posed.div({
 });
 
 type Props = {
-  scrollToTop: () => {}
+  scrollToTop: () => void
 };
 
 const Routes = ({ scrollToTop }: Props) => (

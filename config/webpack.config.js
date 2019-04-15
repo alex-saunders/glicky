@@ -32,7 +32,7 @@ module.exports = merge(base, {
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'index.html'),
       title:
-        process.env.NODE_ENV === 'production' ? 'Production' : 'Development'
+        process.env.NODE_ENV === 'production' ? 'Glicky' : 'Development'
     }),
     new webpack.DefinePlugin({
       'process.env': {
