@@ -44,6 +44,9 @@ function startServer(port, { open }) {
     }
     console.log(chalk.green(data));
   });
+  proc.stderr.on('data', data => {
+    console.log('error', data.toString());
+  });
 } // is not free, falling back to a random port number if all of these are busy // e.g. check 5000 -> busy -> check 5001 -> busy -> ... -> check 5004 -> busy -> random port number // finds free port, using preferredPort as base and checking 4 above this if it
 async function getFreePort(preferredPort = 5000) {
   const preferredPorts = Array.from(Array(5), (_, x) => preferredPort + x);

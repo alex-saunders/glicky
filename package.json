@@ -29,7 +29,6 @@
     "@babel/core": "^7.0.0",
     "@babel/plugin-proposal-function-bind": "^7.0.0",
     "@babel/plugin-transform-runtime": "^7.0.0",
-    "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
@@ -94,6 +93,7 @@
     "xterm": "^3.11.0"
   },
   "dependencies": {
+    "@babel/polyfill": "^7.0.0",
     "chalk": "^2.4.1",
     "clear": "^0.1.0",
     "cross-spawn": "^6.0.5",
