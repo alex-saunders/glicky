@@ -16,11 +16,12 @@
     "watch:server": " concurrently \"nodemon dist/server/server.bundle.js -w dist/server/server.bundle.js -q --signal SIGTERM\" \"node config/rollup.watch.js\"",
     "dev:server": "yarn killport && yarn build:server && yarn watch:server",
     "build:server": "rollup --config config/rollup.config.js",
-    "build": "yarn build:server && yarn build:client",
+    "build": "yarn build:client && yarn build:server",
     "dev": "concurrently \"yarn dev:server\" \"yarn dev:styleguide\" \"yarn dev:client\"",
     "start": "yarn build:client && yarn build:server && NODE_ENV=production node dist/server/server.bundle.js",
     "lint": "eslint -c .eslintrc src/**/* bin/**/* ",
-    "flow": "flow check src"
+    "flow": "flow check src",
+    "prepublishOnly": "yarn lint && yarn flow && yarn build"
   },
   "resolutions": {
     "babel-core": "^7.0.0-bridge.0",

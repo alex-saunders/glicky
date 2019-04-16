@@ -327,10 +327,16 @@ class DependenciesContextProvider extends React.Component<Props, State> {
 
     if (this.state.installedVersions) {
       const { installedVersions } = this.state;
-      updatedDependencies = dependencies.map(dependency => ({
-        ...dependency,
-        installedVersion: installedVersions[dependency.name].version
-      }));
+      updatedDependencies = dependencies.map(dependency => {
+        const installedVersion = installedVersions[dependency.name];
+        if (installedVersion) {
+          return {
+            ...dependency,
+            installedVersion: installedVersion.version
+          };
+        }
+        return dependency;
+      });
     }
 
     // filter out up to date dependencies if required by settings

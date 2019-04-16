@@ -45,6 +45,38 @@ type InputWrapperProps = {
   value: string
 };
 
+const HoverBorder = styled.div`
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  border-bottom: 1px solid ${(p: ThemeProps) => p.theme.colour('text')};
+  opacity: 0.42;
+`;
+
+const ActiveBorder: ThemedComponent<InputWrapperProps> = styled.div`
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  border-bottom: 2px solid
+    ${(p: ThemeProps & InputWrapperProps) =>
+      p.theme.colour(
+        p.disabled
+          ? 'black'
+          : p.error
+          ? 'red'
+          : p.theme.mode === 'dark'
+          ? 'white'
+          : 'primary'
+      )};
+
+  transform: scaleX(
+    ${(p: InputWrapperProps) => (p.focused || p.error ? 1 : 0)}
+  );
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+`;
+
 const InputWrapper: ThemedComponent<InputWrapperProps> = styled.div`
   width: 100%;
   position: relative;
@@ -53,50 +85,12 @@ const InputWrapper: ThemedComponent<InputWrapperProps> = styled.div`
   align-items: center;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
-  &:before {
-    display: block;
-    content: '\00a0';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    border-bottom: 1px solid ${(p: ThemeProps) => p.theme.colour('text')};
-    opacity: 0.42;
-
-    transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  &:after {
-    display: block;
-    content: '\00a0';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    border-bottom: 2px solid
-      ${(p: ThemeProps & InputWrapperProps) =>
-        p.theme.colour(
-          p.disabled
-            ? 'black'
-            : p.error
-            ? 'red'
-            : p.theme.mode === 'dark'
-            ? 'white'
-            : 'primary'
-        )};
-
-    transform: scaleX(
-      ${(p: InputWrapperProps) => (p.focused || p.error ? 1 : 0)}
-    );
-    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
   &:hover {
     ${(p: InputWrapperProps) =>
       !p.focused &&
       !p.disabled &&
       css`
-        &:before {
+        ${HoverBorder} {
           border-bottom: 2px solid ${(p: ThemeProps) => p.theme.colour('text')};
         }
       `};
@@ -324,6 +318,7 @@ class TextField extends Component<Props, State> {
           disabled={disabled}
           value={this.state.value}
         >
+          <HoverBorder />
           {multiline ? (
             <TextArea
               {...inputProps}
@@ -353,6 +348,7 @@ class TextField extends Component<Props, State> {
               )}
             </IconWrapper>
           )}
+          <ActiveBorder focused={this.state.focused} error={error} />
         </InputWrapper>
 
         <ErrorTextContainer>
@@ -363,7 +359,8 @@ class TextField extends Component<Props, State> {
   }
 }
 
-const forwardedTextField = React.forwardRef<any, any>((props, ref) => (
+// $FlowFixMe
+const forwardedTextField = React.forwardRef((props, ref) => (
   <TextField innerRef={ref} {...props} />
 ));
 forwardedTextField.displayName = 'TextField';

@@ -30,6 +30,7 @@ function startServer(port, { open }) {
 
   const productionEnv = Object.create(process.env);
   productionEnv.NODE_ENV = 'production';
+  productionEnv.FORCE_COLOR = 1;
 
   const proc = spawn('node', [serverPath, `--port=${port}`], {
     env: productionEnv
@@ -43,9 +44,6 @@ function startServer(port, { open }) {
       loadingMessage.stop();
     }
     console.log(chalk.green(data));
-  });
-  proc.stderr.on('data', data => {
-    console.log('error', data.toString());
   });
 } // is not free, falling back to a random port number if all of these are busy // e.g. check 5000 -> busy -> check 5001 -> busy -> ... -> check 5004 -> busy -> random port number // finds free port, using preferredPort as base and checking 4 above this if it
 async function getFreePort(preferredPort = 5000) {
