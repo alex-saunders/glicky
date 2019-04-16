@@ -1,6 +1,6 @@
 # 🐭 Glicky
 
-Getting into modern software development as a beginner is _**hard**_. Along with learning HTML, CSS, JavaScript and Node.js (the list goes on), developers these days have to learn a whole host of extra skills to get up and running in a modern stack.
+Getting into modern web development as a beginner is _**hard**_. Along with learning HTML, CSS, JavaScript and Node.js (the list goes on), developers these days have to learn a whole host of extra skills to get up and running in a modern stack.
 
 One such skill is operating npm (or yarn) and traversing the terminal as a whole. Controlling the terminal requires developers to execute unclear commands and save them to memory (not to mention if you initially learn how to use npm, you're then often encouraged to forget all this and learn how to use yarn!). This mental overhead is often daunting for new developers and can lead to unnecessary confusion and burnout. 
 
@@ -28,7 +28,9 @@ Glicky is hosted completely on NPM and runs in your browser, allowing for easy i
 
 Glicky works best with [npx](https://www.npmjs.com/package/npx), if you have it installed, you can run:
 
-`npx glicky [options]`
+```
+npx glicky [options]
+```
 
 From your project root and Glicky should automatically open in your default browser!
 
