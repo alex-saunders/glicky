@@ -1,6 +1,6 @@
 {
   "name": "glicky",
-  "version": "0.0.1-4",
+  "version": "0.0.1-5",
   "license": "MIT",
   "bin": "./bin/index.js",
   "files": [
