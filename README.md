@@ -1,4 +1,4 @@
-# Glicky
+# 🐭 Glicky
 
 Getting into modern software development as a beginner is _**hard**_. Along with learning HTML, CSS, JavaScript and Node.js (the list goes on), developers these days have to learn a whole host of extra skills to get up and running in a modern stack.
 
@@ -16,7 +16,7 @@ Glicky aims to solve this problem by providing a GUI for common CLI commands tha
 
 Glicky hopes that by removing the need to learn the commands necessary to execute these tasks, beginners will feel more empowered get going with the work they actually want to compete, rather than wrestling with the command line.  
 
-> **NOTE**: This is an **early pre-release**. There will undoubtedly be bugs but it mostly works and important features are _upcoming_.
+> ⚠️ **NOTE**: This is an **early pre-release**. There will undoubtedly be bugs but it mostly works and important features are _upcoming_.
 
 ## Why would I use this?
 

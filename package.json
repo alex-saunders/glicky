@@ -1,12 +1,24 @@
 {
   "name": "glicky",
   "version": "0.0.1-5",
+  "description": "An in-browser task runner for modern web development",
+  "author": "Alex Saunders <alexjrsaunders@gmail.com>",
+  "repository": "git@github.com:alex-saunders/glicky.git",
+  "bugs": {
+    "url": "https://github.com/alex-saunders/glicky/issues"
+  },
   "license": "MIT",
   "bin": "./bin/index.js",
   "files": [
     "dist",
     "bin"
   ],
+  "os": [
+    "!win32"
+  ],
+  "engines": {
+    "node": "*"
+  },
   "scripts": {
     "killport": "kill-port 5000",
     "dev:styleguide": "styleguidist server --config config/styleguide.config.js --open",
