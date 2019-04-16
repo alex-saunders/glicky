@@ -16,7 +16,7 @@ Glicky aims to solve this problem by providing a GUI for common CLI commands tha
 
 Glicky hopes that by removing the need to learn the commands necessary to execute these tasks, beginners will feel more empowered get going with the work they actually want to compete, rather than wrestling with the command line.  
 
-> ⚠️ **NOTE**: This is an **early pre-release**. There will undoubtedly be bugs but it mostly works and important features are _upcoming_.
+> ⚠️ **NOTE**: This is an **early pre-release**. There will undoubtedly be bugs but it mostly works and important features are _upcoming_. **Windows is untested** and is tentatively said to be unsupported. 
 
 ## Why would I use this?
 
@@ -24,7 +24,7 @@ There are already a number of applications that aim to provide users with a GUI 
 
 Glicky is hosted completely on NPM and runs in your browser, allowing for easy installation and fast startup times. Users need only execute 1 command to get started with Glicky in seconds, also ensuring that they are running the most up-to-date version that they can be.
 
-## Getting started
+## Quick Start Guide
 
 Glicky works best with [npx](https://www.npmjs.com/package/npx), if you have it installed, you can run:
 
@@ -55,3 +55,6 @@ In the future, Glicky has plans to extend it's functionality by providing a mean
 
 This is just one idea to increase the features that Glicky provides. Nonetheless, the project has aims to include a whole host of features, all with the aim of making modern web development easier to learn and accessible to everyone.
 
+---
+
+(The mouse emoji is because Glicky provides a Graphical User Interface that you control with a **mouse**. That makes sense... right?)
