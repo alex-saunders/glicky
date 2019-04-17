@@ -11,9 +11,10 @@ export const Subtitle = ({ children, ...rest }: Props) => (
     {...rest}
     tag="h3"
     colour="text_secondary"
-    weight="bold"
+    weight="black"
     size="sm2"
     spacing={'medium'}
+    uppercase
   >
     {children}
   </Text>

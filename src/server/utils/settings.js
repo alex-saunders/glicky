@@ -6,7 +6,7 @@ import ospath from 'ospath';
 import { type Settings } from '../../types';
 
 const defaultSettings: Settings = {
-  dark: false,
+  dark: true,
   primaryColour: '#2196f3',
   dependenciesCheckOnStartup: true,
   filterOutdatedDependencies: false

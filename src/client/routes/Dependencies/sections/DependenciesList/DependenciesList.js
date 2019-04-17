@@ -16,7 +16,8 @@ import {
   Header,
   SortContainer,
   SortIcon,
-  SortText,
+  ColumnTitle,
+  TitleTransform,
   Row,
   RowSection,
   Cell,
@@ -172,23 +173,25 @@ class DependenciesList extends Component<Props, State> {
                     isActive={this.state.sort.key === 'name'}
                     direction={this.state.sort.order}
                   />
-                  <SortText isActive={this.state.sort.key === 'name'}>
-                    {'Name'}
-                  </SortText>
+                  <TitleTransform isActive={this.state.sort.key === 'name'}>
+                    <ColumnTitle>{'Name'}</ColumnTitle>
+                  </TitleTransform>
                 </SortContainer>
               </Cell>
             </RowSection>
             <RowSection>
-              <Cell numeric>{'Package Version'}</Cell>
+              <Cell numeric>
+                <ColumnTitle>{'Package Version'}</ColumnTitle>
+              </Cell>
               <Cell onClick={() => this.setSort('type')}>
                 <SortContainer>
                   <SortIcon
                     isActive={this.state.sort.key === 'type'}
                     direction={this.state.sort.order}
                   />
-                  <SortText isActive={this.state.sort.key === 'type'}>
-                    {'Type'}
-                  </SortText>
+                  <TitleTransform isActive={this.state.sort.key === 'type'}>
+                    <ColumnTitle>{'Type'}</ColumnTitle>
+                  </TitleTransform>
                 </SortContainer>
               </Cell>
             </RowSection>

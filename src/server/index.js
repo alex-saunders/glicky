@@ -42,7 +42,7 @@ async function getResourceFromPackage(key) {
 
 async function getPackageInfo({ name }) {
   const { stdout } = await execa.shell(
-    `npm view ${name} --json description version _npmUser.name _npmUser.email time.modified maintainers.name maintainers.email keywords`
+    `npm view ${name} --json description version _npmUser.name _npmUser.email time.modified repository keywords`
   );
 
   const info = JSON.parse(stdout);

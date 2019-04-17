@@ -11,13 +11,15 @@ import {
   Subtitle,
   Button,
   SkeletonScreen,
+  Icon,
   Spacing,
-  Spinner
+  Spinner,
+  Text
 } from '~/components';
 
 import type { Package, Dependency } from '../../../../../../types';
 
-import { Description, Maintainers, Version } from './sections';
+import { Description, Version } from './sections';
 
 import {
   BodyWrapper,
@@ -27,7 +29,9 @@ import {
   Fade,
   PanelFooter,
   IconHolder,
-  UpdateIcon
+  UpdateIcon,
+  RepoLink,
+  RepoIcon
 } from './DependencyPanel.styles';
 
 type State = {
@@ -114,6 +118,8 @@ class DependencyPanel extends Component<Props, State> {
   renderDependencyInfo() {
     const packageInfo = this.state.packageInfo || false;
 
+    console.log(packageInfo);
+
     return (
       <div>
         <InfoSection>
@@ -156,11 +162,24 @@ class DependencyPanel extends Component<Props, State> {
         </InfoSection>
 
         <InfoSection>
-          <Subtitle>{'Maintainers'}</Subtitle>
+          <Subtitle>{'Repository'}</Subtitle>
           {packageInfo ? (
-            <Fade>
-              <Maintainers maintainers={packageInfo.maintainers} />
-            </Fade>
+            packageInfo.repository && (
+              <Fade>
+                <RepoLink
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={packageInfo.repository.url}
+                >
+                  <RepoIcon>
+                    <Icon type="git" />
+                  </RepoIcon>
+                  <Text size="sm1" colour="text_secondary">
+                    Github
+                  </Text>
+                </RepoLink>
+              </Fade>
+            )
           ) : (
             <Fragment>
               <SkeletonScreen width={4} absoluteWidth={195} />

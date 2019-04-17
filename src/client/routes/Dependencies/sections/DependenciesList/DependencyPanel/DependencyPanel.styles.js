@@ -74,3 +74,13 @@ export const UpdateIcon = styled(Icon).attrs({
 })`
   fill: ${(p: ThemeProps) => p.theme.colour('white')};
 `;
+
+export const RepoLink = styled.a`
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+`;
+
+export const RepoIcon = styled.div`
+  margin-right: ${(p: ThemeProps) => p.theme.sizing('xs')};
+`;

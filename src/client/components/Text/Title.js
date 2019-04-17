@@ -24,7 +24,7 @@ export const Title = ({ children, ...rest }: Props) => (
     tag="h2"
     colour="text_secondary"
     weight="black"
-    size="sm2"
+    size="sm1"
     uppercase
   >
     {children}

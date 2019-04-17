@@ -7,47 +7,25 @@ export const log = (text: string) => {
 };
 
 export const parsePackageInfo = (info: Object) => {
+  console.log(info.repository);
   const {
     description,
     version,
     '_npmUser.name': authorName,
     '_npmUser.email': email,
     'time.modified': time,
+    repository: repository,
     keywords
   } = info;
 
-  const maintainerKeys = Object.keys(info).filter(key => {
-    return key.startsWith('maintainers');
-  });
-
-  let maintainers;
-  // only one maintainer - return 1 'author' object
-  if (maintainerKeys.length === 2) {
-    maintainers = [
-      {
-        name: info['maintainers.name'],
-        email: info['maintainers.email']
-      }
-    ];
-  }
-  // multiple maintainers - match up emails and name and return array of 'author' objects
-  else if (maintainerKeys.length > 2) {
-    maintainers = maintainerKeys.reduce((acc, key) => {
-      // TODO: this is a fairly nasty reduce function - refactor
-      const matches = /maintainers\[([0-9]+)\]\.(email|name)/.exec(key);
-      if (!matches) {
-        return acc;
-      }
-
-      const index = parseInt(matches[1], 10);
-      const property = matches[2];
-
-      acc[index] = { ...acc[index], [property]: info[key] };
-
-      return acc;
-    }, []);
-  } else {
-    maintainers = [];
+  let url;
+  // only support git repos atm.
+  if (repository.type === 'git') {
+    const matches = /((http|https):\/\/.*)\.git$/.exec(repository.url);
+    // only support repos hosted on github atm
+    if (matches && matches[1] && matches[1].includes('github')) {
+      url = matches[1];
+    }
   }
 
   return {
@@ -58,7 +36,12 @@ export const parsePackageInfo = (info: Object) => {
       email
     },
     time,
-    maintainers,
+    repository: url
+      ? {
+          host: 'github',
+          url: url
+        }
+      : null,
     keywords: keywords || []
   };
 };

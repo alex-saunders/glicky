@@ -2,13 +2,21 @@
   "name": "glicky",
   "version": "0.0.1-5",
   "description": "An in-browser task runner for modern web development",
-  "author": "Alex Saunders <alexjrsaunders@gmail.com>",
-  "repository": "git@github.com:alex-saunders/glicky.git",
+  "author": {
+    "name": "Alex Saunders",
+    "email": "alexjrsaunders@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://git@github.com/alex-saunders/glicky.git"
+  },
   "bugs": {
     "url": "https://github.com/alex-saunders/glicky/issues"
   },
   "license": "MIT",
-  "bin": "./bin/index.js",
+  "bin": {
+    "glicky": "./bin/index.js"
+  },
   "files": [
     "dist",
     "bin"
@@ -123,5 +131,8 @@
     "read-pkg-up": "^4.0.0",
     "socket.io": "^2.1.1",
     "write-pkg": "^3.2.0"
-  }
+  },
+  "readme": "ERROR: No README data found!",
+  "homepage": "https://github.com/alex-saunders/glicky#readme",
+  "_id": "glicky@0.0.1-5"
 }

@@ -4,7 +4,7 @@ import posed from 'react-pose';
 
 import { type ThemeProps, type ThemedComponent } from '~/theme';
 
-import { Icon } from '~/components';
+import { Icon, Subtitle } from '~/components';
 
 import DependencyPanel from './DependencyPanel/DependencyPanel';
 
@@ -148,14 +148,19 @@ export const SortIcon: ThemedComponent<SortProps> = styled(Icon).attrs({
     `};
 `;
 
-export const SortText: ThemedComponent<SortProps> = styled.span`
-  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+export const TitleTransform = styled.div`
+  transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transform: translateX(0);
 
   ${(p: ThemeProps & SortProps) =>
     p.isActive &&
     css`
       transform: translateX(${p.theme.sizing('md')});
     `};
+`;
+
+export const ColumnTitle = styled(Subtitle)`
+  margin: 0;
 `;
 
 export const StyledDependencyPanel = styled(DependencyPanel)`

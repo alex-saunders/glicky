@@ -15,6 +15,7 @@ import scripts from './Scripts';
 import settings from './Settings';
 import update from './Update';
 import arrow from './Arrow';
+import git from './Git';
 
 const icons = {
   add,
@@ -32,7 +33,8 @@ const icons = {
   scripts,
   settings,
   update,
-  arrow
+  arrow,
+  git
 };
 
 export type Icon = $Keys<typeof icons>;

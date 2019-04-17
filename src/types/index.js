@@ -27,12 +27,18 @@ export type Author = {
   email: string
 };
 
+// TODO: other hosts, i.e. BitBucket
+type RespositoryHost = 'github';
+
 export type Package = {
   name: string,
   author: Author,
   description: string,
   keywords: Array<string>,
-  maintainers: Array<Author>,
+  repository: ?{
+    host: RespositoryHost,
+    url: string
+  },
   time: string,
   version: string
 };
