@@ -268,7 +268,7 @@ io.on('connection', socket => {
   });
 });
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.GLICKY_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../', 'client')));
 
   app.get('*', (req, res: express$Response) => {
@@ -282,6 +282,6 @@ const port = args.port || 5000;
 if (typeof port === 'string' || typeof port === 'number') {
   server.listen(parseInt(port), undefined, undefined, () => {
     // eslint-disable-next-line
-    console.log(`🚀 CLI-GUI running on port ${port}!`);
+    console.log(`🚀 Glicky is running on port ${port}!`);
   });
 }

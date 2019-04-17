@@ -29,12 +29,13 @@ function startServer(port, { open }) {
   );
 
   const productionEnv = Object.create(process.env);
-  productionEnv.NODE_ENV = 'production';
+  productionEnv.GLICKY_ENV = 'production';
   productionEnv.FORCE_COLOR = 1;
 
   const proc = spawn('node', [serverPath, `--port=${port}`], {
     env: productionEnv
   });
+
   proc.stdout.on('data', data => {
     // TODO: do this better
     if (data.toString().startsWith('🚀')) {
@@ -42,10 +43,36 @@ function startServer(port, { open }) {
         opn(`http://localhost:${port}`);
       }
       loadingMessage.stop();
+      printSuccessMessage(port);
+    } else {
+      console.log(data.toString());
     }
-    console.log(chalk.green(data));
   });
-} // is not free, falling back to a random port number if all of these are busy // e.g. check 5000 -> busy -> check 5001 -> busy -> ... -> check 5004 -> busy -> random port number // finds free port, using preferredPort as base and checking 4 above this if it
+  proc.stderr.on('data', err => {
+    console.error(chalk.redd('Glicky encountered an error: ' + err));
+  });
+}
+function printSuccessMessage(port) {
+  console.log(
+    chalk.green(
+      '🐭 Success! Glicky is now running and you can view it in your preferred browser at this URL:\n'
+    )
+  );
+  console.log(`\t✨ http://localhost:${port} ✨\n`);
+  console.log(
+    chalk.yellow.bold(
+      'NOTE: This is an early pre-release. There will undoubtedly be bugs but it mostly works and important features are upcoming.'
+    )
+  );
+  console.log(
+    chalk.yellow.bold(
+      'Please report any bugs you encounter to the issues page on the Github repository:'
+    )
+  );
+  console.log('🐞 https://github.com/alex-saunders/glicky/issues\n');
+  console.log(chalk.grey('(press ctrl+C to stop Glicky at any time)'));
+}
+// is not free, falling back to a random port number if all of these are busy // e.g. check 5000 -> busy -> check 5001 -> busy -> ... -> check 5004 -> busy -> random port number // finds free port, using preferredPort as base and checking 4 above this if it
 async function getFreePort(preferredPort = 5000) {
   const preferredPorts = Array.from(Array(5), (_, x) => preferredPort + x);
   const [initialPort, ...rest] = preferredPorts;
@@ -54,14 +81,13 @@ async function getFreePort(preferredPort = 5000) {
     return initialPort;
   }
   freePort = await getPort({ port: rest });
-
   return await inquirer
     .prompt([
       {
         type: 'confirm',
         name: 'portConfirmation',
         message: chalk.red(
-          `Port 5000 not available, would you like to start CLI-GUI on port ${freePort} instead?`
+          `Port ${initialPort} not available, would you like to start CLI-GUI on port ${freePort} instead?`
         ),
         default: true
       }
@@ -76,7 +102,6 @@ async function getFreePort(preferredPort = 5000) {
     });
 }
 clear();
-
 const { open, port } = minimist(process.argv.slice(2), {
   default: {
     open: true,
@@ -87,7 +112,7 @@ const { open, port } = minimist(process.argv.slice(2), {
   try {
     const freePort = await getFreePort(port);
     startServer(freePort, {
-      open
+      open: open === true || open === 'true'
     });
   } catch (err) {
     process.exit();

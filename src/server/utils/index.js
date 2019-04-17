@@ -3,7 +3,7 @@ import execa from 'execa';
 
 export const log = (text: string) => {
   // eslint-disable-next-line
-  process.env.NODE_ENV !== 'production' && console.log(text);
+  process.env.GLICKY_ENV !== 'production' && console.log(text);
 };
 
 export const parsePackageInfo = (info: Object) => {

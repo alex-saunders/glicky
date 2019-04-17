@@ -2,7 +2,7 @@
 
 ### The in-browser task runner for modern web development
 
-![Glicky in the wild](https://github.com/alex-saunders/glicky/raw/master/docs/images/glicky-example-screen.png)
+![Glicky in the wild](https://github.com/alex-saunders/glicky/raw/master/docs/images/glicky-example.png)
 
 Getting into modern web development as a beginner is _**hard**_. Along with learning HTML, CSS, JavaScript and Node.js (the list goes on), developers these days have to learn a whole host of extra skills to get up and running in a modern stack.
 
@@ -36,7 +36,7 @@ Glicky works best with [npx](https://www.npmjs.com/package/npx), if you have it 
 npx glicky [options]
 ```
 
-From your project root and Glicky should automatically open in your default browser!
+From your project root and Glicky should automatically open in your default browser! 
 
 Alternatively, you could install Glicky globally via:
 
@@ -47,6 +47,8 @@ However, this is not recommended as it could lead to problems with running out o
 Glicky accepts a number of options:
 - `--open` (default `true`) - if passed `false`, Glicky will not automatically open in your default browser.
 - `--port` (default `5000`) - Glicky will attempt to open on the specified port, if this port is not available it will attempt to use a number of close ports, falling back to a random, free port.
+
+> ⚠️ **NOTE**: At the moment, Glicky only works in projects that have been initialised with a package.json, please run `npm init` in your project root if you do not have one.
 
 ## How does it work?
 
