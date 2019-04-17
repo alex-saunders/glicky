@@ -97,7 +97,6 @@ class AddScript extends Component<Props, State> {
         command: this.state.scriptCommand
       })
       .then(() => {
-        console.log('new script!');
         this.handleModalRequestClose();
       })
       .catch(() => {

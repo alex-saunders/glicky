@@ -118,8 +118,6 @@ class DependencyPanel extends Component<Props, State> {
   renderDependencyInfo() {
     const packageInfo = this.state.packageInfo || false;
 
-    console.log(packageInfo);
-
     return (
       <div>
         <InfoSection>
