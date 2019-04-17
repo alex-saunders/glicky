@@ -44,12 +44,7 @@ function startServer(port, { open }) {
       }
       loadingMessage.stop();
       printSuccessMessage(port);
-    } else {
-      console.log(data.toString());
     }
-  });
-  proc.stderr.on('data', err => {
-    console.error(chalk.redd('Glicky encountered an error: ' + err));
   });
 }
 function printSuccessMessage(port) {

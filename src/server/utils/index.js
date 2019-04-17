@@ -7,7 +7,6 @@ export const log = (text: string) => {
 };
 
 export const parsePackageInfo = (info: Object) => {
-  console.log(info.repository);
   const {
     description,
     version,
@@ -51,7 +50,6 @@ export const hasYarn = async () => {
 
   try {
     const { stdout } = await execa.shell(command);
-    console.log('HAS YARN STDOUT:', stdout);
     const json = JSON.parse(stdout);
 
     return (

@@ -7,6 +7,7 @@ function getHostContextNode(rootNode: Root) {
   if (typeof rootNode !== undefined) {
     return (ROOT_NODE_INSTANCE = rootNode);
   } else {
+    // eslint-disable-next-line
     console.warn(`${rootNode} is not an instance of XTerm constructor.`);
 
     return (ROOT_NODE_INSTANCE = new Root());

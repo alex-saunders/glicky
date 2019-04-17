@@ -158,34 +158,36 @@ class DependencyPanel extends Component<Props, State> {
             </Fragment>
           )}
         </InfoSection>
+        {!packageInfo || (packageInfo && packageInfo.repository) ? (
+          <InfoSection>
+            <Subtitle>{'Repository'}</Subtitle>
 
-        <InfoSection>
-          <Subtitle>{'Repository'}</Subtitle>
-          {packageInfo ? (
-            packageInfo.repository && (
-              <Fade>
-                <RepoLink
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={packageInfo.repository.url}
-                >
-                  <RepoIcon>
-                    <Icon type="git" />
-                  </RepoIcon>
-                  <Text size="sm1" colour="text_secondary">
-                    Github
-                  </Text>
-                </RepoLink>
-              </Fade>
-            )
-          ) : (
-            <Fragment>
-              <SkeletonScreen width={4} absoluteWidth={195} />
-              <Spacing top="xs" />
-              <SkeletonScreen width={4.3} absoluteWidth={240} />
-            </Fragment>
-          )}
-        </InfoSection>
+            {packageInfo ? (
+              packageInfo.repository && (
+                <Fade>
+                  <RepoLink
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={packageInfo.repository.url}
+                  >
+                    <RepoIcon>
+                      <Icon type="git" />
+                    </RepoIcon>
+                    <Text size="sm1" colour="text_secondary">
+                      Github
+                    </Text>
+                  </RepoLink>
+                </Fade>
+              )
+            ) : (
+              <Fragment>
+                <SkeletonScreen width={4} absoluteWidth={195} />
+                <Spacing top="xs" />
+                <SkeletonScreen width={4.3} absoluteWidth={240} />
+              </Fragment>
+            )}
+          </InfoSection>
+        ) : null}
       </div>
     );
   }

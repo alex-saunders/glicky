@@ -6,10 +6,7 @@
     "name": "Alex Saunders",
     "email": "alexjrsaunders@gmail.com"
   },
-  "repository": {
-    "type": "git",
-    "url": "git://git@github.com/alex-saunders/glicky.git"
-  },
+  "repository": "git@github.com:alex-saunders/glicky.git",
   "bugs": {
     "url": "https://github.com/alex-saunders/glicky/issues"
   },
