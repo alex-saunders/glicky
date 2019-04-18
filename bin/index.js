@@ -9,8 +9,18 @@ const getPort = require('get-port');
 const inquirer = require('inquirer');
 const opn = require('opn');
 const minimist = require('minimist');
+const readPkgUp = require('read-pkg-up');
 
 ('use strict');
+
+// Log Utility
+function logWarning(...params) {
+  console.log(chalk.yellow.bold(...params));
+}
+
+function logError(...params) {
+  console.log(chalk.red.bold(...params));
+}
 
 // starts local server with given port and opens the application
 // in the users default browser (if open === true)
@@ -54,16 +64,8 @@ function printSuccessMessage(port) {
     )
   );
   console.log(`\t✨ http://localhost:${port} ✨\n`);
-  console.log(
-    chalk.yellow.bold(
-      'NOTE: This is an early pre-release. There will undoubtedly be bugs but it mostly works and important features are upcoming.'
-    )
-  );
-  console.log(
-    chalk.yellow.bold(
-      'Please report any bugs you encounter to the issues page on the Github repository:'
-    )
-  );
+  logWarning('NOTE: This is an early pre-release. There will undoubtedly be bugs but it mostly works and important features are upcoming.');
+  logWarning('Please report any bugs you encounter to the issues page on the Github repository:');
   console.log('🐞 https://github.com/alex-saunders/glicky/issues\n');
   console.log(chalk.grey('(press ctrl+C to stop Glicky at any time)'));
 }
@@ -105,6 +107,11 @@ const { open, port } = minimist(process.argv.slice(2), {
 });
 (async () => {
   try {
+    const { pkg } = await readPkgUp();
+    if (!pkg || !Object.keys(pkg).length) {
+      logError('This directory does not contain package.json file (via npm init).');
+      throw Error();
+    }
     const freePort = await getFreePort(port);
     startServer(freePort, {
       open: open === true || open === 'true'
