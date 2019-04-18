@@ -109,7 +109,7 @@ const { open, port } = minimist(process.argv.slice(2), {
   try {
     const { pkg } = await readPkgUp();
     if (!pkg || !Object.keys(pkg).length) {
-      logError('This directory does not contain package.json file (via npm init).');
+      logError('At the moment, Glicky does not support projects that have not been initialised with a package.json file. Please run `npm init` before running Glicky in this directory.');
       throw Error();
     }
     const freePort = await getFreePort(port);
