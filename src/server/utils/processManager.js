@@ -160,7 +160,7 @@ export default class ProcessManager {
           });
       } else {
         try {
-          cp.spawnSync('taskkill', ['/PID', this.pid, '/T', '/F']);
+          cp.spawnSync('taskkill', ['/PID', this.pid.toString(), '/T', '/F']);
           this.executing = false;
           this.killing = false;
           res();
