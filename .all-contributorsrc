@@ -13,6 +13,19 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "alex-saunders",
+      "name": "Alex Saunders",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/22820481?v=4",
+      "profile": "https://asaunders.com",
+      "contributions": [
+        "code",
+        "design",
+        "infra",
+        "ideas",
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
