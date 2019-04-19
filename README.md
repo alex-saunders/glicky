@@ -1,4 +1,5 @@
 # 🐭 Glicky
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 
 ### The in-browser task runner for modern web development
 
@@ -66,3 +67,15 @@ This is just one idea to increase the features that Glicky provides. Nonetheless
 ---
 
 (The mouse emoji is because Glicky provides a Graphical User Interface that you control with a **mouse**. That makes sense... right?)
+
+## Contributors
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+<table><tr><td align="center"><a href="https://github.com/threepointone"><img src="https://avatars2.githubusercontent.com/u/18808?v=4" width="100px;" alt="Sunil Pai"/><br /><sub><b>Sunil Pai</b></sub></a><br /><a href="#ideas-threepointone" title="Ideas, Planning, & Feedback">🤔</a></td></tr></table>
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
