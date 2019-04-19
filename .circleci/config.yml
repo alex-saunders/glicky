@@ -7,14 +7,14 @@ aliases:
     - image: circleci/node:10.11
   - &restore-cache
     keys:
-      - v1.0.0.1-dependencies-{{ checksum "package.json" }}
-      - v1.0.0.1-dependencies-
+      - v1-dependencies-{{ checksum "package.json" }}
+      - v1-dependencies-
     paths:
       - ~/repo
   - &save-cache
     paths:
       - ~/repo
-    key: v1.0.0.1-dependencies-{{ checksum "package.json" }}
+    key: v1-dependencies-{{ checksum "package.json" }}
 jobs:
   build:
     docker: *base-image
