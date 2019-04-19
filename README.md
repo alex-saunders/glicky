@@ -63,6 +63,14 @@ In the future, Glicky has plans to extend it's functionality by providing a mean
 
 This is just one idea to increase the features that Glicky provides. Nonetheless, the project has aims to include a whole host of features, all with the aim of making modern web development easier to learn and accessible to everyone.
 
+## Attribution
+
+As mentioned, a number of a similar projects existed before Glicky that attempted to bridge the gap between CLI tools and GUIs. These projects and ideas influenced the development of this project heavily and Glicky owes them a lot. These include:
+  
+  - [Guppy](https://github.com/joshwcomeau/guppy) by [joshwcomeau](https://github.com/joshwcomeau) - A friendly application manager and task runner for React.js
+  - [JSUI](https://github.com/kitze/JSUI) by [Kitze](https://github.com/kitze) - A powerful UI toolkit for managing JavaScript apps
+  - [Sunil Pai](https://github.com/threepointone)'s talk at React Europe 2018 - ['Stop writing code'](https://www.youtube.com/watch?v=WYWVGQKnz5M) was a big source of inspiration and stimulated the initial work on Glicky.
+
 ## Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
