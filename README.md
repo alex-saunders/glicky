@@ -69,7 +69,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
-<table><tr><td align="center"><a href="https://github.com/threepointone"><img src="https://avatars2.githubusercontent.com/u/18808?v=4" width="100px;" alt="Sunil Pai"/><br /><sub><b>Sunil Pai</b></sub></a><br /><a href="#ideas-threepointone" title="Ideas, Planning, & Feedback">🤔</a></td></tr></table>
+<table><tr><td align="center"><a href="https://asaunders.com"><img src="https://avatars2.githubusercontent.com/u/22820481?v=4" width="100px;" alt="Alex Saunders"/><br /><sub><b>Alex Saunders</b></sub></a><br /><a href="https://github.com/alex-saunders/glicky/commits?author=alex-saunders" title="Code">💻</a> <a href="#design-alex-saunders" title="Design">🎨</a> <a href="#infra-alex-saunders" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#ideas-alex-saunders" title="Ideas, Planning, & Feedback">🤔</a> <a href="#review-alex-saunders" title="Reviewed Pull Requests">👀</a></td><td align="center"><a href="https://github.com/threepointone"><img src="https://avatars2.githubusercontent.com/u/18808?v=4" width="100px;" alt="Sunil Pai"/><br /><sub><b>Sunil Pai</b></sub></a><br /><a href="#ideas-threepointone" title="Ideas, Planning, & Feedback">🤔</a></td></tr></table>
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
