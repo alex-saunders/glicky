@@ -7,14 +7,14 @@ aliases:
     - image: circleci/node:10.11
   - &restore-cache
     keys:
-      - v1-dependencies-{{ checksum "package.json" }}
+      - test-cache-v1-{{ checksum ".checksum" }}
       - v1-dependencies-
     paths:
       - ~/repo
   - &save-cache
     paths:
       - ~/repo
-    key: v1-dependencies-{{ checksum "package.json" }}
+    key: test-cache-v1-{{ checksum ".checksum" }}
 jobs:
   build:
     docker: *base-image
@@ -22,6 +22,9 @@ jobs:
     steps:
       - checkout
       - run: yarn install --frozen-lockfile
+      - run:
+          name: Create checksum
+          command: shasum ~/repo/* > ~/repo/.checksum && cat ~/repo/.checksum
       - save_cache: *save-cache
   lint:
     docker: *base-image
