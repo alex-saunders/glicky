@@ -64,10 +64,6 @@ In the future, Glicky has plans to extend it's functionality by providing a mean
 
 This is just one idea to increase the features that Glicky provides. Nonetheless, the project has aims to include a whole host of features, all with the aim of making modern web development easier to learn and accessible to everyone.
 
----
-
-(The mouse emoji is because Glicky provides a Graphical User Interface that you control with a **mouse**. That makes sense... right?)
-
 ## Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
@@ -79,3 +75,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+---
+
+(The mouse emoji is because Glicky provides a Graphical User Interface that you control with a **mouse**. That makes sense... right?)
