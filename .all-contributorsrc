@@ -3,8 +3,21 @@
     "README.md"
   ],
   "imageSize": 100,
-  "commit": false,
+  "commit": true,
   "contributors": [
+    {
+      "login": "alex-saunders",
+      "name": "Alex Saunders",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/22820481?v=4",
+      "profile": "https://asaunders.com",
+      "contributions": [
+        "code",
+        "design",
+        "infra",
+        "ideas",
+        "review"
+      ]
+    },
     {
       "login": "threepointone",
       "name": "Sunil Pai",
