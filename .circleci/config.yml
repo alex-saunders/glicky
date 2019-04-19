@@ -24,7 +24,7 @@ jobs:
       - run: yarn install --frozen-lockfile
       - run:
           name: Create checksum
-          command: shasum ~/repo/* > ~/repo/.checksum && cat ~/repo/.checksum
+          command: find ./src -type f \( -exec sha1sum "$PWD"/{} \; \) > ~/repo/.checksum && cat ~/repo/.checksum
       - save_cache: *save-cache
   lint:
     docker: *base-image
