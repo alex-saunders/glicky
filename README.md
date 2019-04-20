@@ -6,7 +6,7 @@
 
 Getting into modern web development as a beginner is _**hard**_. Along with learning HTML, CSS, JavaScript and Node.js (the list goes on), developers these days have to learn a whole host of extra skills to get up and running in a modern stack.
 
-One such skill is operating npm (or yarn) and traversing the terminal as a whole. Controlling the terminal requires developers to execute unclear commands and save them to memory (not to mention if you initially learn how to use npm, you're then often encouraged to forget all this and learn how to use yarn!). This mental overhead is often daunting for new developers and can lead to unnecessary confusion and burnout. 
+One such skill is operating npm (or yarn) and traversing the terminal as a whole. Controlling the terminal requires developers to execute unclear commands and save them to memory (not to mention if you initially learn how to use npm, you're then often encouraged to forget all this and learn how to use yarn!). This mental overhead is often daunting for new developers and can lead to unnecessary confusion and burnout.
 
 Should learning these skills be necessary to start in modern development or could this be avoided?
 
@@ -18,9 +18,9 @@ Glicky aims to solve this problem by providing a GUI for common CLI commands tha
 - Removing dependencies
 - Updating dependencies
 
-Glicky hopes that by removing the need to learn the commands necessary to execute these tasks, beginners will feel more empowered get going with the work they actually want to compete, rather than wrestling with the command line.  
+Glicky hopes that by removing the need to learn the commands necessary to execute these tasks, beginners will feel more empowered get going with the work they actually want to compete, rather than wrestling with the command line.
 
-> ⚠️ **NOTE**: This is an **early pre-release**. There will undoubtedly be bugs but it mostly works and important features are _upcoming_. **Windows is not fully supported** and there might be unforseen bugs. 
+> ⚠️ **NOTE**: This is an **early pre-release**. There will undoubtedly be bugs but it mostly works and important features are _upcoming_. **Windows is not fully supported** and there might be unforseen bugs.
 
 ## Why would I use this?
 
@@ -36,7 +36,7 @@ Glicky works best with [npx](https://www.npmjs.com/package/npx), if you have it 
 npx glicky [options]
 ```
 
-From your project root and Glicky should automatically open in your default browser! 
+From your project root and Glicky should automatically open in your default browser!
 
 Alternatively, you could install Glicky globally via:
 
@@ -66,7 +66,7 @@ This is just one idea to increase the features that Glicky provides. Nonetheless
 ## Attribution
 
 As mentioned, a number of a similar projects existed before Glicky that attempted to bridge the gap between CLI tools and GUIs. These projects and ideas influenced the development of this project heavily and Glicky owes them a lot. These include:
-  
+
   - [Guppy](https://github.com/joshwcomeau/guppy) by [joshwcomeau](https://github.com/joshwcomeau) - A friendly application manager and task runner for React.js
   - [JSUI](https://github.com/kitze/JSUI) by [Kitze](https://github.com/kitze) - A powerful UI toolkit for managing JavaScript apps
   - [Sunil Pai](https://github.com/threepointone)'s talk at React Europe 2018 - ['Stop writing code'](https://www.youtube.com/watch?v=WYWVGQKnz5M) was a big source of inspiration and stimulated the initial work on Glicky.

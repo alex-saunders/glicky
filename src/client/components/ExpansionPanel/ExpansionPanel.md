@@ -1,7 +1,7 @@
 Render-prop controlled expanding panel (implements `<AnimateHeight />` under the hood)
 
 ```js
-// display: inline-block used to account for h5 margins) 
+// display: inline-block used to account for h5 margins)
 
 <ExpansionPanel
   renderTitle={({ onClick, active }) => (
@@ -21,7 +21,7 @@ Render-prop controlled expanding panel (implements `<AnimateHeight />` under the
 Controlled
 
 ```js
-// display: inline-block used to account for h5 margins) 
+// display: inline-block used to account for h5 margins)
 
 initialState = {
   active: true

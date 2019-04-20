@@ -45,7 +45,7 @@ const Icon = require('../Icon/Icon').default;
 
 const StyledIcon = styled(Icon)`
   width: 16px;
-  height: 16px;  
+  height: 16px;
 `;
 
 <TextField label="I have an icon"  icon='edit' />
@@ -132,7 +132,7 @@ submit = () => {
   />
 
   <br />
-  <br /> 
+  <br />
   <Button onClick={submit}>Submit</Button>
 </div>
 

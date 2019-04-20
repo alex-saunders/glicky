@@ -17,7 +17,7 @@ const Container = styled.div`
   background: ${(p: ThemeProps & Props) =>
     // $FlowFixMe
     isColourName(p.bgColour) ? p.theme.colour(p.bgColour) : p.bgColour};
-    
+
   height: ${(p: ThemeProps) => p.theme.sizing(-1.5)};
   position: relative;
   overflow: hidden;
