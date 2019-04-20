@@ -9,7 +9,7 @@ import Text from './Text';
 const StyledText = styled(Text)`
   text-transform: uppercase;
   margin: 0;
-  /* we use padding instead of margin to play nice with reach routers 
+  /* we use padding instead of margin to play nice with reach routers
   absolute positioning on transitions */
   padding: ${(p: ThemeProps) => p.theme.sizing('xxl')} 0
     ${(p: ThemeProps) => p.theme.sizing('xs')} 0;

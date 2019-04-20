@@ -178,7 +178,7 @@ const TextArea: ThemedComponent<TextArea & InputProps> = styled.textarea`
   outline: 0;
   padding: 0;
   background: none;
-  /* num rows * line height value to stop text getting half cut off when more than 3 lines 
+  /* num rows * line height value to stop text getting half cut off when more than 3 lines
   (a bit nasty) */
   height: ${(p: TextAreaProps) => `${p.rows * 18.4}px`};
 `;
