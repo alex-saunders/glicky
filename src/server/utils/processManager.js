@@ -15,6 +15,8 @@ type DataObject = {|
   error: boolean
 |};
 
+const isWin = /^win/.test(process.platform);
+
 export default class ProcessManager {
   proc: ChildProcess;
   socket: Socket;
@@ -145,7 +147,6 @@ export default class ProcessManager {
         rej();
       }
       this.killing = true;
-      const isWin = /^win/.test(process.platform);
       if (!isWin) {
         this.psTreeKill(signal)
           .then(() => {
@@ -177,8 +178,10 @@ export default class ProcessManager {
   execute() {
     if (!this.initCommand) return;
 
+    const env = Object.assign({}, process.env);
+    env.Path += (isWin ? ';' : ':') + process.cwd() + '/node_modules/.bin'; // Using process.cwd until a better solution is found for (#5)
     this.proc = cp.spawn(this.initCommand, [], {
-      env: Object.assign({ FORCE_COLOR: supportsColor.level }, process.env),
+      env: Object.assign({ FORCE_COLOR: supportsColor.level }, env),
       shell: true
     });
 
