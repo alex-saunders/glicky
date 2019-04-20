@@ -20,7 +20,7 @@ Glicky aims to solve this problem by providing a GUI for common CLI commands tha
 
 Glicky hopes that by removing the need to learn the commands necessary to execute these tasks, beginners will feel more empowered get going with the work they actually want to compete, rather than wrestling with the command line.  
 
-> ⚠️ **NOTE**: This is an **early pre-release**. There will undoubtedly be bugs but it mostly works and important features are _upcoming_. **Windows is untested** and is tentatively said to be unsupported. 
+> ⚠️ **NOTE**: This is an **early pre-release**. There will undoubtedly be bugs but it mostly works and important features are _upcoming_. **Windows is not fully supported** and there might be unforseen bugs. 
 
 ## Why would I use this?
 

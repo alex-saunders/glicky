@@ -1,6 +1,5 @@
 // @flow
 import cp, { type ChildProcess } from 'child_process';
-import execa from 'execa';
 import psTree from 'ps-tree';
 import chalk from 'chalk';
 import supportsColor from 'supports-color';
@@ -160,18 +159,17 @@ export default class ProcessManager {
             rej(err);
           });
       } else {
-        execa('taskkill /PID ' + this.pid + ' /T /F')
-          .then(() => {
-            this.executing = false;
-            this.killing = false;
-            res();
-          })
-          .catch(err => {
-            this.killing = false;
-            this.emitError(err);
+        try {
+          cp.spawnSync('taskkill', ['/PID', this.pid.toString(), '/T', '/F']);
+          this.executing = false;
+          this.killing = false;
+          res();
+        } catch (err) {
+          this.killing = false;
+          this.emitError(err);
 
-            rej(err);
-          });
+          rej(err);
+        }
       }
     });
   }
