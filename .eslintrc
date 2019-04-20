@@ -24,6 +24,7 @@
   "rules": {
     "no-octal": "off",
     "prettier/prettier": "error",
+    "no-inline-comments": "error",
     "flowtype/generic-spacing": "off",
     "react/react-in-jsx-scope": "off",
     "no-unused-vars": [
