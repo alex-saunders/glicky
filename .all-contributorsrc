@@ -26,6 +26,15 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "Tolsee",
+      "name": "Tulsi Sapkota",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/16590492?v=4",
+      "profile": "https://github.com/Tolsee",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
