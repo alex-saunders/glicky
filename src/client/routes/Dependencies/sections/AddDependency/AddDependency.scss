@@ -1,0 +1,24 @@
+// Include only the reset
+@import "~instantsearch.css/themes/reset.css";
+// or include the full Algolia theme
+@import "~instantsearch.css/themes/algolia.css";
+
+.ais-PoweredBy .ais-PoweredBy-text {
+  font-size: 0.7rem;
+}
+
+.ais-PoweredBy .ais-PoweredBy-logo {
+  height: 1em;
+}
+
+// dark mode overrides
+.ais-PoweredBy.ais-PoweredBy--dark {
+  color: #fafafa;
+}
+
+.ais-PoweredBy--dark path:nth-child(1) {
+  fill: #fff;
+}
+.ais-PoweredBy--dark path:nth-child(4) {
+  fill: #fff;
+}

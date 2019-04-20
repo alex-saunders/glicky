@@ -3,21 +3,16 @@ import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 import debounce from 'lodash/debounce';
 import Reward from 'react-rewards';
+import algoliasearch from 'algoliasearch/lite';
+import { InstantSearch, PoweredBy } from 'react-instantsearch-dom';
 
 import {
   withDependencies,
   type DependenciesContextProps
 } from '~/context/DependenciesContext';
+import { withTheme, type ThemeContextProps } from '~/context/ThemeContext';
 
-import {
-  FAB,
-  Modal,
-  TextField,
-  Spacing,
-  Select,
-  Spinner,
-  Icon
-} from '~/components';
+import { FAB, Modal, Spacing, Select, Spinner, Icon } from '~/components';
 
 import { type ThemeProps } from '~/theme';
 
@@ -26,7 +21,10 @@ import type {
   DependencyType
 } from '../../../../../types';
 
+import SearchBox from './SearchBox';
 import SearchSuggestions from './SearchSuggestions';
+
+import './AddDependency.scss';
 
 const FABHolder = styled.div`
   position: fixed;
@@ -56,7 +54,18 @@ const StyledAdd = styled(Icon).attrs({
   fill: ${(p: ThemeProps) => p.theme.colour('white')};
 `;
 
-type Props = DependenciesContextProps;
+const AlgoliaWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+`;
+
+const searchClient = algoliasearch(
+  'OFCNCOG2CU',
+  '86ebd6a34c7fbb7988d5ba5c75d5da34'
+);
+
+type Props = DependenciesContextProps & ThemeContextProps;
 
 type State = {
   modalIsActive: boolean,
@@ -81,7 +90,7 @@ class AddDependency extends Component<Props, State> {
     hasAddedDependency: false
   };
 
-  textField = React.createRef();
+  searchArea = React.createRef();
   reward: { current: null | Reward } = React.createRef();
 
   constructor(props: Props) {
@@ -97,30 +106,13 @@ class AddDependency extends Component<Props, State> {
   }
 
   handleFabClick = () => {
-    this.setState(
-      {
-        modalIsActive: true,
-        dependencyType: 'dependencies',
-        searchValue: '',
-        isDisabled: false,
-        hasAddedDependency: false
-      },
-      () => {
-        const textFieldContainer = this.textField.current;
-        if (!textFieldContainer) {
-          return;
-        }
-
-        const textField = textFieldContainer.querySelector('input');
-        if (!textField) {
-          return;
-        }
-
-        setTimeout(() => {
-          textField.focus();
-        }, 100);
-      }
-    );
+    this.setState({
+      modalIsActive: true,
+      dependencyType: 'dependencies',
+      searchValue: '',
+      isDisabled: false,
+      hasAddedDependency: false
+    });
   };
 
   handleModalRequestClose = () => {
@@ -149,12 +141,12 @@ class AddDependency extends Component<Props, State> {
   };
 
   handleClickOutsideSuggestions = (e: SyntheticEvent<EventTarget>) => {
-    const textField = this.textField.current;
-    if (!textField) {
+    const searchArea = this.searchArea.current;
+    if (!searchArea) {
       return;
     }
 
-    if (!textField.contains(e.target)) {
+    if (!searchArea.contains(e.target)) {
       this.setState({
         isFocused: false
       });
@@ -166,11 +158,11 @@ class AddDependency extends Component<Props, State> {
       {
         isFocused: false,
         isDisabled: true,
-        searchValue: suggestion.package.name
+        searchValue: suggestion.name
       },
       () => {
         this.props
-          .addDependency(suggestion.package.name, this.state.dependencyType)
+          .addDependency(suggestion.name, this.state.dependencyType)
           .then(() => {
             this.setState(
               {
@@ -258,42 +250,65 @@ class AddDependency extends Component<Props, State> {
                 disabled={this.state.isDisabled}
               />
               <Spacing top="xs" />
-              <TextField
+              <div ref={this.searchArea}>
+                <InstantSearch
+                  searchClient={searchClient}
+                  indexName="npm-search"
+                >
+                  <SearchBox
+                    onFocus={this.handleInputFocus}
+                    disabled={this.state.isDisabled}
+                    icon={
+                      this.state.isDisabled ? (
+                        this.state.hasAddedDependency ? (
+                          <Reward
+                            ref={this.reward}
+                            type="confetti"
+                            config={{
+                              spread: 185,
+                              startVelocity: 25
+                            }}
+                          >
+                            <StyledCheck />
+                          </Reward>
+                        ) : (
+                          <Spinner size="md" lineWidth={3} />
+                        )
+                      ) : null
+                    }
+                  />
+                  {this.state.isFocused && (
+                    <SearchSuggestions
+                      onClickOutside={this.handleClickOutsideSuggestions}
+                      onSelect={this.handleSuggestionClick}
+                      max={4}
+                    />
+                  )}
+                  <AlgoliaWrapper>
+                    <PoweredBy
+                      className={
+                        this.props.theme.mode === 'dark' &&
+                        'ais-PoweredBy--dark'
+                      }
+                    />
+                  </AlgoliaWrapper>
+                </InstantSearch>
+              </div>
+              {/* <TextField
                 label="Dependency Name"
                 fullWidth
                 value={this.state.searchValue}
                 onChange={this.handleInputChange}
-                onFocus={this.handleInputFocus}
-                ref={this.textField}
-                disabled={this.state.isDisabled}
-                icon={
-                  this.state.isDisabled ? (
-                    this.state.hasAddedDependency ? (
-                      <Reward
-                        ref={this.reward}
-                        type="confetti"
-                        config={{
-                          spread: 185,
-                          startVelocity: 25
-                        }}
-                      >
-                        <StyledCheck />
-                      </Reward>
-                    ) : (
-                      <Spinner size="md" lineWidth={3} />
-                    )
-                  ) : null
-                }
+                
               />
               {this.state.searchSuggestions.length > 0 &&
                 this.state.isFocused && (
                   <SearchSuggestions
                     suggestions={this.state.searchSuggestions}
-                    max={4}
-                    onClickOutside={this.handleClickOutsideSuggestions}
-                    onSelect={this.handleSuggestionClick}
+                    
+                    
                   />
-                )}
+                )} */}
               <Spacing top="lg" />
             </Fragment>
           )}
@@ -303,4 +318,4 @@ class AddDependency extends Component<Props, State> {
   }
 }
 
-export default withDependencies(AddDependency);
+export default withDependencies(withTheme(AddDependency));

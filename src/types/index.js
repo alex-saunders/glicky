@@ -59,9 +59,9 @@ export type Dependency = Package & {
 };
 
 export type DependencySuggestion = {
-  package: Package,
-  score: number,
-  highlight: string
+  name: string,
+  version: string,
+  description: string
 };
 
 type SortOder = 'asc' | 'desc';
