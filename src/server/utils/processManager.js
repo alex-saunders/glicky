@@ -180,7 +180,7 @@ export default class ProcessManager {
     const pathVariableName = getPathVariableName();
     // Using process.cwd until a better solution is found for (#5)
     env[pathVariableName] +=
-      (isWin ? ';' : ':') + process.cwd() + '/node_modules/.bin';
+      (isWin() ? ';' : ':') + process.cwd() + '/node_modules/.bin';
     this.proc = cp.spawn(this.initCommand, [], {
       env: Object.assign({ FORCE_COLOR: supportsColor.level }, env),
       shell: true
