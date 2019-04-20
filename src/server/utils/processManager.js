@@ -145,7 +145,7 @@ export default class ProcessManager {
         rej();
       }
       this.killing = true;
-      if (!isWin) {
+      if (!isWin()) {
         this.psTreeKill(signal)
           .then(() => {
             this.executing = false;
