@@ -9,7 +9,7 @@ const getPort = require('get-port');
 const inquirer = require('inquirer');
 const opn = require('opn');
 const minimist = require('minimist');
-const readPkgUp = require('read-pkg-up');
+const fs = require('fs');
 
 ('use strict');
 
@@ -20,6 +20,11 @@ function logWarning(...params) {
 
 function logError(...params) {
   console.log(chalk.red.bold(...params));
+}
+
+function packagePresent() {
+  const packagePath = path.join(process.cwd(), 'package.json');
+  return fs.existsSync(packagePath);
 }
 
 // starts local server with given port and opens the application
@@ -107,8 +112,7 @@ const { open, port } = minimist(process.argv.slice(2), {
 });
 (async () => {
   try {
-    const { pkg } = await readPkgUp();
-    if (!pkg || !Object.keys(pkg).length) {
+    if (!packagePresent()) {
       logError('At the moment, Glicky does not support projects that have not been initialised with a package.json file. Please run `npm init` before running Glicky in this directory.');
       throw Error();
     }
