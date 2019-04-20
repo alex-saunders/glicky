@@ -14,7 +14,7 @@ const TabBody = styled.a`
   width: 100%;
   color: #fff;
   cursor: pointer;
-`;  
+`;
 
 initialState = {
   activeTab: 1

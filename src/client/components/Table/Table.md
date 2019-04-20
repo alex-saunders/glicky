@@ -2,7 +2,7 @@
 const { Cell, Row } = require('./Table');
 
 
-<Table renderHead={() => 
+<Table renderHead={() =>
   <Row>
     <Cell><Checkbox /></Cell>
     <Cell>Ipsum</Cell>
