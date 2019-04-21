@@ -8,8 +8,10 @@ const ora = require('ora');
 const getPort = require('get-port');
 const inquirer = require('inquirer');
 const opn = require('opn');
-const minimist = require('minimist');
 const fs = require('fs');
+
+const glicky = require('commander');
+const { version } = require('../package');
 
 ('use strict');
 
@@ -25,6 +27,14 @@ function logError(...params) {
 function packagePresent() {
   const packagePath = path.join(process.cwd(), 'package.json');
   return fs.existsSync(packagePath);
+}
+
+function parseBoolean(value) {
+  return  value === 'true'
+}
+
+function parseInteger(value) {
+  return parseInt(value);
 }
 
 // starts local server with given port and opens the application
@@ -103,19 +113,26 @@ async function getFreePort(preferredPort = 5000) {
       }
     });
 }
-clear();
-const { open, port } = minimist(process.argv.slice(2), {
-  default: {
-    open: true,
-    port: 5000
-  }
-});
+
+/**
+ * Register Glicky commands
+ */
+glicky
+  .version(version, '-v, --version')
+  .usage('[options]')
+  .option('-o, --open <boolean>', 'Open Glicky in default browser, default true', parseBoolean, true)
+  .option('-p, --port <port>', 'Open Glicky is specified port, default 5000', parseInteger, 5000)
+  .parse(process.argv);
+
+const { open, port } = glicky;
+
 (async () => {
   try {
     if (!packagePresent()) {
       logError('At the moment, Glicky does not support projects that have not been initialised with a package.json file. Please run `npm init` before running Glicky in this directory.');
       throw Error();
     }
+    clear();
     const freePort = await getFreePort(port);
     startServer(freePort, {
       open: open === true || open === 'true'
