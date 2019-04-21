@@ -4,7 +4,7 @@ import psTree from 'ps-tree';
 import chalk from 'chalk';
 import supportsColor from 'supports-color';
 
-import { log } from '../utils';
+import { log, isWin, getPathVariableName } from '../utils';
 
 type EmitCode = 'data' | 'processError' | 'exit';
 type KillSignal = 'SIGKILL';
@@ -145,8 +145,7 @@ export default class ProcessManager {
         rej();
       }
       this.killing = true;
-      const isWin = /^win/.test(process.platform);
-      if (!isWin) {
+      if (!isWin()) {
         this.psTreeKill(signal)
           .then(() => {
             this.executing = false;
@@ -177,8 +176,13 @@ export default class ProcessManager {
   execute() {
     if (!this.initCommand) return;
 
+    const env = Object.assign({}, process.env);
+    const pathVariableName = getPathVariableName();
+    // Using process.cwd until a better solution is found for (#5)
+    env[pathVariableName] +=
+      (isWin() ? ';' : ':') + process.cwd() + '/node_modules/.bin';
     this.proc = cp.spawn(this.initCommand, [], {
-      env: Object.assign({ FORCE_COLOR: supportsColor.level }, process.env),
+      env: Object.assign({ FORCE_COLOR: supportsColor.level }, env),
       shell: true
     });
 

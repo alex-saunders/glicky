@@ -6,6 +6,24 @@ export const log = (text: string) => {
   process.env.GLICKY_ENV !== 'production' && console.log(text);
 };
 
+export const isWin = () => /^win/.test(process.platform);
+
+export const getPathVariableName = (): string => {
+  if (isWin()) {
+    const variables = Object.keys(process.env);
+    let path = '';
+    for (let variable of variables) {
+      if (variable.toUpperCase() === 'PATH') {
+        path = variable;
+        break;
+      }
+    }
+    return path;
+  }
+
+  return 'PATH';
+};
+
 export const parsePackageInfo = (info: Object) => {
   const {
     description,
