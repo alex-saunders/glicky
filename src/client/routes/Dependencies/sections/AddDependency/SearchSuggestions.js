@@ -12,7 +12,7 @@ import type { DependencySuggestion } from '../../../../../types';
 
 const Container = styled.div`
   position: relative;
-  top: -${(p: ThemeProps) => p.theme.sizing('md')};
+  top: -${(p: ThemeProps) => p.theme.sizing('ms')};
 `;
 
 type BoxProps = {

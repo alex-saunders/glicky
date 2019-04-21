@@ -4,13 +4,12 @@ import styled from 'styled-components';
 import debounce from 'lodash/debounce';
 import Reward from 'react-rewards';
 import algoliasearch from 'algoliasearch/lite';
-import { InstantSearch, PoweredBy } from 'react-instantsearch-dom';
+import { InstantSearch } from 'react-instantsearch-dom';
 
 import {
   withDependencies,
   type DependenciesContextProps
 } from '~/context/DependenciesContext';
-import { withTheme, type ThemeContextProps } from '~/context/ThemeContext';
 
 import { FAB, Modal, Spacing, Select, Spinner, Icon } from '~/components';
 
@@ -23,8 +22,7 @@ import type {
 
 import SearchBox from './SearchBox';
 import SearchSuggestions from './SearchSuggestions';
-
-import './AddDependency.scss';
+import PoweredBy from './PoweredBy';
 
 const FABHolder = styled.div`
   position: fixed;
@@ -65,7 +63,7 @@ const searchClient = algoliasearch(
   '86ebd6a34c7fbb7988d5ba5c75d5da34'
 );
 
-type Props = DependenciesContextProps & ThemeContextProps;
+type Props = DependenciesContextProps;
 
 type State = {
   modalIsActive: boolean,
@@ -285,30 +283,10 @@ class AddDependency extends Component<Props, State> {
                     />
                   )}
                   <AlgoliaWrapper>
-                    <PoweredBy
-                      className={
-                        this.props.theme.mode === 'dark' &&
-                        'ais-PoweredBy--dark'
-                      }
-                    />
+                    <PoweredBy />
                   </AlgoliaWrapper>
                 </InstantSearch>
               </div>
-              {/* <TextField
-                label="Dependency Name"
-                fullWidth
-                value={this.state.searchValue}
-                onChange={this.handleInputChange}
-                
-              />
-              {this.state.searchSuggestions.length > 0 &&
-                this.state.isFocused && (
-                  <SearchSuggestions
-                    suggestions={this.state.searchSuggestions}
-                    
-                    
-                  />
-                )} */}
               <Spacing top="lg" />
             </Fragment>
           )}
@@ -318,4 +296,4 @@ class AddDependency extends Component<Props, State> {
   }
 }
 
-export default withDependencies(withTheme(AddDependency));
+export default withDependencies(AddDependency);
