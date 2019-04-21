@@ -120,8 +120,8 @@ async function getFreePort(preferredPort = 5000) {
 glicky
   .version(version, '-v, --version')
   .usage('[options]')
-  .option('-o, --open <boolean>', 'Open Glicky in default browser, default true', parseBoolean, true)
-  .option('-p, --port <port>', 'Open Glicky is specified port, default 5000', parseInteger, 5000)
+  .option('-o, --open <boolean>', 'Open Glicky in default browser', parseBoolean, true)
+  .option('-p, --port <port>', 'Open Glicky is specified port', parseInteger, 5000)
   .parse(process.argv);
 
 const { open, port } = glicky;
