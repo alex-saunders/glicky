@@ -121,7 +121,7 @@ glicky
   .version(version, '-v, --version')
   .usage('[options]')
   .option('-o, --open <boolean>', 'Open Glicky in default browser', parseBoolean, true)
-  .option('-p, --port <port>', 'Open Glicky is specified port', parseInteger, 5000)
+  .option('-p, --port <number>', 'Open Glicky is specified port number', parseInteger, 5000)
   .parse(process.argv);
 
 const { open, port } = glicky;
