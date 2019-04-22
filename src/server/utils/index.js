@@ -37,7 +37,7 @@ export const parsePackageInfo = (info: Object) => {
 
   let url;
   // only support git repos atm.
-  if (repository.type === 'git') {
+  if (repository && repository.type === 'git') {
     const matches = /((http|https):\/\/.*)\.git$/.exec(repository.url);
     // only support repos hosted on github atm
     if (matches && matches[1] && matches[1].includes('github')) {

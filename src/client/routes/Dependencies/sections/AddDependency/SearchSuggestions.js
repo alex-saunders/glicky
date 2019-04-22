@@ -2,6 +2,7 @@
 import React, { Component, createRef } from 'react';
 import styled from 'styled-components';
 import Ink from 'react-ink';
+import { connectHits, connectStateResults } from 'react-instantsearch-dom';
 
 import { type ThemeProps, type ThemedComponent } from '~/theme';
 
@@ -11,7 +12,7 @@ import type { DependencySuggestion } from '../../../../../types';
 
 const Container = styled.div`
   position: relative;
-  top: -${(p: ThemeProps) => p.theme.sizing('md')};
+  top: -${(p: ThemeProps) => p.theme.sizing('ms')};
 `;
 
 type BoxProps = {
@@ -57,7 +58,10 @@ const Description = styled.div`
 `;
 
 type Props = {
-  suggestions: Array<DependencySuggestion>,
+  hits: Array<DependencySuggestion>,
+  searchState: ?{
+    query: ?string
+  },
   max: number,
   onClickOutside?: (e: SyntheticEvent<EventTarget>) => void,
   onSelect: DependencySuggestion => void
@@ -95,39 +99,44 @@ class SearchSuggestions extends Component<Props, State> {
   };
 
   render() {
-    return (
+    const { searchState, hits } = this.props;
+    return searchState &&
+      searchState.query &&
+      searchState.query.trim().length > 0 ? (
       <Container ref={this.container}>
         <Box max={this.props.max}>
-          {this.props.suggestions.map(suggestion => (
-            <Suggestion
-              key={suggestion.package.name}
-              onClick={this.props.onSelect.bind(null, suggestion)}
-            >
-              <Ink />
-              <span>
-                <Text
-                  colour="text"
-                  dangerouslySetInnerHTML={{
-                    __html: `${suggestion.highlight}`
-                  }}
-                >
-                  {}
-                </Text>{' '}
-                <Text colour="text_secondary" size="sm1">{` @${
-                  suggestion.package.version
-                } - latest`}</Text>
-              </span>
-              <Description>
-                <Text colour="text_secondary" size="sm2">
-                  {suggestion.package.description}
-                </Text>
-              </Description>
-            </Suggestion>
+          {hits.map(hit => (
+            <Hit
+              key={hit.name}
+              hit={hit}
+              onClick={this.props.onSelect.bind(null, hit)}
+            />
           ))}
         </Box>
       </Container>
-    );
+    ) : null;
   }
 }
 
-export default SearchSuggestions;
+type HitProps = {
+  hit: DependencySuggestion
+};
+
+const Hit = ({ hit, ...rest }: HitProps) => (
+  <Suggestion {...rest}>
+    <Ink />
+    <span>
+      <Text colour="text">{hit.name}</Text>{' '}
+      <Text colour="text_secondary" size="sm1">{` @${
+        hit.version
+      } - latest`}</Text>
+    </span>
+    <Description>
+      <Text colour="text_secondary" size="sm2">
+        {hit.description}
+      </Text>
+    </Description>
+  </Suggestion>
+);
+
+export default connectHits(connectStateResults(SearchSuggestions));
