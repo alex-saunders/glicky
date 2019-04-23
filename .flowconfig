@@ -13,3 +13,4 @@ flow-typed/
 [options]
 module.name_mapper='.*\(.s?css\)' -> 'empty/object'
 module.name_mapper='^\~' ->'<PROJECT_ROOT>/src/client'
+server.max_workers=1
