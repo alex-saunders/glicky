@@ -16,7 +16,7 @@ const Button: ThemedComponent<ButtonProps> = styled.button`
   position: relative;
   display: flex;
   justify-content: center;
-  align-content: center;
+  align-items: center;
 
   height: ${(p: ThemeProps) => p.theme.sizing('xl')};
   width: ${(p: ThemeProps) => p.theme.sizing('xl')};
