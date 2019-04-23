@@ -19,6 +19,8 @@ export const Wrapper = styled.div`
   height: 100%;
   border-radius: 50%;
   overflow: hidden;
+  /* required for safari */
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
 `;
 
 export const Placeholder = styled.div`

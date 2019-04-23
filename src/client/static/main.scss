@@ -33,6 +33,10 @@ input {
   outline: 0;
 }
 
+select {
+  -webkit-appearance: none;
+}
+
 svg {
   fill: currentColor;
 }
