@@ -69,7 +69,7 @@ As mentioned, a number of a similar projects existed before Glicky that attempte
 
   - [Guppy](https://github.com/joshwcomeau/guppy) by [joshwcomeau](https://github.com/joshwcomeau) - A friendly application manager and task runner for React.js
   - [JSUI](https://github.com/kitze/JSUI) by [Kitze](https://github.com/kitze) - A powerful UI toolkit for managing JavaScript apps
-  - [Sunil Pai](https://github.com/threepointone)'s talk at React Europe 2018 - ['Stop writing code'](https://www.youtube.com/watch?v=WYWVGQKnz5M) was a big source of inspiration and stimulated the initial work on Glicky.
+  - [Sunil Pai](https://github.com/threepointone)'s talk at React Europe 2018 - ['Stop writing code'](https://www.youtube.com/watch?v=WYWVGQKnz5M), along with this [tweet](https://twitter.com/threepointone/status/948559739826376704), was a big source of inspiration and stimulated the initial work on Glicky.
 
 ## Contributors
 
