@@ -2,7 +2,7 @@
 
 ### The in-browser task runner for modern web development
 
-![Glicky in the wild](https://github.com/alex-saunders/glicky/raw/master/docs/images/glicky-example.png)
+![Glicky in the wild](https://github.com/alex-saunders/glicky/raw/master/docs/images/glicky-example-v0.0.2.png)
 
 Getting into modern web development as a beginner is _**hard**_. Along with learning HTML, CSS, JavaScript and Node.js (the list goes on), developers these days have to learn a whole host of extra skills to get up and running in a modern stack.
 
