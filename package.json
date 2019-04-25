@@ -1,6 +1,6 @@
 {
   "name": "glicky",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "An in-browser task runner for modern web development",
   "author": {
     "name": "Alex Saunders",
