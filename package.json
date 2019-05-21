@@ -6,7 +6,10 @@
     "name": "Alex Saunders",
     "email": "alexjrsaunders@gmail.com"
   },
-  "repository": "git@github.com:alex-saunders/glicky.git",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/alex-saunders/glicky.git"
+  },
   "bugs": {
     "url": "https://github.com/alex-saunders/glicky/issues"
   },
@@ -35,7 +38,8 @@
     "start": "yarn build:client && yarn build:server && cross-env NODE_ENV=production node dist/server/server.bundle.js",
     "lint": "eslint -c .eslintrc src/* bin/* ",
     "flow": "flow check src",
-    "prepublishOnly": "yarn lint && yarn flow && yarn build"
+    "prepublishOnly": "yarn lint && yarn flow && yarn build",
+    "testscript": "echo 'hello world'"
   },
   "resolutions": {
     "babel-core": "^7.0.0-bridge.0",
@@ -134,5 +138,5 @@
   },
   "readme": "ERROR: No README data found!",
   "homepage": "https://github.com/alex-saunders/glicky#readme",
-  "_id": "glicky@0.0.1-5"
+  "_id": "glicky@0.0.2"
 }

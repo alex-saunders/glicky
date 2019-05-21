@@ -5,19 +5,24 @@ import { createElement, getHostContextNode } from '../utils/createElement';
 
 const XTermRenderer = Reconciler({
   appendInitialChild(_parentInstance, _child) {
-    //   parentInstance.document = child;
-    // }
+    // noop
   },
 
-  appendChildToContainer(_parentInstance, _child) {},
+  appendChildToContainer(_parentInstance, _child) {
+    // noop
+  },
 
-  removeChild(_parentInstance, _child) {},
+  removeChild(_parentInstance, _child) {
+    // noop
+  },
 
   removeChildFromContainer(_container, _child) {
-    // container.root.clear();
+    // noop
   },
 
-  commitUpdate(_instance, _updatePayload, _type, _oldProps, _newProps) {},
+  commitUpdate(_instance, _updatePayload, _type, _oldProps, _newProps) {
+    // noop
+  },
 
   commitTextUpdate(_textInstance, _oldText, _newText) {
     // some instance.replaceText() function
@@ -40,10 +45,7 @@ const XTermRenderer = Reconciler({
   },
 
   prepareForCommit(container) {
-    container.root.write('\u001Bc');
-
-    // container.root.clear();
-    // noop
+    container.root.write('\x1b[H\x1b[2J');
   },
 
   prepareUpdate(
@@ -58,7 +60,6 @@ const XTermRenderer = Reconciler({
   },
 
   resetAfterCommit(_container) {
-    // container.root.clear();
     // noop
   },
 
