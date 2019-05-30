@@ -112,7 +112,7 @@ class DependenciesContextProvider extends React.Component<Props, State> {
       () => {
         Promise.all([
           this.getOutdatedDependencies(),
-          this.getInstalledVersions()
+          getInstalledVersions()
         ]).then(([outdatedDependencies, installedVersions]) => {
           this.setState({
             outdatedDependencies,
@@ -148,16 +148,12 @@ class DependenciesContextProvider extends React.Component<Props, State> {
     });
   };
 
-  getInstalledVersions() {
-    return getInstalledVersions();
-  }
-
   async getAllDependencies() {
     const dependencyTypes = Object.keys(DEPENDENCY_TYPES);
     const dependencies = [];
 
     for (let dependencyType of dependencyTypes) {
-      const fetchedDependencies = await this.getDependencies(dependencyType);
+      const fetchedDependencies = await getFromPackageJSON(dependencyType);
       if (!fetchedDependencies) continue;
 
       const entries = Object.entries(fetchedDependencies);
@@ -181,16 +177,12 @@ class DependenciesContextProvider extends React.Component<Props, State> {
     return dependencies;
   }
 
-  getDependencies(type: DependencyType) {
-    return getFromPackageJSON(type);
-  }
-
   addDependency = (dependencyName: string, dependencyType: DependencyType) => {
     return new Promise(async (resolve, reject) => {
       try {
         await addDependency({ dependencyName, dependencyType });
         const dependencies = await this.getAllDependencies();
-        const installedVersions = await this.getInstalledVersions();
+        const installedVersions = await getInstalledVersions();
 
         this.setState(
           {
@@ -237,7 +229,7 @@ class DependenciesContextProvider extends React.Component<Props, State> {
           dependencyType: dependency.type
         });
         const dependencies = await this.getAllDependencies();
-        const installedVersions = await this.getInstalledVersions();
+        const installedVersions = await getInstalledVersions();
 
         this.setState(prevState => {
           const outdatedDependencies = prevState.outdatedDependencies
