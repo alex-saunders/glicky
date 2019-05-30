@@ -8,13 +8,20 @@ import React, {
 import { navigate } from '@reach/router';
 
 import {
+  getInstalledVersions,
+  addDependency,
+  removeDependency
+} from '~/utils/dependencyUtils';
+import { executeCommand } from '~/utils/processUtils';
+import { getFromPackageJSON } from '~/utils/packageUtils';
+
+import {
   type Dependency,
   type DependencyType,
   DEPENDENCY_TYPES
 } from '../../types';
 
 import { withSettings, type SettingsContextProps } from './SettingsContext';
-import { type SocketContextProps } from './SocketContext';
 
 export type DependenciesContextProps = {
   dependencies: Array<Dependency>,
@@ -37,10 +44,9 @@ const defaultContext = {
 
 export const Context = createContext<DependenciesContextProps>(defaultContext);
 
-type Props = SocketContextProps &
-  SettingsContextProps & {
-    children: Node
-  };
+type Props = SettingsContextProps & {
+  children: Node
+};
 
 type State = {
   dependencies: Array<Dependency>,
@@ -125,9 +131,8 @@ class DependenciesContextProvider extends React.Component<Props, State> {
       }
 
       this.hasFetchedOutdatedDeps = true;
-      const { socket } = this.props;
 
-      socket.emit('exec', 'npm outdated --json', json => {
+      executeCommand('npm outdated --json').then(json => {
         const outdatedDependencies = Object.keys(JSON.parse(json));
         const numOutdatedDependencies = outdatedDependencies.length;
         if (numOutdatedDependencies > 0) {
@@ -144,19 +149,7 @@ class DependenciesContextProvider extends React.Component<Props, State> {
   };
 
   getInstalledVersions() {
-    return new Promise(res => {
-      const { socket } = this.props;
-
-      socket.emit(
-        'request',
-        {
-          resource: 'installed-versions'
-        },
-        installedVersions => {
-          res(installedVersions);
-        }
-      );
-    });
+    return getInstalledVersions();
   }
 
   async getAllDependencies() {
@@ -188,75 +181,14 @@ class DependenciesContextProvider extends React.Component<Props, State> {
     return dependencies;
   }
 
-  getDependencies(
-    type: DependencyType
-  ): ?{
-    [string]: string
-  } {
-    return new Promise((resolve, reject) => {
-      const { socket } = this.props;
-      if (socket) {
-        socket.emit('package', type, async dependencies => {
-          resolve(dependencies);
-        });
-      } else {
-        reject();
-      }
-    });
+  getDependencies(type: DependencyType) {
+    return getFromPackageJSON(type);
   }
-
-  _addDependency = async (
-    dependencyName: string,
-    dependencyType: DependencyType
-  ) => {
-    return new Promise((resolve, reject) => {
-      const { socket } = this.props;
-
-      socket.emit(
-        'request',
-        {
-          resource: 'add-dependency',
-          dependencyName: dependencyName,
-          dependencyType: dependencyType
-        },
-        result => {
-          if (!result.error) {
-            resolve();
-          } else {
-            reject();
-          }
-        }
-      );
-    });
-  };
-
-  // uninstalls + deletes dependency from package.json but doesn't update state
-  _deleteDependency = async (dependency: Dependency) => {
-    return new Promise((resolve, reject) => {
-      const { socket } = this.props;
-
-      socket.emit(
-        'request',
-        {
-          resource: 'remove-dependency',
-          dependencyName: dependency.name,
-          dependencyType: dependency.type
-        },
-        res => {
-          if (!res) {
-            reject('did not recieve a response');
-          }
-
-          resolve(res);
-        }
-      );
-    });
-  };
 
   addDependency = (dependencyName: string, dependencyType: DependencyType) => {
     return new Promise(async (resolve, reject) => {
       try {
-        await this._addDependency(dependencyName, dependencyType);
+        await addDependency({ dependencyName, dependencyType });
         const dependencies = await this.getAllDependencies();
         const installedVersions = await this.getInstalledVersions();
 
@@ -279,7 +211,10 @@ class DependenciesContextProvider extends React.Component<Props, State> {
         const currDependency = this.state.dependencies.find(
           dep => dep.name === dependency.name
         );
-        await this._deleteDependency(dependency);
+        await removeDependency({
+          dependencyName: dependency.name,
+          dependencyType: dependency.type
+        });
         this.setState(
           prevState => ({
             dependencies: prevState.dependencies.filter(
@@ -297,7 +232,10 @@ class DependenciesContextProvider extends React.Component<Props, State> {
   updateDependency = (dependency: Dependency) => {
     return new Promise(async (resolve, reject) => {
       try {
-        await this._addDependency(dependency.name, dependency.type);
+        await addDependency({
+          dependencyName: dependency.name,
+          dependencyType: dependency.type
+        });
         const dependencies = await this.getAllDependencies();
         const installedVersions = await this.getInstalledVersions();
 

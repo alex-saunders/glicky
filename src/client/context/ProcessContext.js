@@ -6,9 +6,10 @@ import React, {
   type ComponentType
 } from 'react';
 
-import type { Process, ProcessState } from '../../types';
+import { Server } from '~/utils';
+import { spawnProcess, killProcess, requestPrompt } from '~/utils/processUtils';
 
-import { type SocketContextProps } from '~/context/SocketContext';
+import type { Process, ProcessState } from '../../types';
 
 export type WithProcessContextProps = {
   processes: {
@@ -49,7 +50,7 @@ export const Context = createContext<WithProcessContextProps>(
   defaultProcessContext
 );
 
-type Props = SocketContextProps & {
+type Props = {
   children: Node
 };
 
@@ -69,9 +70,7 @@ class ProcessContextProvider extends React.Component<Props, State> {
   };
 
   setupEvents = () => {
-    const { socket } = this.props;
-
-    socket.on('data', ({ output, pid }) => {
+    Server.on('data', ({ output, pid }) => {
       const id = this.getIDforPID(pid);
 
       if (id) {
@@ -79,7 +78,7 @@ class ProcessContextProvider extends React.Component<Props, State> {
       }
     });
 
-    socket.on('processError', ({ output, pid }) => {
+    Server.on('processError', ({ output, pid }) => {
       const id = this.getIDforPID(pid);
 
       if (id) {
@@ -87,7 +86,7 @@ class ProcessContextProvider extends React.Component<Props, State> {
       }
     });
 
-    socket.on('exit', ({ output, pid }) => {
+    Server.on('exit', ({ output, pid }) => {
       (async () => {
         const id = this.getIDforPID(pid);
 
@@ -120,7 +119,6 @@ class ProcessContextProvider extends React.Component<Props, State> {
   };
 
   executeCommand = async (id: string, command: string) => {
-    const { socket } = this.props;
     const process = this.state[id] || {};
 
     // terminal has never been opened so prompt has not been generated
@@ -136,7 +134,7 @@ class ProcessContextProvider extends React.Component<Props, State> {
 
     this.generateNewLine(id);
 
-    socket.emit('spawn', command, pid => {
+    spawnProcess(command).then(pid => {
       this.setState(prevState => ({
         [id]: {
           ...prevState[id],
@@ -152,22 +150,18 @@ class ProcessContextProvider extends React.Component<Props, State> {
 
   killProcess = (id: string) => {
     return new Promise<void>((resolve, reject) => {
-      const { socket } = this.props;
       const process = this.state[id];
 
-      if (!process.executing) {
+      if (!process.executing || !process.pid) {
         reject();
+      } else {
+        killProcess(process.pid).then(resolve);
       }
-
-      socket.emit('kill', process.pid, resolve);
     });
   };
 
   generatePrompt = () => {
-    const { socket } = this.props;
-    return new Promise<string>(res => {
-      socket.emit('request', { resource: 'prompt' }, res);
-    });
+    return requestPrompt();
   };
 
   generateNewLine = async (id: string, withPrompt?: boolean = false) => {

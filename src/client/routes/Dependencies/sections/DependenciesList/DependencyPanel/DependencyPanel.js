@@ -3,11 +3,6 @@ import React, { Component, Fragment } from 'react';
 import { PoseGroup } from 'react-pose';
 
 import {
-  withSocketContext,
-  type SocketContextProps
-} from '~/context/SocketContext';
-
-import {
   Subtitle,
   Button,
   SkeletonScreen,
@@ -16,6 +11,8 @@ import {
   Spinner,
   Text
 } from '~/components';
+
+import { getDependencyInfo } from '~/utils/dependencyUtils';
 
 import type { Package, Dependency } from '../../../../../../types';
 
@@ -42,7 +39,7 @@ type State = {
   isUpdating: boolean
 };
 
-type Props = SocketContextProps & {
+type Props = {
   dependency: Dependency,
   active: boolean,
   renderTitle: () => void,
@@ -93,26 +90,19 @@ class DependencyPanel extends Component<Props, State> {
   };
 
   fetchPackageInfo() {
-    const { socket, dependency } = this.props;
+    const { dependency } = this.props;
 
-    socket.emit(
-      'request',
-      {
-        resource: 'package-info',
-        name: dependency.name
-      },
-      info => {
-        this.setState(
-          {
-            packageInfo: info,
-            isFetchingPackageInfo: false
-          },
-          () => {
-            this.setState({});
-          }
-        );
-      }
-    );
+    getDependencyInfo(dependency.name).then(info => {
+      this.setState(
+        {
+          packageInfo: info,
+          isFetchingPackageInfo: false
+        },
+        () => {
+          this.setState({});
+        }
+      );
+    });
   }
 
   renderDependencyInfo() {
@@ -244,4 +234,4 @@ class DependencyPanel extends Component<Props, State> {
   }
 }
 
-export default withSocketContext(DependencyPanel);
+export default DependencyPanel;

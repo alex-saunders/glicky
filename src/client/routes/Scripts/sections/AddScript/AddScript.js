@@ -6,10 +6,6 @@ import {
   withScriptsContext,
   type ScriptsContextProps
 } from '~/context/ScriptsContext';
-import {
-  withSocketContext,
-  type SocketContextProps
-} from '~/context/SocketContext';
 
 import type { ThemeProps } from '~/theme';
 
@@ -163,4 +159,4 @@ class AddScript extends Component<Props, State> {
   }
 }
 
-export default withScriptsContext(withSocketContext(AddScript));
+export default withScriptsContext(AddScript);
