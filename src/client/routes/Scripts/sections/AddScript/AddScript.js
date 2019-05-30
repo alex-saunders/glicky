@@ -27,7 +27,7 @@ const StyledIcon = styled(Icon)`
   fill: ${(p: ThemeProps) => p.theme.colour('white')};
 `;
 
-type Props = SocketContextProps & ScriptsContextProps;
+type Props = ScriptsContextProps;
 
 type State = {
   modalIsActive: boolean,
