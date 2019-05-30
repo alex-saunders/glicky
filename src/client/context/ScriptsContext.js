@@ -6,9 +6,10 @@ import React, {
   type ComponentType
 } from 'react';
 
-import { type Script } from '../../types';
+import { getFromPackageJSON } from '~/utils/packageUtils';
+import { addScript, removeScript } from '~/utils/scriptUtils';
 
-import { type SocketContextProps } from '~/context/SocketContext';
+import { type Script } from '../../types';
 
 export type ScriptsContextProps = {
   scripts: {
@@ -30,7 +31,7 @@ export const Context = createContext<ScriptsContextProps>(
   defaultScriptsContext
 );
 
-type Props = SocketContextProps & {
+type Props = {
   children: Node
 };
 
@@ -42,9 +43,7 @@ class ScriptsContextProvider extends React.Component<Props, State> {
   state = {};
 
   fetchScripts = () => {
-    const { socket } = this.props;
-
-    socket.emit('package', 'scripts', scripts => {
+    getFromPackageJSON('scripts').then(scripts => {
       const objScripts = Object.keys(scripts).reduce((acc, script) => {
         acc[script] = {
           name: script,
@@ -56,57 +55,12 @@ class ScriptsContextProvider extends React.Component<Props, State> {
     });
   };
 
-  // deletes script from package.json but doesn't update state
-  _deleteScript = async (script: Script) => {
-    return new Promise((resolve, reject) => {
-      const { socket } = this.props;
-
-      socket.emit(
-        'request',
-        {
-          resource: 'delete-script',
-          scriptName: script.name
-        },
-        res => {
-          if (!res) {
-            reject('did not recieve a response');
-          }
-
-          resolve(res);
-        }
-      );
-    });
-  };
-
-  // adds a script to package.json but doesn't update state
-  _addScript = async (newScript: Script) => {
-    return new Promise((resolve, reject) => {
-      const { socket } = this.props;
-
-      socket.emit(
-        'request',
-        {
-          resource: 'add-script',
-          scriptName: newScript.name,
-          scriptCommand: newScript.command
-        },
-        res => {
-          if (!res) {
-            reject('did not recieve a response');
-          }
-
-          resolve(res);
-        }
-      );
-    });
-  };
-
   updateScript = async (scriptId: string, newScript: Script) => {
     const oldScript = this.state[scriptId];
     if (newScript.name !== oldScript.name) {
-      await this._deleteScript(this.state[scriptId]);
+      await removeScript(this.state[scriptId].name);
     }
-    await this._addScript(newScript);
+    await addScript(newScript.name, newScript.command);
 
     this.setState({
       [scriptId]: newScript
@@ -117,7 +71,7 @@ class ScriptsContextProvider extends React.Component<Props, State> {
     return new Promise(async (resolve, reject) => {
       try {
         const currScript = this.state[scriptId];
-        await this._deleteScript(currScript);
+        await removeScript(currScript.name);
         this.setState(
           prevState =>
             Object.assign({}, prevState, {
@@ -134,7 +88,7 @@ class ScriptsContextProvider extends React.Component<Props, State> {
   addScript = async (script: Script) => {
     return new Promise(async (resolve, reject) => {
       try {
-        await this._addScript(script);
+        await addScript(script.name, script.command);
         this.setState(
           () => ({
             [script.name]: {

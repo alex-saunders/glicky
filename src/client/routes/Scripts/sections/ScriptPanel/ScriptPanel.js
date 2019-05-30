@@ -132,19 +132,8 @@ class ScriptPanel extends PureComponent<Props, State> {
             {({ active }) =>
               this.state.displayContent && (
                 <ProcessContext.Consumer id={scriptId}>
-                  {({
-                    process: proc,
-                    executeProcess,
-                    addToOutput,
-                    removeFromOutput
-                  }) => (
-                    <TerminalManager
-                      addToOutput={addToOutput}
-                      removeFromOutput={removeFromOutput}
-                      executeProcess={executeProcess}
-                      process={proc}
-                      active={active}
-                    />
+                  {processContextProps => (
+                    <TerminalManager {...processContextProps} active={active} />
                   )}
                 </ProcessContext.Consumer>
               )

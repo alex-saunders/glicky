@@ -7,7 +7,8 @@ import React, {
   type ComponentType
 } from 'react';
 
-import { type SocketContextProps } from './SocketContext';
+import { getSettings, setSettings } from '~/utils/settingsUtils';
+
 import { type Settings } from '../../types';
 
 export type SettingsContextProps = {
@@ -24,7 +25,7 @@ export const defaultSettingsContext: SettingsContextProps = {
 
 const Context = createContext<SettingsContextProps>(defaultSettingsContext);
 
-type Props = SocketContextProps & {
+type Props = {
   children: Node
 };
 
@@ -40,9 +41,7 @@ class SettingsContextProvider extends Component<Props, State> {
   };
 
   componentDidMount() {
-    const { socket } = this.props;
-
-    socket.emit('settings', null, settings => {
+    getSettings().then(settings => {
       this.setState({
         settings,
         loading: false
@@ -51,13 +50,11 @@ class SettingsContextProvider extends Component<Props, State> {
   }
 
   setSettings = (newSettings: Settings) => {
-    const { socket } = this.props;
-
     this.setState({
       loading: true
     });
 
-    socket.emit('settings', newSettings, updatedSettings => {
+    setSettings(newSettings).then(updatedSettings => {
       this.setState({
         settings: updatedSettings,
         loading: false

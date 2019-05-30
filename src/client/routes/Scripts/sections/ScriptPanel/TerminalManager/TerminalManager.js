@@ -1,21 +1,18 @@
 // @flow
 import React, { PureComponent } from 'react';
 
+import { requestPrompt } from '~/utils/processUtils';
+
 import { type ProcessContextProps } from '~/context/ProcessContext';
-import {
-  withSocketContext,
-  type SocketContextProps
-} from '~/context/SocketContext';
 
 import { Terminal } from '~/components';
 
-type Props = ProcessContextProps &
-  SocketContextProps & {
-    active: boolean
-  };
+type Props = ProcessContextProps & {
+  active: boolean
+};
 
 class TerminalManager extends PureComponent<Props> {
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
 
     const { process: proc } = props;
@@ -31,11 +28,13 @@ class TerminalManager extends PureComponent<Props> {
   }
 
   getPrompt(
-    { withLeadingCarriageReturn } = { withLeadingCarriageReturn: true }
+    { withLeadingCarriageReturn }: { withLeadingCarriageReturn?: boolean } = {
+      withLeadingCarriageReturn: true
+    }
   ) {
-    const { socket, addToOutput } = this.props;
+    const { addToOutput } = this.props;
 
-    socket.emit('request', { resource: 'prompt' }, prompt => {
+    requestPrompt().then(prompt => {
       addToOutput(withLeadingCarriageReturn ? '\n' + prompt : prompt);
     });
   }
@@ -79,4 +78,4 @@ class TerminalManager extends PureComponent<Props> {
   }
 }
 
-export default withSocketContext(TerminalManager);
+export default TerminalManager;
