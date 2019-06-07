@@ -1,17 +1,17 @@
 // @flow
-import Server from './serverUtils';
+import Server from '../serverHandler';
 
-import type { DependencyType } from '../../types';
+import type { DependencyType } from '../../../types';
 
 export const getInstalledVersions = () => {
-  return Server.request('request', {
-    resource: 'installed-versions'
+  return Server.request('dependency', {
+    resource: 'installedVersions'
   });
 };
 
 export const getDependencyInfo = (dependencyName: string) => {
-  return Server.request('request', {
-    resource: 'package-info',
+  return Server.request('dependency', {
+    resource: 'packageInfo',
     name: dependencyName
   });
 };
@@ -24,8 +24,8 @@ export const addDependency = ({
   dependencyType: DependencyType
 }) => {
   return new Promise<void>((resolve, reject) => {
-    Server.request('request', {
-      resource: 'add-dependency',
+    Server.request('dependency', {
+      resource: 'addDependency',
       dependencyName: dependencyName,
       dependencyType: dependencyType
     }).then(res => {
@@ -46,8 +46,8 @@ export const removeDependency = ({
   dependencyType: DependencyType
 }) => {
   return new Promise<void>((resolve, reject) => {
-    Server.request('request', {
-      resource: 'remove-dependency',
+    Server.request('dependency', {
+      resource: 'removeDependency',
       dependencyName,
       dependencyType
     }).then(res => {

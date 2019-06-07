@@ -7,7 +7,11 @@ import React, {
 } from 'react';
 
 import { Server } from '~/utils';
-import { spawnProcess, killProcess, requestPrompt } from '~/utils/processUtils';
+import {
+  spawnProcess,
+  killProcess,
+  requestPrompt
+} from '~/utils/requests/processes';
 
 import type { Process, ProcessState } from '../../types';
 
