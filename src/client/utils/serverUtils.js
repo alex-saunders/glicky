@@ -24,9 +24,16 @@ class ServerUtils implements Server {
   // request directly asks the server for a resource/task and awaits the response.
   // In this case, it is an alias for socket.emit, that resolves a promise instead
   // of using callbacks
-  request = (req: string, opts: {} | string | number) => {
+  request = (req: string, { resource, ...rest }: Object) => {
     return new Promise<any>(resolve => {
-      this.socket.emit(req, opts, resolve);
+      this.socket.emit(
+        req,
+        {
+          resource,
+          options: rest
+        },
+        resolve
+      );
     });
   };
 

@@ -2,17 +2,26 @@
 import Server from './serverUtils';
 
 export const executeCommand = (command: string) => {
-  return Server.request('exec', command);
+  return Server.request('process', {
+    resource: 'syncProcess',
+    command
+  });
 };
 
 export const spawnProcess = (command: string) => {
-  return Server.request('spawn', command);
+  return Server.request('process', {
+    resource: 'asyncProcess',
+    command
+  });
 };
 
 export const killProcess = (pid: number) => {
-  return Server.request('kill', pid);
+  return Server.request('process', {
+    resource: 'killProcess',
+    pid
+  });
 };
 
 export const requestPrompt = () => {
-  return Server.request('request', { resource: 'prompt' });
+  return Server.request('process', { resource: 'prompt' });
 };

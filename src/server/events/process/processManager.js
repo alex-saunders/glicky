@@ -4,20 +4,29 @@ import psTree from 'ps-tree';
 import chalk from 'chalk';
 import supportsColor from 'supports-color';
 
-import { log, isWin, getPathVariableName } from '../utils';
+import { log, isWin, getPathVariableName } from '../../utils';
 
-type EmitCode = 'data' | 'processError' | 'exit';
 type KillSignal = 'SIGKILL';
 
-type DataObject = {|
+export type DataObject = {|
   pid: number,
   output: ?string,
   error: boolean
 |};
 
+const emitCodesObj = {
+  data: '',
+  processError: '',
+  exit: ''
+};
+
+export type EmitCode = $Keys<typeof emitCodesObj>;
+export const emitCodes: Array<EmitCode> = Object.keys(emitCodesObj);
+
+type Listener = (data: DataObject) => void;
+
 export default class ProcessManager {
   proc: ChildProcess;
-  socket: Socket;
 
   pid: number;
   initCommand: string;
@@ -25,23 +34,33 @@ export default class ProcessManager {
   killing: boolean = false;
   executing: boolean = false;
 
+  listeners: { [EmitCode]: Array<Listener> } = {};
+
   get id() {
     return this.pid;
   }
 
-  constructor(command: string, socket: Socket) {
+  constructor(command: string) {
     this.initCommand = command;
-    this.socket = socket;
 
     this.execute();
   }
 
+  on(emitCode: EmitCode, callback: (data: DataObject) => void) {
+    this.listeners = {
+      ...this.listeners,
+      [emitCode]: this.listeners[emitCode]
+        ? [...this.listeners[emitCode], callback]
+        : [callback]
+    };
+  }
+
   emit(code: EmitCode, data: DataObject) {
-    try {
-      this.socket.emit(code, data);
-    } catch (err) {
-      // eslint-disable-next-line
-      console.error('error occured');
+    const listeners = this.listeners[code];
+    if (listeners) {
+      for (let listener of listeners) {
+        listener(data);
+      }
     }
   }
 
