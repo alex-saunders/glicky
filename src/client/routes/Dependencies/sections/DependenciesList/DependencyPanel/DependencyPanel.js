@@ -12,7 +12,7 @@ import {
   Text
 } from '~/components';
 
-import { getDependencyInfo } from '~/utils/dependencyUtils';
+import { getDependencyInfo } from '~/utils/requests/dependencies';
 
 import type { Package, Dependency } from '../../../../../../types';
 

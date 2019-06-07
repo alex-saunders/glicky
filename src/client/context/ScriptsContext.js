@@ -6,8 +6,8 @@ import React, {
   type ComponentType
 } from 'react';
 
-import { getFromPackageJSON } from '~/utils/packageUtils';
-import { addScript, removeScript } from '~/utils/scriptUtils';
+import { getFromPackageJSON } from '~/utils/requests/package';
+import { addScript, removeScript } from '~/utils/requests/scripts';
 
 import { type Script } from '../../types';
 
@@ -39,7 +39,7 @@ type State = {
   [string]: Script
 };
 
-class ScriptsContextProvider extends React.Component<Props, State> {
+class ScriptsContextProvider extends Component<Props, State> {
   state = {};
 
   fetchScripts = () => {

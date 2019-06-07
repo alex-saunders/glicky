@@ -72,7 +72,8 @@ const getAllInstalledVersions = async () => {
       // command can return 'extraneous dependencies' error - which causes an
       // 'error' in execa
       // TODO: catch this specific error
-      resolve(parseOutput(err.stdout));
+      const output = parseOutput(err.stdout);
+      resolve(output);
     }
   });
 };
@@ -83,6 +84,7 @@ type InstalledVersionOpts = {
 
 const getInstalledVersion = async ({ package: pkg }: InstalledVersionOpts) => {
   const installedVersions = await getAllInstalledVersions();
+  console.log(installedVersions);
   return installedVersions && installedVersions[pkg];
 };
 

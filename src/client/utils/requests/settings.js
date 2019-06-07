@@ -1,4 +1,4 @@
-import Server from './serverUtils';
+import Server from '../serverHandler';
 
 export const getSettings = () => {
   return Server.request('settings', {

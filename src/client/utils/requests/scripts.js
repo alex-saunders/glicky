@@ -1,5 +1,5 @@
 // @flow
-import Server from './serverUtils';
+import Server from '../serverHandler';
 
 export const addScript = (scriptName: string, scriptCommand: string) => {
   return Server.request('script', {

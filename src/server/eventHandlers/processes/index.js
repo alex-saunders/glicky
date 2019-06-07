@@ -47,9 +47,13 @@ class ProcessEventsHandler {
         const { stdout } = await execa.shell(command);
         resolve(stdout);
       } catch (err) {
-        // eslint-disable-next-line
-        console.error(err);
-        reject(err.stdout);
+        if (err.stdout) {
+          resolve(err.stdout);
+        } else {
+          // eslint-disable-next-line
+          console.error(err);
+          reject(err);
+        }
       }
     });
   };

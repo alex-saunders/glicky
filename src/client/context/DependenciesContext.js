@@ -11,9 +11,9 @@ import {
   getInstalledVersions,
   addDependency,
   removeDependency
-} from '~/utils/dependencyUtils';
-import { executeCommand } from '~/utils/processUtils';
-import { getFromPackageJSON } from '~/utils/packageUtils';
+} from '~/utils/requests/dependencies';
+import { executeCommand } from '~/utils/requests/processes';
+import { getFromPackageJSON } from '~/utils/requests/package';
 
 import {
   type Dependency,
@@ -110,12 +110,13 @@ class DependenciesContextProvider extends React.Component<Props, State> {
         dependencies: await this.getAllDependencies()
       },
       () => {
-        Promise.all([
-          this.getOutdatedDependencies(),
-          getInstalledVersions()
-        ]).then(([outdatedDependencies, installedVersions]) => {
+        this.getOutdatedDependencies().then(outdatedDependencies => {
           this.setState({
-            outdatedDependencies,
+            outdatedDependencies
+          });
+        });
+        getInstalledVersions().then(installedVersions => {
+          this.setState({
             installedVersions
           });
         });
@@ -126,8 +127,7 @@ class DependenciesContextProvider extends React.Component<Props, State> {
   getOutdatedDependencies = () => {
     return new Promise((res, rej) => {
       if (this.hasFetchedOutdatedDeps) {
-        rej();
-        return;
+        return rej();
       }
 
       this.hasFetchedOutdatedDeps = true;

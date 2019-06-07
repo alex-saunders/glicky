@@ -9,12 +9,12 @@ interface Server {
 }
 
 /**
- * ServerUtils provides abstractions above whatever technology we are
+ * ServerHandler provides abstractions above whatever technology we are
  * using to communicate with the server, helping to make other util
  * classes/functons that communicate with the server be technology agnostic
  */
-class ServerUtils implements Server {
-  // Currently, ServerUtils uses socket.io for WebSocket-based communcation
+class ServerHandler implements Server {
+  // Currently, ServerHandler uses socket.io for WebSocket-based communcation
   socket: Socket = io();
 
   events: {
@@ -69,5 +69,5 @@ class ServerUtils implements Server {
   };
 }
 
-const instance = new ServerUtils();
+const instance = new ServerHandler();
 export default instance;

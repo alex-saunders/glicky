@@ -1,15 +1,15 @@
-import Server from './serverUtils';
-import * as DependencyUtils from './dependencyUtils';
-import * as ProcessUtils from './processUtils';
-import * as PackageUtils from './packageUtils';
-import * as ScriptUtils from './scriptUtils';
-import * as SettingsUtils from './settingsUtils';
+import Server from './serverHandler';
+import * as DependenciesEvents from './requests/dependencies';
+import * as ProcessesEvents from './requests/processes';
+import * as PackageEvents from './requests/package';
+import * as ScriptsEvents from './requests/scripts';
+import * as SettingsEvents from './requests/settings';
 
 export {
   Server,
-  DependencyUtils,
-  ProcessUtils,
-  PackageUtils,
-  ScriptUtils,
-  SettingsUtils
+  DependenciesEvents,
+  ProcessesEvents,
+  PackageEvents,
+  ScriptsEvents,
+  SettingsEvents
 };

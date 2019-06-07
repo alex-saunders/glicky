@@ -10,20 +10,21 @@ import {
   ScriptEvents,
   SettingsEvents,
   PackageEvents
-} from './events';
+} from './eventHandlers';
 
 type Handlers = {
   [string]: (options: any) => Promise<any>
 };
+
 /**
- * Client provides the technology that we use to communicate with the client
- * but abstracts this away from the various handlers, so that this is the only
+ * ClientHandler provides the methods that we use to communicate with the client
+ * but abstracts this away from the various event handlers, so that this is the only
  * class that is concerned with the technical specifics of talking to
  * the client.
  */
 class ClientHandler {
   constructor(server: Server) {
-    // Currently, Client uses socket.io for WebSocket-based communcation
+    // Currently, ClientHandler uses socket.io for WebSocket-based communcation
     const io = socket(server);
     io.on('connection', socket => {
       log(`new connection ${socket.id}`);
@@ -45,14 +46,14 @@ class ClientHandler {
         .then(cb)
         .catch(err =>
           log(
-            `The following error occured while request resource: ${resource}, with options: ${options}`,
+            `The following error occured while requesting resource: ${resource}, with options: ${options}`,
             err
           )
         );
     }
   };
 
-  // Setup all events that we use to talk to the client
+  // Setup all events that the client may send
   setupEvents = (socket: Socket) => {
     const handlers = {
       process: {

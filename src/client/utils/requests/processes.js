@@ -1,5 +1,5 @@
 // @flow
-import Server from './serverUtils';
+import Server from '../serverHandler';
 
 export const executeCommand = (command: string) => {
   return Server.request('process', {

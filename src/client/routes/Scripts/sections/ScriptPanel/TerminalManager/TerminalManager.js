@@ -1,7 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 
-import { requestPrompt } from '~/utils/processUtils';
+import { requestPrompt } from '~/utils/requests/processes';
 
 import { type ProcessContextProps } from '~/context/ProcessContext';
 

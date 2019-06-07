@@ -1,7 +1,7 @@
 // @flow
-import Server from './serverUtils';
+import Server from '../serverHandler';
 
-import type { DependencyType } from '../../types';
+import type { DependencyType } from '../../../types';
 
 export const getInstalledVersions = () => {
   return Server.request('dependency', {

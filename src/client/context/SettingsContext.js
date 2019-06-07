@@ -7,7 +7,7 @@ import React, {
   type ComponentType
 } from 'react';
 
-import { getSettings, setSettings } from '~/utils/settingsUtils';
+import { getSettings, setSettings } from '~/utils/requests/settings';
 
 import { type Settings } from '../../types';
 
