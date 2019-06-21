@@ -65,7 +65,7 @@ async function getFreePort(preferredPort = 5000) {
 
 function printSuccessMessage(port) {
   const box = boxen(
-    `${chalk.green('✨ Glicky is now running! ✨  \b\b')}\n
+    `${chalk.green('✨ Glicky is now running! ✨  ')}\n
     ${chalk.bold('Local:')}            http://localhost:${port}
     ${chalk.bold('On your network:')}  http://${ip.address()}:${port}
     `,
