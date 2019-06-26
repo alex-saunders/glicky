@@ -17,6 +17,14 @@ export type { ColourName, Space, Weight, Size, LetterSpacing, Elevation };
 
 export type ThemeMode = 'light' | 'dark';
 
+export const themeNames = {
+  default: 'Default',
+  playful: 'Playful',
+  extra: 'Extra'
+};
+
+export type ThemeName = $Keys<typeof themeNames>;
+
 export const theme = (
   mode: ThemeMode = 'light',
   primaryColour: PrimaryColour = '#673AB7'

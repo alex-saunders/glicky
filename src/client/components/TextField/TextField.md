@@ -12,7 +12,7 @@ handleChange = (value) => {
   })
 }
 
-<TextField label="Test" value={state.value} onChange={handleChange}/>
+<ForwardedTextField label="Test" value={state.value} onChange={handleChange}/>
 ```
 
 Single line disabled
@@ -33,7 +33,7 @@ handleClick = () => {
   <button onClick={this.handleClick}>Toggle disabled</button>
   <br />
   <br />
-  <TextField label="I am disabled" disabled={state.disabled}/>
+  <ForwardedTextField label="I am disabled" disabled={state.disabled}/>
 </div>
 ```
 
@@ -48,7 +48,7 @@ const StyledIcon = styled(Icon)`
   height: 16px;
 `;
 
-<TextField label="I have an icon"  icon='edit' />
+<ForwardedTextField label="I have an icon"  icon='edit' />
 ```
 
 Multiline controlled
@@ -65,13 +65,13 @@ handleChange = (value) => {
   })
 }
 
-<TextField label="Test" value={state.value} onChange={handleChange} multiline/>
+<ForwardedTextField label="Test" value={state.value} onChange={handleChange} multiline/>
 ```
 
 Multiline uncontrolled
 
 ```js
-<TextField label="10 Rows" multiline rows={10}/>
+<ForwardedTextField label="10 Rows" multiline rows={10}/>
 ```
 
 Error State
@@ -89,7 +89,7 @@ handleChange = (value) => {
   })
 }
 
-<TextField
+<ForwardedTextField
   label="Don't enter anything here"
   value={state.value}
   onChange={handleChange}
@@ -123,7 +123,7 @@ submit = () => {
 }
 
 <div>
-  <TextField
+  <ForwardedTextField
     label="Required"
     value={state.value}
     onChange={handleChange}

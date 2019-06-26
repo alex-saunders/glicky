@@ -5,7 +5,14 @@ module.exports = {
   skipComponentsWithoutExample: true,
   usageMode: 'expand',
   styleguideComponents: {
-    Wrapper: path.join(__dirname, '../src/styleguide/ThemeWrapper')
+    Wrapper: path.join(
+      __dirname,
+      '../src/styleguide/components/ComponentWrapper'
+    ),
+    StyleGuideRenderer: path.join(
+      __dirname,
+      '../src/styleguide/components/StyleGuideRenderer.js'
+    )
   },
   compilerConfig: {
     transforms: { dangerousTaggedTemplateString: true }

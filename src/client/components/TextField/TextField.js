@@ -194,7 +194,7 @@ const StyledIcon = styled(Icon)`
 
 const ErrorTextContainer = styled.div`
   position: absolute;
-  bottom: 0;
+  top: 100%;
   left: 0;
   overflow: hidden;
   height: ${(p: ThemeProps) => p.theme.sizing('ms')};
@@ -360,8 +360,8 @@ class TextField extends Component<Props, State> {
 }
 
 // $FlowFixMe
-const forwardedTextField = React.forwardRef((props, ref) => (
+const ForwardedTextField = React.forwardRef((props, ref) => (
   <TextField innerRef={ref} {...props} />
 ));
-forwardedTextField.displayName = 'TextField';
-export default forwardedTextField;
+ForwardedTextField.displayName = 'TextField';
+export default ForwardedTextField;
