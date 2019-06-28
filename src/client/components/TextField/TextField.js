@@ -237,7 +237,7 @@ type State = {
   focused: boolean
 };
 
-class TextField extends Component<Props, State> {
+class BaseTextField extends Component<Props, State> {
   static defaultProps = {
     multiline: false,
     rows: 3,
@@ -360,8 +360,8 @@ class TextField extends Component<Props, State> {
 }
 
 // $FlowFixMe
-const ForwardedTextField = React.forwardRef((props, ref) => (
-  <TextField innerRef={ref} {...props} />
+const TextField = React.forwardRef((props, ref) => (
+  <BaseTextField innerRef={ref} {...props} />
 ));
-ForwardedTextField.displayName = 'TextField';
-export default ForwardedTextField;
+TextField.displayName = 'TextField';
+export default TextField;

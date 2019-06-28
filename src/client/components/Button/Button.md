@@ -14,7 +14,7 @@ const Container = styled.div`
 `;
 
 <Container>
-  <Button type="primary">Primary</Button>
+  <Button type="primary" onClick={() => console.log('click')}>Primary</Button>
 
   <Button type="secondary">Secondary</Button>
 
@@ -22,7 +22,7 @@ const Container = styled.div`
 
   <Button type="disabled">Disabled</Button>
 
-  <Button type="primary" icon={<Icon type="add" />}>Icon</Button>
+  <Button type="primary" icon="add" >Icon</Button>
 </Container>
 
 ```

@@ -1,9 +1,9 @@
 import { withThemeMode } from '../../context/ThemeContext';
 
 import DefaultButton from './default';
-import PlayfulButton from './playful';
+import RetroButton from './retro';
 
 export default withThemeMode({
   default: DefaultButton,
-  playful: PlayfulButton
+  retro: RetroButton
 });

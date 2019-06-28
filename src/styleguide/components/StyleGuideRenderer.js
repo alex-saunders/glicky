@@ -1,5 +1,5 @@
 // @flow
-import React, { type Node } from 'react';
+import React, { useEffect, type Node } from 'react';
 import styled from 'styled-components';
 
 import ThemeContext from '../../client/context/ThemeContext';
@@ -49,11 +49,14 @@ const StyleGuideRenderer = (props: Props) => {
   const themeObj = {
     name: 'default',
     dark: false,
-    primaryColour: '#2196f3'
+    primaryColour: '#0652DD'
   };
 
   return (
-    <ThemeContext.Provider theme={themeObj}>
+    <ThemeContext.Provider themeOpts={themeObj}>
+      <ThemeContext.Consumer>
+        {({ theme, name }) => <ThemeController theme={theme} name={name} />}
+      </ThemeContext.Consumer>
       <Layout>
         <Header />
         {props.hasSidebar && <Aside>{toc}</Aside>}
@@ -67,6 +70,22 @@ const StyleGuideRenderer = (props: Props) => {
       </Layout>
     </ThemeContext.Provider>
   );
+};
+
+const ThemeController = ({ theme, name }) => {
+  useEffect(() => {
+    // Hack for styleguidist so that we can consume the theme
+    // within each component example (each component is mounted
+    // in a different react root in styleguidist so cannot consume
+    // the value from this context provider)
+    window.__THEME__ = {
+      name,
+      dark: theme.mode === 'dark',
+      primaryColour: theme.primaryColour
+    };
+  }, [theme, name]);
+
+  return null;
 };
 
 export default StyleGuideRenderer;

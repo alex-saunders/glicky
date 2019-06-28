@@ -19,15 +19,25 @@ const App = () => (
   <A11yHandler>
     <SettingsContext.Provider>
       <ProcessContext.Provider>
-        <ThemeContext.Provider>
-          <SearchContext.Provider>
-            <DependenciesContext.Provider>
-              <ScriptsContext.Provider>
-                <AppLayout />
-              </ScriptsContext.Provider>
-            </DependenciesContext.Provider>
-          </SearchContext.Provider>
-        </ThemeContext.Provider>
+        <SettingsContext.Consumer>
+          {({ settings }) => (
+            <ThemeContext.Provider
+              themeOpts={{
+                name: 'default',
+                dark: settings.dark,
+                primaryColour: settings.primaryColour
+              }}
+            >
+              <SearchContext.Provider>
+                <DependenciesContext.Provider>
+                  <ScriptsContext.Provider>
+                    <AppLayout />
+                  </ScriptsContext.Provider>
+                </DependenciesContext.Provider>
+              </SearchContext.Provider>
+            </ThemeContext.Provider>
+          )}
+        </SettingsContext.Consumer>
       </ProcessContext.Provider>
     </SettingsContext.Provider>
   </A11yHandler>

@@ -1,5 +1,5 @@
 // @flow
-import React, { type Node } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Ink from 'react-ink';
 
@@ -11,23 +11,14 @@ import type {
 } from '~/theme';
 
 import Text from '../../Text/Text';
-import Icon, { type IconType } from '../../Icon/Icon';
+import Icon from '../../Icon/Icon';
 
-type ThemeColourButtonTypes = 'primary' | 'secondary' | 'disabled' | 'error';
-type ButtonType = ThemeColourButtonTypes | 'ghost';
+import type { ButtonType, ThemeColourButtonTypes, Props } from '../types';
 
 type SCProps = {
   buttonType: ButtonType,
   elevation: Elevation,
   icon?: string
-};
-
-type Props = {
-  type: ButtonType,
-  elevation: Elevation,
-  icon?: IconType | Node,
-  submit?: boolean,
-  children: string
 };
 
 const getButtonColour = (buttonType: ThemeColourButtonTypes): ColourName => {

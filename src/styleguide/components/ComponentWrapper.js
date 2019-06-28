@@ -10,7 +10,7 @@ type Props = {
 const ComponentWrapper = (props: Props) => (
   // Grab the theme details off window and set up
   // a context provider for this component's root
-  <ThemeContext.Provider theme={window.__THEME__}>
+  <ThemeContext.Provider themeOpts={window.__THEME__}>
     {props.children}
   </ThemeContext.Provider>
 );

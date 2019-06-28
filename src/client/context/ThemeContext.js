@@ -4,10 +4,11 @@ import React, {
   Component,
   useState,
   useEffect,
+  Fragment,
   type Node,
   type ComponentType
 } from 'react';
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider, createGlobalStyle } from 'styled-components';
 
 import {
   theme as themeFunc,
@@ -36,25 +37,27 @@ export const Context = createContext<ThemeContextProps>(defaultThemeContext);
 
 type Props = SettingsContextProps & {
   children: Node,
-  theme?: {
+  themeOpts: {
     name: ThemeName,
     dark: boolean,
     primaryColour: string
   }
 };
 
+type FontStyleProps = ThemeProps & {
+  themeName: ThemeName
+};
+const FontStyle = createGlobalStyle`
+  ${(p: FontStyleProps) => p.theme.baseFont(p.themeName)}
+`;
+
 const ThemeContextProvider = (props: Props) => {
-  const { settings, theme: themeProp } = props;
-  if (!settings && !themeProp) {
-    return null;
-  }
+  const { themeOpts } = props;
 
-  const themeObj = themeProp || settings;
-
-  const [themeName, setThemeName] = useState(themeObj.name || 'default');
+  const [themeName, setThemeName] = useState(themeOpts.name || 'default');
 
   const [theme, setTheme] = useState(
-    themeFunc(themeObj.dark ? 'dark' : 'light', themeObj.primaryColour)
+    themeFunc(themeOpts.dark ? 'dark' : 'light', themeOpts.primaryColour)
   );
 
   const setThemeMode = (mode: ThemeMode) => {
@@ -73,18 +76,6 @@ const ThemeContextProvider = (props: Props) => {
     setThemeName(name);
   };
 
-  useEffect(() => {
-    // Hack for styleguidist so that we can consume the theme
-    // within each component example (each component is mounted
-    // in a different react root in styleguidist so cannot consume
-    // the value from this context provider)
-    window.__THEME__ = {
-      name: themeName,
-      dark: theme.mode === 'dark',
-      primaryColour: theme.primaryColour
-    };
-  }, [theme, themeName]);
-
   return (
     <Context.Provider
       value={{
@@ -95,7 +86,12 @@ const ThemeContextProvider = (props: Props) => {
         setThemeName: setName
       }}
     >
-      <ThemeProvider theme={theme}>{props.children}</ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <Fragment>
+          <FontStyle themeName={themeName} />
+          {props.children}
+        </Fragment>
+      </ThemeProvider>
     </Context.Provider>
   );
 };
@@ -139,6 +135,6 @@ export const withTheme = <P>(
 };
 
 export default {
-  Provider: withSettings(ThemeContextProvider),
+  Provider: ThemeContextProvider,
   Consumer: Context.Consumer
 };

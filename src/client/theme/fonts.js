@@ -1,4 +1,6 @@
 // @flow
+import type { ThemeName } from '.';
+
 import { css } from 'styled-components';
 
 const fontSizes = {
@@ -80,3 +82,29 @@ export const font = (size: ?Size): string => {
 };
 
 export const fontWeight = (weight: Weight): string => fontWeights[weight];
+
+export const baseFont = (themeName: ThemeName) => {
+  switch (themeName) {
+    case 'retro':
+      return css`
+        @import url('https://fonts.googleapis.com/css?family=PT+Mono&display=swap');
+        html,
+        body {
+          font-family: 'PT Mono', monospace;
+        }
+      `;
+    default:
+      return css`
+        @import url('https://rsms.me/inter/inter.css');
+        html,
+        body {
+          font-family: 'Inter', sans-serif;
+        }
+        @supports (font-variation-settings: normal) {
+          html {
+            font-family: 'Inter var', sans-serif;
+          }
+        }
+      `;
+  }
+};

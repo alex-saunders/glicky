@@ -2,14 +2,15 @@
 import { type StyledComponent } from 'styled-components';
 
 import { sizing, type Space } from './sizes';
-import type { Weight, Size, LetterSpacing } from './fontSize';
+import type { Weight, Size, LetterSpacing } from './fonts';
 import {
+  baseFont,
   fontSize,
   lineHeight,
   fontWeight,
   font,
   letterSpacing
-} from './fontSize';
+} from './fonts';
 import { colour, type ColourName, type PrimaryColour } from './colours';
 import { elevation, type Elevation } from './elevation';
 
@@ -19,7 +20,7 @@ export type ThemeMode = 'light' | 'dark';
 
 export const themeNames = {
   default: 'Default',
-  playful: 'Playful',
+  retro: 'Retro',
   extra: 'Extra'
 };
 
@@ -33,6 +34,7 @@ export const theme = (
   primaryColour,
   sizing,
   colour: colour(mode, primaryColour),
+  baseFont,
   fontSize,
   lineHeight,
   fontWeight,
