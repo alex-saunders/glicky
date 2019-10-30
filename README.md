@@ -86,3 +86,5 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 ---
 
 (The mouse emoji is because Glicky provides a Graphical User Interface that you control with a **mouse**. That makes sense... right?)
+
+Favicon by [OpenMoji](https://openmoji.org/) using [CC BY-SA 4.0 license](https://creativecommons.org/licenses/by-sa/4.0/).
